@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\BookController;
+// use App\Http\Controllers\Admin\JobController;
+use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\AppSettingManageController;
 use Illuminate\Support\Facades\Route;
@@ -14,6 +17,7 @@ use App\Http\Controllers\SettingManageController;
 use App\Http\Controllers\UserSettingController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\ItemsController;
+
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\WithdrawController;
@@ -95,6 +99,7 @@ Route::middleware(['jwt'])->group(function () {
 
     Route::resource('slider', SliderController::class);
     Route::resource('book', BookController::class);
+    Route::resource('job', JobController::class);
     // h
 
 

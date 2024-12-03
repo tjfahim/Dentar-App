@@ -1,11 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\JobCollection;
+use App\Http\Resources\JobResource;
+use App\Models\Job;
 use Illuminate\Http\Request;
 
-class JobsController extends Controller
+class JobController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,17 +17,24 @@ class JobsController extends Controller
      */
     public function index()
     {
-        //
+        $jobs = Job::all();
+        return  new JobCollection($jobs);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+
+    public function search()
     {
-        //
+        $search = request()->input('search');
+
+        $jobs = Job::when($search, function($query, $search){
+            return $query->where('title', 'like', '%'.$search.'%')
+                ->orWhere('company_name', 'like', '%'.$search.'%');
+        })->get();
+
+        return $jobs;
+
+
+
     }
 
     /**
@@ -41,33 +51,22 @@ class JobsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Job  $job
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Job $job)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return new JobCollection(collect($job));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Job  $job
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Job $job)
     {
         //
     }
@@ -75,10 +74,10 @@ class JobsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Job  $job
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Job $job)
     {
         //
     }

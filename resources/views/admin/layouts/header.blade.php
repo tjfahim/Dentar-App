@@ -74,7 +74,7 @@
                 </li>
 
                 <!-- Subscription Menu Item -->
-                <li class="nav-item {{ Request::is('items') || Request::is('items/*') || Request::is('subscriptions') || Request::is('subscriptions/*') ? 'active' : '' }}">
+                {{-- <li class="nav-item {{ Request::is('items') || Request::is('items/*') || Request::is('subscriptions') || Request::is('subscriptions/*') ? 'active' : '' }}">
                     <a href="#" class="nav-link">
                         <i class="mdi mdi-chart-areaspline menu-icon"></i>
                         <span class="menu-title">Subscription</span>
@@ -87,22 +87,27 @@
                             <li class="nav-item"><a class="nav-link" href="{{ url('withdraw') }}">Withdraw Manage</a></li>
                         </ul>
                     </div>
-                </li>
+                </li> --}}
 
-                <!-- Message Menu Item -->
+                {{-- book, slider, job --}}
                 <li class="nav-item {{ Request::is('rooms') || Request::is('rooms/*') || Request::is('messages') || Request::is('messages/*') ? 'active' : '' }}">
                     <a href="#" class="nav-link">
                         <i class="mdi mdi-chart-areaspline menu-icon"></i>
-                        <span class="menu-title">Message</span>
+                        <span class="menu-title">Book Slider Job</span>
                         <i class="menu-arrow"></i>
                     </a>
                     <div class="submenu">
                         <ul>
-                            <li class="nav-item"><a class="nav-link" href="{{ url('rooms') }}">Rooms Manage</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ url('messages') }}">Messages Manage</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('slider.index') }}">Slider</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('book.index') }}">Book</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('job.index') }}">JOB</a></li>
+                            {{-- <li class="nav-item"><a class="nav-link" href="{{ url('rooms') }}">Rooms Manage</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url('messages') }}">Messages Manage</a></li> --}}
                         </ul>
                     </div>
                 </li>
+
+
 
                 <!-- Setting Menu Item -->
                 <li class="nav-item {{ Request::is('settings') || Request::is('user/settings/*') ? 'active' : '' }}">

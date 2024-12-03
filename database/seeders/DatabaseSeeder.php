@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\File;
 
 use App\Models\Book;
 use App\Models\Slider;
+use App\Models\Job;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,28 +22,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call([
-        //     SettingSeeder::class,
-        //     UserSeeder::class,
-        // ]);
+        $this->call([
+            SettingSeeder::class,
+            UserSeeder::class,
+            BookSeeder::class
+        ]);
 
 
-        // Slider::factory(5)->create();
-        // Book::factory(5)->create();
+        Slider::factory(5)->create();
+        Job::factory(10)->create();
 
 
-        $faker = Faker::create();
 
-        for ($i = 0; $i < 10; $i++) {
-            // Generate a random PDF file and save it in the storage directory
-            $pdfPath = 'pdfs/' . $faker->word . '.pdf';
-            $fakePdfContent = "Fake PDF content for book {$faker->word}."; // Content for the PDF
-            File::put(public_path($pdfPath), $fakePdfContent); // Save the fake content to the file
-
-            // Create the book entry in the database
-            Book::create([
-                'pdf' => $pdfPath, // Store the relative path to the generated PDF
-            ]);
-        }
     }
 }

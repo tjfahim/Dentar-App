@@ -1,18 +1,20 @@
 <?php
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\API\AuthApi;
-use App\Http\Controllers\API\InAppItemsApi;
-use App\Http\Controllers\API\SubscriptionApi;
-use App\Http\Controllers\API\MessageApi;
 use App\Http\Controllers\API\RoomApi;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\MessageApi;
+use Illuminate\Support\Facades\Broadcast;
 use App\Http\Controllers\API\FollowingApi;
 use App\Http\Controllers\API\GiftManageApi;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\InAppItemsApi;
 use App\Http\Controllers\WithdrawController;
-use Illuminate\Support\Facades\Broadcast;
-use Illuminate\Support\Facades\Hash;
-
+use App\Http\Controllers\API\SubscriptionApi;
+use App\Http\Controllers\Api\V1\BookController;
+use App\Http\Controllers\Api\V1\JobController;
+use App\Http\Controllers\Api\V1\SliderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,7 +37,7 @@ Route::post('check-otp', [AuthApi::class, 'checkOtp']);
 Route::post('reset-password', [AuthApi::class, 'resetPassword']);
 
 
-    
+
 Route::group(['middleware'=>'jwt_auth'], function($router){
 
 Route::post('/broadcasting/auth', function (Request $request) {
@@ -43,7 +45,7 @@ Route::post('/broadcasting/auth', function (Request $request) {
                 'call' => 'yes'
             ]);
         return Broadcast::auth($request);
-    
+
     return response()->json(['error' => 'Unauthorized'], 403);
 }); // Add auth middleware to this route
 
@@ -65,3 +67,19 @@ Route::post('/broadcasting/auth', function (Request $request) {
 Route::post('hash-password', function(Request $request){
     return Hash::make($request->password);
 });
+
+
+// h
+// Route::apiResource('job', JobController::class)
+//     ->only('index');
+Route::get('job', [JobController::class, 'index'])->name('job.index');
+Route::get('job/{job}', [JobController::class, 'show'])->name('job.show');
+Route::post('job/search', [JobController::class, 'search'])->name('job.search');
+
+Route::apiResource('book', BookController::class);
+Route::post('book/search', [BookController::class, 'search'])
+    ->name('search');
+
+Route::apiResource('sliders', SliderController::class)
+    ->only('index');
+// h
