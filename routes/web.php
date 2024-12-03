@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\AppSettingManageController;
 use Illuminate\Support\Facades\Route;
 
@@ -72,7 +73,7 @@ Route::middleware(['jwt'])->group(function () {
     Route::put('users/{id}', [UserController::class, 'update'])->name('usersUpdate');
     Route::delete('users/delete/{id}', [UserController::class, 'destroy'])->name('usersDestroy');
 
-  
+
     Route::get('roles', [RoleController::class, 'index'])->name('role.list');
     Route::get('role', [RoleController::class, 'create'])->name('role.create');
     Route::post('role', [RoleController::class, 'store'])->name('role.store');
@@ -88,6 +89,13 @@ Route::middleware(['jwt'])->group(function () {
     Route::resource('settingManage', SettingManageController::class);
     Route::get('/app-settings/edit', [AppSettingManageController::class, 'edit'])->name('appSettingManage.edit');
     Route::put('/app-settings/update', [AppSettingManageController::class, 'update'])->name('appSettingManage.update');
+
+
+    // h
+
+    Route::resource('slider', SliderController::class);
+    Route::resource('book', BookController::class);
+    // h
 
 
 });
