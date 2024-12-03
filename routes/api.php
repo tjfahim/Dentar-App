@@ -55,14 +55,6 @@ Route::post('/broadcasting/auth', function (Request $request) {
     Route::post('profile-update', [AuthApi::class, 'update']);
     Route::delete('profile-delete', [AuthApi::class, 'profileDelete']);
     Route::put('change-password', [AuthApi::class, 'passwordUpdate']);
-    Route::post('buy-items', [SubscriptionApi::class, 'buyItems']);
-
-    Route::get('subscription-list', [SubscriptionApi::class, 'subscriptionList']);
-    Route::get('my-subscriptions', [SubscriptionApi::class, 'mySubscriptions']);
-    Route::get('user-subscriptions', [SubscriptionApi::class, 'userSubscriptions']);
-
-    Route::post('withdraw-subscription', [SubscriptionApi::class, 'withdrawSubscription']);
-
 
     Route::post('user-is-active', [AuthApi::class, 'userIsActive']);
     Route::get('get-active-users', [AuthApi::class, 'getActiveUsers']);
