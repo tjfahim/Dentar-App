@@ -3,18 +3,14 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\API\AuthApi;
-use App\Http\Controllers\API\RoomApi;
+
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\MessageApi;
+
 use Illuminate\Support\Facades\Broadcast;
-use App\Http\Controllers\API\FollowingApi;
-use App\Http\Controllers\API\GiftManageApi;
-use App\Http\Controllers\API\InAppItemsApi;
-use App\Http\Controllers\WithdrawController;
-use App\Http\Controllers\API\SubscriptionApi;
-use App\Http\Controllers\Api\V1\BookController;
-use App\Http\Controllers\Api\V1\JobController;
-use App\Http\Controllers\Api\V1\SliderController;
+
+use App\Http\Controllers\API\V1\BookController;
+use App\Http\Controllers\API\V1\JobController;
+use App\Http\Controllers\API\V1\SliderController;
 
 /*
 |--------------------------------------------------------------------------

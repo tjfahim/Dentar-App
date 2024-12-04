@@ -11,7 +11,7 @@ class JobController extends Controller
     // Display a listing of the jobs
     public function index()
     {
-        $jobs = Job::all();
+        $jobs = Job::latest()->paginate(15);
         return view('admin.pages.job.index', compact('jobs'));
     }
 

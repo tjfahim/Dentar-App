@@ -89,6 +89,9 @@ Book Manage |
                             @endforelse
                         </tbody>
                     </table>
+                    <div class="mt-4 d-flex justify-content-start">
+                        {{ $books->links('pagination::bootstrap-4') }}
+                    </div>
                 </div>
             </div>
         </div>

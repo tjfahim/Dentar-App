@@ -81,6 +81,9 @@ Job Manage |
                             @endforelse
                         </tbody>
                     </table>
+                    <div class="mt-4 d-flex justify-content-start">
+                        {{ $jobs->links('pagination::bootstrap-4') }}
+                    </div>
                 </div>
             </div>
         </div>
