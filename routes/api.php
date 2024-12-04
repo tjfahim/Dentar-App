@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\API\AuthApi;
 use App\Http\Controllers\API\V1\Auth\DoctorController;
+use App\Http\Controllers\API\V1\Auth\LoginController;
+use App\Http\Controllers\API\V1\Auth\RegisterController;
 use App\Http\Controllers\API\V1\Auth\StudentController;
 use App\Http\Controllers\API\V1\Auth\UserController;
 use Illuminate\Support\Facades\Route;
@@ -13,6 +15,8 @@ use Illuminate\Support\Facades\Broadcast;
 use App\Http\Controllers\API\V1\BookController;
 use App\Http\Controllers\API\V1\JobController;
 use App\Http\Controllers\API\V1\SliderController;
+
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,30 +73,46 @@ Route::post('hash-password', function(Request $request){
 
 // h
 // auth --user
-Route::post('user/login', [UserController::class, 'login']);
-Route::post('user/register', [UserController::class, 'register']);
-Route::get('user/{id}', [UserController::class, 'destroy']);
+Route::post('login', [ LoginController::class, 'login']);
+Route::post('register', RegisterController::class);
 
-// auth --student
-Route::post('student/login', [StudentController::class, 'login']);
-Route::post('student/register', [StudentController::class, 'register']);
-Route::get('student/{id}', [StudentController::class, 'destroy']);
 
-// auth --doctor
-Route::post('doctor/login', [DoctorController::class, 'login']);
-Route::post('doctor/register', [DoctorController::class, 'register']);
-Route::get('doctor/{id}', [DoctorController::class, 'destroy']);
+// Route::post('user/login', [UserController::class, 'login'])->middleware('api_role');
+// Route::post('user/register', [UserController::class, 'register'])->name('patient.register');
+// Route::get('user/{id}', [UserController::class, 'destroy']);
+
+// // auth --student
+// Route::post('student/login', [StudentController::class, 'login']);
+// Route::post('student/register', [StudentController::class, 'register'])->name('student.register');
+// Route::get('student/{id}', [StudentController::class, 'destroy']);
+
+// // auth --doctor
+// Route::post('doctor/login', [DoctorController::class, 'login']);
+// Route::post('doctor/register', [DoctorController::class, 'register'])->name('doctor.register');
+// Route::get('doctor/{id}', [DoctorController::class, 'destroy']);
 
 // Route::apiResource('job', JobController::class)
 //     ->only('index');
-Route::get('job', [JobController::class, 'index'])->name('job.index');
-Route::get('job/{job}', [JobController::class, 'show'])->name('job.show');
-Route::post('job/search', [JobController::class, 'search'])->name('job.search');
 
-Route::apiResource('book', BookController::class);
-Route::post('book/search', [BookController::class, 'search'])
-    ->name('search');
+Route::middleware(['auth:sanctum', 'auth.student'])->group(function(){
+    Route::get('job', [JobController::class, 'index'])->name('job.index');
+    Route::get('job/{job}', [JobController::class, 'show'])->name('job.show');
+    Route::post('job/search', [JobController::class, 'search'])->name('job.search');
+
+
+    Route::apiResource('book', BookController::class);
+    Route::post('book/search', [BookController::class, 'search'])
+        ->name('search');
+});
+
+
 
 Route::apiResource('sliders', SliderController::class)
     ->only('index');
+
+
+Route::get('/test', function(){
+    $user = Auth::user();
+    return $user;
+})->middleware('auth:sanctum');
 // h

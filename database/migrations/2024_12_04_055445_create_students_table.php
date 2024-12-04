@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name'); // Name of the student
             $table->string('email')->unique(); // Email of the student
             $table->string('phone')->unique(); // Phone number
+            $table->string('userType')->default('student');
             $table->string('password');
             $table->string('address')->nullable(); // Address
             $table->date('dob')->nullable(); // Date of Birth

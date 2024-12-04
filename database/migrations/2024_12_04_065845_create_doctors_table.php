@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('email')->unique(); // Email address
             $table->string('phone')->unique(); // Phone number
             $table->string('password');
+            $table->string('userType')->default('doctor');
             $table->string('specialization'); // Medical specialization
             $table->string('hospital')->nullable(); // Hospital or clinic the doctor works at
             $table->string('gender')->nullable(); // Gender
