@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\File;
 
 
 use App\Models\Book;
+use App\Models\Doctor;
 use App\Models\Slider;
 use App\Models\Job;
 
@@ -25,14 +26,16 @@ class DatabaseSeeder extends Seeder
         $this->call([
             SettingSeeder::class,
             UserSeeder::class,
-            BookSeeder::class
+            BookSeeder::class,
+            PatientSeeder::class,
+            StudentSeeder::class,
+            // DocterSeeder::class
+            DoctorSeeder::class
         ]);
 
 
         Slider::factory(5)->create();
         Job::factory(10)->create();
-
-
 
     }
 }

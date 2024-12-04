@@ -3,7 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\API\AuthApi;
-
+use App\Http\Controllers\API\V1\Auth\DoctorController;
+use App\Http\Controllers\API\V1\Auth\StudentController;
+use App\Http\Controllers\API\V1\Auth\UserController;
 use Illuminate\Support\Facades\Route;
 
 use Illuminate\Support\Facades\Broadcast;
@@ -24,13 +26,13 @@ use App\Http\Controllers\API\V1\SliderController;
 */
 
 
-//roopi api
-Route::post('login', [AuthApi::class, 'login']);
-Route::post('register', [AuthApi::class, 'register']);
+// roopi api
+// Route::post('login', [AuthApi::class, 'login']);
+// Route::post('register', [AuthApi::class, 'register']);
 
-Route::post('send-otp', [AuthApi::class, 'sendOtp']);
-Route::post('check-otp', [AuthApi::class, 'checkOtp']);
-Route::post('reset-password', [AuthApi::class, 'resetPassword']);
+// Route::post('send-otp', [AuthApi::class, 'sendOtp']);
+// Route::post('check-otp', [AuthApi::class, 'checkOtp']);
+// Route::post('reset-password', [AuthApi::class, 'resetPassword']);
 
 
 
@@ -66,6 +68,21 @@ Route::post('hash-password', function(Request $request){
 
 
 // h
+// auth --user
+Route::post('user/login', [UserController::class, 'login']);
+Route::post('user/register', [UserController::class, 'register']);
+Route::get('user/{id}', [UserController::class, 'destroy']);
+
+// auth --student
+Route::post('student/login', [StudentController::class, 'login']);
+Route::post('student/register', [StudentController::class, 'register']);
+Route::get('student/{id}', [StudentController::class, 'destroy']);
+
+// auth --doctor
+Route::post('doctor/login', [DoctorController::class, 'login']);
+Route::post('doctor/register', [DoctorController::class, 'register']);
+Route::get('doctor/{id}', [DoctorController::class, 'destroy']);
+
 // Route::apiResource('job', JobController::class)
 //     ->only('index');
 Route::get('job', [JobController::class, 'index'])->name('job.index');
