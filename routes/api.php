@@ -138,7 +138,8 @@ Route::get('lists', function(){
     return response()->json([
         'doctor-specialty' => $arr,
         'organization' => ['HealthCare Center', 'Clinic Center', 'Diagnostic'],
-        'occupation' => ['doctor', 'student', 'patient']
+        'occupation' => ['doctor', 'student', 'patient'],
+        'bmdc_type' => ['Doctor', 'Dentor']
     ]);
 });
 

@@ -32,7 +32,7 @@ class DoctorFactory extends Factory
             'role' => $this->faker->randomElement(['normal', 'admin']), // Random role
             'address' => $this->faker->address(), // Fake address
             'bmdc_number' => '234234234',
-            'bmdc_type' => 'dentor'
+            'bmdc_type' => 'Dentor'
         ];
     }
 }
