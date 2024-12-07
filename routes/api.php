@@ -76,6 +76,7 @@ Route::post('hash-password', function(Request $request){
 // h
 // auth --user
 Route::post('login', [ LoginController::class, 'login']);
+Route::post('logout', [ LoginController::class, 'logout'])->middleware('auth:sanctum');
 Route::post('register', RegisterController::class);
 
 
@@ -96,7 +97,7 @@ Route::post('register', RegisterController::class);
 // Route::apiResource('job', JobController::class)
 //     ->only('index');
 
-Route::middleware(['auth:sanctum', 'auth.student'])->group(function(){
+Route::middleware(['auth:sanctum', 'auth.doctor_or_student'])->group(function(){
     Route::get('job', [JobController::class, 'index'])->name('job.index');
     Route::get('job/{job}', [JobController::class, 'show'])->name('job.show');
     Route::post('job/search', [JobController::class, 'search'])->name('job.search');
@@ -107,12 +108,16 @@ Route::middleware(['auth:sanctum', 'auth.student'])->group(function(){
         ->name('search');
 });
 
+
+
+
+// doctor section
 Route::middleware(['auth:sanctum', 'auth.doctor'])->group(function(){
     Route::get('/doctor/patient/list', [DoctorController::class, 'caseList']);
-    Route::get('/doctor/patient/add', [DoctorController::class, 'caseList']);
+    Route::post('/doctor/patient/report/{id}', [DoctorController::class, 'addReport']);
 });
 
-Route::middleware('auth:sanctum')->group(function(){
+Route::middleware('auth:sanctum', 'auth.patient')->group(function(){
     Route::get('/patient/cases/list', [PatientProblemController::class, 'problemList'])->middleware('auth:sanctum');
     Route::post('/patient/cases/add', [PatientProblemController::class, 'store'])->middleware('auth:sanctum');
 });
@@ -132,7 +137,8 @@ Route::get('lists', function(){
 
     return response()->json([
         'doctor-specialty' => $arr,
-        'organization' => ['HealthCare Center', 'Clinic Center', 'Diagnostic']
+        'organization' => ['HealthCare Center', 'Clinic Center', 'Diagnostic'],
+        'occupation' => ['doctor', 'student', 'patient']
     ]);
 });
 

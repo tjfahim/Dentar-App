@@ -17,6 +17,17 @@ class DoctorSeeder extends Seeder
     {
         Doctor::factory(50)->create();
 
+
+        Doctor::factory()->create([
+            'name' => 'Mr. Doctor',
+            'email' => 'userdoctor@g.c',
+            'phone' => 01223334444,
+            'password' => bcrypt('1234'),
+            'specialization' => 'doctor',
+            'role' => 'admin'
+
+        ]);
+
         $doctor = Doctor::where('role', 'admin')->first();
 
         $doctor->nextPatient = true;

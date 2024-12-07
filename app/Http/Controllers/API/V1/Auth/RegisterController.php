@@ -89,7 +89,7 @@ class RegisterController extends Controller
                 'name' => 'required|string|max:255',
                 'email' => 'email|unique:patients,email|unique:students,email|unique:doctors,email',
                 'phone' => 'required|string|max:15|unique:patients,phone|unique:students,phone|unique:doctors,phone',
-                'password' => 'required|string|min:4|confirmed', // Confirm password
+                'password' => 'required|string|min:4', // Confirm password
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
                 'address' => 'nullable|string',
                 'dob' => 'nullable|date',

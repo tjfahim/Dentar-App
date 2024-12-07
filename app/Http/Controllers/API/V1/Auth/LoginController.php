@@ -10,6 +10,7 @@ use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 
@@ -109,4 +110,21 @@ class LoginController extends Controller
             'user' => $userRes
         ]);
     }
+
+
+    public function logout(Request $request)
+{
+    // Ensure the user is authenticated
+    if (!$request->user()) {
+        return response()->json(['error' => 'User not authenticated'], 401);
+    }
+
+    // Revoke the current access token
+    $request->user()->currentAccessToken()->delete();
+
+    return response()->json([
+        'message' => 'Logout successful'
+    ], 200);
+}
+
 }

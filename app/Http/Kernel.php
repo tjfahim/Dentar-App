@@ -61,6 +61,8 @@ class Kernel extends HttpKernel
         'api_role' => \App\Http\Middleware\RoleManage::class,
         'auth.student' => \App\Http\Middleware\StudentMiddleware::class,
         'auth.doctor' => \App\Http\Middleware\DoctorMiddleware::class,
+        'auth.doctor_or_student' => \App\Http\Middleware\DoctorOrStudentMiddleware::class,
+        'auth.patient' => \App\Http\Middleware\PatientMiddleware::class,
         'api_role' => \App\Http\Middleware\RoleManage::class,
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,

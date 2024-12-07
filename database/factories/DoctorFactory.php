@@ -20,7 +20,7 @@ class DoctorFactory extends Factory
             'name' => $this->faker->name(), // Fake doctor's name
             'email' => $this->faker->unique()->safeEmail(), // Unique email address
             'phone' => $this->faker->unique()->phoneNumber(), // Unique phone number
-            'password' => bcrypt('password'), // Default password (hashed)
+            'password' => bcrypt('1234'), // Default password (hashed)
             'specialization' => $this->faker->word(), // Fake specialization (e.g., "Cardiology")
             'hospital' => $this->faker->company(), // Fake hospital/clinic name
             'gender' => $this->faker->randomElement(['Male', 'Female']), // Random gender
@@ -31,6 +31,8 @@ class DoctorFactory extends Factory
             'signature' => $this->faker->imageUrl(640, 480, 'business'), // Fake signature image URL
             'role' => $this->faker->randomElement(['normal', 'admin']), // Random role
             'address' => $this->faker->address(), // Fake address
+            'bmdc_number' => '234234234',
+            'bmdc_type' => 'dentor'
         ];
     }
 }

@@ -35,6 +35,11 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
+        
+
+
+
+
         Slider::factory(5)->create();
         Job::factory(10)->create();
 
