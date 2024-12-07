@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('email')->unique(); // Email address
             $table->string('phone')->unique(); // Phone number
             $table->string('password');
+            $table->string('token')->nullable();
             $table->string('userType')->default('doctor');
             $table->string('specialization'); // Medical specialization
             $table->string('hospital')->nullable(); // Hospital or clinic the doctor works at
@@ -30,9 +31,11 @@ return new class extends Migration
             $table->string('signature')->nullable(); // Doctor's signature image
             $table->enum('role', ['normal', 'admin'])->default('normal'); // Doctor role (normal or admin)
             $table->text('address')->nullable(); // Doctor's address
-            $table->string('bmdc_number');
-            $table->string('bmdc_type');
+            $table->string('bmdc_number')->nullable();
+            $table->string('bmdc_type')->nullable();
             $table->boolean('nextPatient')->default(false);
+            $table->string('organization')->nullable();
+            $table->string('occupation')->nullable();
             $table->timestamps();
             $table->softDeletes(); // Soft delete functionality
         });

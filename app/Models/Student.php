@@ -15,6 +15,7 @@ class Student extends Model
         'name',
         'email',
         'phone',
+        'token',
         'address',
         'dob',
         'password',
@@ -25,5 +26,7 @@ class Student extends Model
         'medical_history',
         'additional_info',
         'bio',
+        'organization',
+        'occupation'
     ];
 }

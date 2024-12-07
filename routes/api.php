@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\API\AuthApi;
 use App\Http\Controllers\API\V1\Auth\LoginController;
+use App\Http\Controllers\API\V1\Auth\ProfileController;
 use App\Http\Controllers\API\V1\Auth\RegisterController;
 use App\Http\Controllers\API\V1\Auth\StudentController;
 use App\Http\Controllers\API\V1\Auth\UserController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\API\V1\JobController;
 use App\Http\Controllers\API\V1\Patinet\PatientProblemController;
 use App\Http\Controllers\API\V1\SliderController;
 use App\Http\Controllers\API\V1\Doctor\DoctorController;
+use App\Http\Controllers\API\V1\NotificationController;
 use App\Http\Resources\DoctorSpecialtyResource;
 use App\Models\DoctorSpecialty;
 use Illuminate\Support\Facades\Auth;
@@ -79,24 +81,14 @@ Route::post('login', [ LoginController::class, 'login']);
 Route::post('logout', [ LoginController::class, 'logout'])->middleware('auth:sanctum');
 Route::post('register', RegisterController::class);
 
+Route::middleware('auth:sanctum')->group(function(){
+    Route::get('profile', [ProfileController::class, 'profile']);
+    Route::post('profile/update', [ProfileController::class, 'update']);
+});
 
-// Route::post('user/login', [UserController::class, 'login'])->middleware('api_role');
-// Route::post('user/register', [UserController::class, 'register'])->name('patient.register');
-// Route::get('user/{id}', [UserController::class, 'destroy']);
 
-// // auth --student
-// Route::post('student/login', [StudentController::class, 'login']);
-// Route::post('student/register', [StudentController::class, 'register'])->name('student.register');
-// Route::get('student/{id}', [StudentController::class, 'destroy']);
 
-// // auth --doctor
-// Route::post('doctor/login', [DoctorController::class, 'login']);
-// Route::post('doctor/register', [DoctorController::class, 'register'])->name('doctor.register');
-// Route::get('doctor/{id}', [DoctorController::class, 'destroy']);
-
-// Route::apiResource('job', JobController::class)
-//     ->only('index');
-
+// doctor and student  common section
 Route::middleware(['auth:sanctum', 'auth.doctor_or_student'])->group(function(){
     Route::get('job', [JobController::class, 'index'])->name('job.index');
     Route::get('job/{job}', [JobController::class, 'show'])->name('job.show');
@@ -117,10 +109,17 @@ Route::middleware(['auth:sanctum', 'auth.doctor'])->group(function(){
     Route::post('/doctor/patient/report/{id}', [DoctorController::class, 'addReport']);
 });
 
+
+// patient section only
 Route::middleware('auth:sanctum', 'auth.patient')->group(function(){
     Route::get('/patient/cases/list', [PatientProblemController::class, 'problemList'])->middleware('auth:sanctum');
     Route::post('/patient/cases/add', [PatientProblemController::class, 'store'])->middleware('auth:sanctum');
 });
+
+
+// common api
+
+Route::get('notification', [NotificationController::class, 'index']);
 
 
 

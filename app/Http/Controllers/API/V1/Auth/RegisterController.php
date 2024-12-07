@@ -148,7 +148,7 @@ class RegisterController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'email|unique:patients,email|unique:students,email|unique:doctors,email',
             'phone' => 'required|string|max:15|unique:patients,phone|unique:students,phone|unique:doctors,phone',
-            'password' => 'required|string|min:4|confirmed', // Confirm password
+            'password' => 'required|string|min:4', // Confirm password
             'specialization' => 'required|string',
             'hospital' => 'nullable|string',
             'gender' => 'nullable|string',
@@ -158,7 +158,12 @@ class RegisterController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'signature' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'address' => 'nullable|string',
-            'role' => 'nullable|in:normal,admin', // Default to normal, or specify role
+            'role' => 'nullable|in:normal,admin',
+            'bmdc_number' => 'string|nullable',
+            'bmdc_type' => 'string|nullable',
+            'occupation' => 'string|nullable',
+            'organization' => 'string|nullable',
+
         ]);
 
         if ($validator->fails()) {
@@ -191,6 +196,10 @@ class RegisterController extends Controller
             'image' => $imagePath,
             'signature' => $signaturePath,
             'address' => $request->address,
+            'bmdc_number' => $request->bmdc_number,
+            'bmdc_type' => $request->bmdc_type,
+            'occupation' => $request->occupation,
+            'organization' => $request->organization,
             'role' => $request->role ?? 'normal', // Default to normal role
         ]);
 
@@ -208,4 +217,5 @@ class RegisterController extends Controller
         }
 
     }
+
 }

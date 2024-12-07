@@ -15,6 +15,7 @@ class Doctor extends Model
         'name',        // Doctor's name
         'email',       // Email address
         'phone',       // Phone number
+        'token',
         'password',    // Password
         'specialization', // Medical specialization
         'hospital',    // Hospital or clinic the doctor works at
@@ -26,6 +27,10 @@ class Doctor extends Model
         'signature',   // Doctor's signature image
         'role',        // Role (normal or admin)
         'address',     // Doctor's address
+        'bmdc_number',
+        'bmdc_type',
+        'organization',
+        'occupation'
     ];
 
 

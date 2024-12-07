@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name'); // Name of the student
             $table->string('email')->unique(); // Email of the student
             $table->string('phone')->unique(); // Phone number
+            $table->string('token')->nullable();
             $table->string('userType')->default('student');
             $table->string('password');
             $table->string('address')->nullable(); // Address
@@ -28,6 +29,8 @@ return new class extends Migration
             $table->string('specialization')->nullable(); // Medical specialization
             $table->text('medical_history')->nullable(); // Medical history (if applicable)
             $table->text('additional_info')->nullable(); // Additional info
+            $table->string('organization')->nullable();
+            $table->string('occupation')->nullable();
             $table->text('bio')->nullable(); // Additional info
             $table->timestamps();
         });

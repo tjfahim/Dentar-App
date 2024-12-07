@@ -29,6 +29,8 @@ class StudentResource extends JsonResource
             'medical_history' => $this->medical_history,
             'additional_info' => $this->additional_info,
             'bio' => $this->bio,
+            'organization' => $this->organization,
+            'occupation' => $this->occupation
         ];
     }
 }

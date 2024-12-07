@@ -32,10 +32,11 @@ class DatabaseSeeder extends Seeder
             DoctorSeeder::class,
             DoctorSpecialtySeeder::class,
             PatientProblemSeeder::class,
+            NotificationSeeder::class,
         ]);
 
 
-        
+
 
 
 

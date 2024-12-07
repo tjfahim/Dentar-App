@@ -17,12 +17,15 @@ class Patient extends Model
         'name',
         'email',
         'phone' ,
+        'token',
         'password' ,
         'image',
         'address',
         'dob'  ,
         'gender' ,
         'medical_history' ,
+        'organization',
+        'occupation'
 
     ];
 
