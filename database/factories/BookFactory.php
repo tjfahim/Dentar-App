@@ -22,6 +22,7 @@ class BookFactory extends Factory
             'title' => fake()->sentence(3), // Random title with 3 words
             'description' => fake()->paragraph(3), // Random paragraph for description
             'image' => fake()->imageUrl(640, 480, 'books', true), // Random image URL (can be changed to a file path if desired)
+            'book_type' => $this->faker->randomElement(['pdf', 'book']),
  // Random PDF URL (you can replace this with your file generation logic)
             'status' => fake()->randomElement(['active', 'inactive']), // Randomly assign active or inactive
         ];

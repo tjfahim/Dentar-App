@@ -21,6 +21,7 @@ class BookResource extends JsonResource
             'image' => $this->image ? asset($this->image) : null, // Convert image path to full URL
             'pdf' => $this->pdf ? asset($this->pdf) : null,       // Convert PDF path to full URL
             'status' => $this->status,
+            'book_type' => $this->book_type,
             'created_at' => $this->created_at->toDateTimeString(), // Format creation date
             'updated_at' => $this->updated_at->toDateTimeString(), // Format update date
         ];

@@ -17,7 +17,8 @@ class PrivacyPolicyFactory extends Factory
     public function definition()
     {
         return [
-            'title' => 
+            'title' => fake()->sentence(),
+            'description' => fake()->paragraph(10)
         ];
     }
 }

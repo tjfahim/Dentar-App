@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('pdf')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->enum('book_type', ['pdf', 'book'])->default('book');
             $table->timestamps();
         });
     }

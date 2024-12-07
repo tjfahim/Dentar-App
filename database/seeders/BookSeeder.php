@@ -16,22 +16,32 @@ class BookSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker::create(); // Create a Faker instance
+        $faker = Faker::create();
+
+        // Create the 'pdfs' directory if it doesn't exist
+        if (!File::exists(public_path('pdfs'))) {
+            File::makeDirectory(public_path('pdfs'), 0755, true);
+        }
 
         // Create 10 fake books
         for ($i = 0; $i < 10; $i++) {
             // Generate a random PDF file and save it in the storage directory
-            $pdfPath = 'pdfs/' . $faker->word . '.pdf';
-            $fakePdfContent = "Fake PDF content for book {$faker->word}."; // Content for the PDF
-            File::put(public_path($pdfPath), $fakePdfContent); // Save the fake content to the file
+            $pdfFileName = $faker->word . '.pdf';
+            $pdfPath = 'pdfs/' . 'dummy.pdf'; // Relative path
+            $pdfFullPath = public_path($pdfPath); // Full path to save the PDF
+            $fakePdfContent = "Fake PDF content for book " . $faker->word . ".";
+
+            // Save the fake PDF file
+            File::put($pdfFullPath, $fakePdfContent);
 
             // Create the book entry in the database
             Book::create([
-                'title' => $faker->sentence(3), // Random title with 3 words
-                'description' => $faker->paragraph(3), // Random paragraph for description
-                'image' => $faker->imageUrl(640, 480, 'books', true), // Random image URL
-                'pdf' => $pdfPath, // Store the relative path to the generated PDF
-                'status' => $faker->randomElement(['active', 'inactive']), // Randomly assign active or inactive
+                'title' => $faker->sentence(3),
+                'description' => $faker->paragraph(3),
+                'image' => $faker->imageUrl(640, 480, 'books', true),
+                'pdf' => 'pdfs/dummy.pdf', // Store the relative path in the database
+                'book_type' => $faker->randomElement(['book', 'pdf']),
+                'status' => $faker->randomElement(['active', 'inactive']),
             ]);
         }
     }

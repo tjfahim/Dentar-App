@@ -13,13 +13,17 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Broadcast;
 
 use App\Http\Controllers\API\V1\BookController;
+use App\Http\Controllers\API\V1\ContactController;
 use App\Http\Controllers\API\V1\JobController;
 use App\Http\Controllers\API\V1\Patinet\PatientProblemController;
 use App\Http\Controllers\API\V1\SliderController;
 use App\Http\Controllers\API\V1\Doctor\DoctorController;
 use App\Http\Controllers\API\V1\NotificationController;
+use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\VideoController;
 use App\Http\Resources\DoctorSpecialtyResource;
 use App\Models\DoctorSpecialty;
+use App\Models\PrivacyPolicy;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -95,7 +99,8 @@ Route::middleware(['auth:sanctum', 'auth.doctor_or_student'])->group(function(){
     Route::post('job/search', [JobController::class, 'search'])->name('job.search');
 
 
-    Route::apiResource('book', BookController::class);
+    Route::get('book', [BookController::class, 'index']);
+    Route::get('pdf', [BookController::class, 'pdf_index']);
     Route::post('book/search', [BookController::class, 'search'])
         ->name('search');
 });
@@ -120,6 +125,20 @@ Route::middleware('auth:sanctum', 'auth.patient')->group(function(){
 // common api
 
 Route::get('notification', [NotificationController::class, 'index']);
+Route::get('privacypolicy', function(){
+    return PrivacyPolicy::first();
+});
+Route::get('trumsandcondition', function(){
+    return response()->json([
+        'title' => "Lorem task",
+        'description' => "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text"
+    ]);
+});
+
+
+Route::post('feedback/add', [FeedbackController::class, 'store']);
+Route::post('contact/add', [ContactController::class, 'store']);
+Route::get('youtube/videos', [VideoController::class, 'index']);
 
 
 
@@ -139,6 +158,13 @@ Route::get('lists', function(){
         'organization' => ['HealthCare Center', 'Clinic Center', 'Diagnostic'],
         'occupation' => ['doctor', 'student', 'patient'],
         'bmdc_type' => ['Doctor', 'Dentor']
+    ]);
+});
+
+
+Route::get('leaderboard', function(){
+    return response()->json([
+        
     ]);
 });
 

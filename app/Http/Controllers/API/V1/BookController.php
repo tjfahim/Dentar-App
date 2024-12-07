@@ -16,9 +16,16 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = Book::all();
+        $books = Book::where('book_type', 'book')->latest()->get();
 
         return BookResource::collection($books);
+    }
+
+    public function pdf_index()
+    {
+        $pdf = Book::where('book_type', 'pdf')->latest()->get();
+
+        return BookResource::collection($pdf);
     }
 
 

@@ -33,6 +33,10 @@ class DatabaseSeeder extends Seeder
             DoctorSpecialtySeeder::class,
             PatientProblemSeeder::class,
             NotificationSeeder::class,
+            PrivacyPolicySeeder::class,
+            FeedbackSeeder::class,
+            ContactSeeder::class,
+            VideoSeeder::class
         ]);
 
 
