@@ -22,7 +22,7 @@ class DoctorSeeder extends Seeder
             'name' => 'Mr. Doctor',
             'email' => 'userdoctor@g.c',
             'phone' => 01223334444,
-            'password' => bcrypt('1234'),
+            'password' => bcrypt('123456'),
             'specialization' => 'doctor',
             'role' => 'admin'
 

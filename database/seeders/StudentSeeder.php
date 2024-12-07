@@ -24,7 +24,7 @@ class StudentSeeder extends Seeder
             'email' => 'userstudent@g.c', // Unique email
             'phone' => '01223335555', // Unique phone number
             'address' => 'Dhaka Bangladesh',
-            'password' => Hash::make('1234'),
+            'password' => Hash::make('123456'),
             'dob' => '1972-02-25', // Random date of birth
             'gender' => 'male',
             'university' => 'Dhaka Univerisy', // Random university name
