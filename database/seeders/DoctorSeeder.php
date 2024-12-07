@@ -16,5 +16,10 @@ class DoctorSeeder extends Seeder
     public function run()
     {
         Doctor::factory(50)->create();
+
+        $doctor = Doctor::where('role', 'admin')->first();
+
+        $doctor->nextPatient = true;
+        $doctor->save();
     }
 }

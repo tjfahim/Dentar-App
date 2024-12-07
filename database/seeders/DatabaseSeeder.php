@@ -29,8 +29,9 @@ class DatabaseSeeder extends Seeder
             BookSeeder::class,
             PatientSeeder::class,
             StudentSeeder::class,
-            // DocterSeeder::class
-            DoctorSeeder::class
+            DoctorSeeder::class,
+            DoctorSpecialtySeeder::class,
+            PatientProblemSeeder::class,
         ]);
 
 

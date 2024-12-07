@@ -3,7 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\API\AuthApi;
-use App\Http\Controllers\API\V1\Auth\DoctorController;
 use App\Http\Controllers\API\V1\Auth\LoginController;
 use App\Http\Controllers\API\V1\Auth\RegisterController;
 use App\Http\Controllers\API\V1\Auth\StudentController;
@@ -14,8 +13,11 @@ use Illuminate\Support\Facades\Broadcast;
 
 use App\Http\Controllers\API\V1\BookController;
 use App\Http\Controllers\API\V1\JobController;
+use App\Http\Controllers\API\V1\Patinet\PatientProblemController;
 use App\Http\Controllers\API\V1\SliderController;
-
+use App\Http\Controllers\API\V1\Doctor\DoctorController;
+use App\Http\Resources\DoctorSpecialtyResource;
+use App\Models\DoctorSpecialty;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -103,6 +105,35 @@ Route::middleware(['auth:sanctum', 'auth.student'])->group(function(){
     Route::apiResource('book', BookController::class);
     Route::post('book/search', [BookController::class, 'search'])
         ->name('search');
+});
+
+Route::middleware(['auth:sanctum', 'auth.doctor'])->group(function(){
+    Route::get('/doctor/patient/list', [DoctorController::class, 'caseList']);
+    Route::get('/doctor/patient/add', [DoctorController::class, 'caseList']);
+});
+
+Route::middleware('auth:sanctum')->group(function(){
+    Route::get('/patient/cases/list', [PatientProblemController::class, 'problemList'])->middleware('auth:sanctum');
+    Route::post('/patient/cases/add', [PatientProblemController::class, 'store'])->middleware('auth:sanctum');
+});
+
+
+
+
+
+
+Route::get('lists', function(){
+    $allSpecialty = DoctorSpecialty::all();
+    $arr = [];
+
+    foreach($allSpecialty as $item){
+       array_push($arr, $item->name);
+    }
+
+    return response()->json([
+        'doctor-specialty' => $arr,
+        'organization' => ['HealthCare Center', 'Clinic Center', 'Diagnostic']
+    ]);
 });
 
 

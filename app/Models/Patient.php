@@ -25,4 +25,10 @@ class Patient extends Model
         'medical_history' ,
 
     ];
+
+
+    public function cases()
+    {
+        return $this->hasMany(PatientProblem::class);
+    }
 }

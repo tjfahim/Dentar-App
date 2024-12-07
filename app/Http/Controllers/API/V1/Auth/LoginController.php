@@ -20,11 +20,30 @@ class LoginController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'phone' => 'required_without:email|string|max:15', // If phone is provided, email is not required
-            'email' => 'required_without:phone|email', // If email is provided, phone is not required
+            // 'phone' => 'required_without:email|string|max:15', // If phone is provided, email is not required
+            // 'email' => 'required_without:phone|email', // If email is provided, phone is not required
+
             'password' => 'required|string',
         ]);
 
+        if(!$request->user){
+            return response()->json([
+                'error' => [
+                    'user' => [
+                        "Please add phone or email address"
+                    ]
+                ]
+            ], 422);
+        }
+
+        $email = null;
+        $phone = null;
+
+
+        $email = filter_var($request->user , FILTER_VALIDATE_EMAIL);
+        if(!$email){
+            $phone = $request->user;
+        }
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 422);
@@ -33,38 +52,43 @@ class LoginController extends Controller
         $user = null;
         $userType = null;
 
-        if($request->has('phone')){
-            $user  = Patient::where('phone', $request->phone )->first();
+        if($phone){
+            $user  = Patient::where('phone',$phone )->first();
             $userType = 'patient';
-        }elseif($request->has('email')){
-            $user =  Patient::where('email', $request->email )->first();
+        }elseif($email){
+            $user =  Patient::where('email', $email )->first();
             $userType = 'patient';
         }
 
         if(!$user){
-            if($request->has('phone')){
-                $user  = Student::where('phone', $request->phone )->first();
+            if($phone){
+                $user  = Student::where('phone',$phone )->first();
                 $userType = 'student';
-            }elseif($request->has('email')){
-                $user =  Student::where('email', $request->email )->first();
+            }elseif($email){
+                $user =  Student::where('email', $email )->first();
                 $userType = 'student';
             }
         }
 
         if(!$user){
-            if($request->has('phone')){
-                $user  = Doctor::where('phone', $request->phone )->first();
+            if($phone){
+                $user  = Doctor::where('phone',$phone )->first();
                 $userType = 'doctor';
-            }elseif($request->has('email')){
-                $user =  Doctor::where('email', $request->email )->first();
+            }elseif($email){
+                $user =  Doctor::where('email', $email )->first();
                 $userType = 'doctor';
             }
         }
 
+        if(!$user){
+            if($email){
+                return response()->json(['error' => 'Incorrect email'], 401);
+            }elseif($phone){
+                return response()->json(['error' => 'Incorrect phone number'], 401);
 
-
-        if(!$user || !Hash::check($request->password, $user->password)){
-            return response()->json(['error' => 'Invalid credentials'], 401);
+            }
+        }elseif(!Hash::check($request->password, $user->password)){
+            return response()->json(['error' => 'Incorrect password'], 401);
         }
 
 
@@ -80,6 +104,7 @@ class LoginController extends Controller
         // Return the token in the response
         return response()->json([
             'message' => 'Login successful',
+            'userType' => $userType,
             'token' => $token,
             'user' => $userRes
         ]);

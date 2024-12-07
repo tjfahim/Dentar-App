@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('signature')->nullable(); // Doctor's signature image
             $table->enum('role', ['normal', 'admin'])->default('normal'); // Doctor role (normal or admin)
             $table->text('address')->nullable(); // Doctor's address
+            $table->boolean('nextPatient')->default(false);
             $table->timestamps();
             $table->softDeletes(); // Soft delete functionality
         });

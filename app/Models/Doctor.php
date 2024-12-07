@@ -27,4 +27,10 @@ class Doctor extends Model
         'role',        // Role (normal or admin)
         'address',     // Doctor's address
     ];
+
+
+    public function cases()
+    {
+        return $this->hasMany(PatientProblem::class);
+    }
 }
