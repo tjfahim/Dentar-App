@@ -18,10 +18,11 @@ class PatientProblemResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'age' => $this->age,
+            'gender' => $this->gender,
             'number' => $this->number,
             'image' => $this->image,
             'problem' => $this->problem,
-            'patient_id' => $this->patient_id, 
+            'patient_id' => $this->patient_id,
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
         ];

@@ -21,7 +21,7 @@ class PatientFactory extends Factory
             'name' => $this->faker->name, // Generate a fake name
             'email' => $this->faker->unique()->safeEmail, // Generate a unique email
             'phone' => $this->faker->unique()->phoneNumber, // Generate a unique phone number
-            'password' => Hash::make('1234'), // Encrypt and store the password "1234"j
+            'password' => Hash::make('123456'), // Encrypt and store the password "1234"j
             'image' => $this->faker->imageUrl(),
             'address' => $this->faker->address, // Generate a fake address
             'dob' => $this->faker->date('Y-m-d', '2000-01-01'), // Generate a date before 2000-01-01

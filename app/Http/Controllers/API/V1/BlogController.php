@@ -4,8 +4,10 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
+use App\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class BlogController extends Controller
 {
@@ -16,6 +18,7 @@ class BlogController extends Controller
      */
     public function index()
     {
+
 
         $blogs_student = Blog::where('user_type', 'student')->with('student_user')->get();
         $blogs_docoter = Blog::where('user_type', 'doctor')->with('doctor_user')->get();
@@ -33,31 +36,80 @@ class BlogController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
 
-        $user = Auth::user();
-         // Validate the incoming data
-         $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-        ]);
+public function store(Request $request)
+{
+    // Validate incoming data
+    $validatedData = $request->validate([
+        'title' => 'required|string|max:255',
+        'content' => 'required|string',
+        'images' => 'array|nullable', // Accepts array of images
+        'videos' => 'array|nullable', // Accepts array of videos
+    ]);
 
-        // Create new blog post based on the validated data
-        $blog = Blog::create([
-            'title' => $request->title,
-            'content' => $request->content,
-            'user_type' => $user->userType,
-            'user_id' => $user->id
-        ]);
+    // Decode base64 images and videos and store them in the database
+    $images = [];
+    $videos = [];
 
-        // Return the created blog as JSON response
-        // return response()->json($blog, 201);
-        return response()->json([
-            'message' => 'Blog added successfully',
-            'data' => $blog,
-        ], 201);
+    $user = Auth::user();
+    return $user->userType;
+
+    // Handle base64 image upload
+    if ($request->has('images')) {
+        foreach ($request->images as $image) {
+            // Validate if the image is a valid base64 string
+            if (preg_match('/^data:image\/(\w+);base64,/', $image)) {
+                $imageData = substr($image, strpos($image, ',') + 1);
+                $imageData = base64_decode($imageData);
+
+                // Generate a unique name for the image file
+                $imageName = uniqid('image_') . '.png';
+
+                // Store the image to the public directory
+                \Storage::disk('public')->put('images/' . $imageName, $imageData);
+
+                // Save the image path to the images array
+                $images[] = asset('storage/images/' . $imageName);
+            }
+        }
     }
+
+    // Handle base64 video upload
+    if ($request->has('videos')) {
+        foreach ($request->videos as $video) {
+            // Validate if the video is a valid base64 string
+            if (preg_match('/^data:video\/(\w+);base64,/', $video)) {
+                $videoData = substr($video, strpos($video, ',') + 1);
+                $videoData = base64_decode($videoData);
+
+                // Generate a unique name for the video file
+                $videoName = uniqid('video_') . '.mp4';
+
+                // Store the video to the public directory
+                \Storage::disk('public')->put('videos/' . $videoName, $videoData);
+
+                // Save the video path to the videos array
+                $videos[] = asset('storage/videos/' . $videoName);
+            }
+        }
+    }
+
+    // Create a new blog post with the images and videos as JSON
+    $blog = Blog::create([
+        'title' => $validatedData['title'],
+        'content' => $validatedData['content'],
+        'user_type' => Auth::user()->userType,
+        'user_id' => Auth::id(),
+        'images' => $images, // Store the images array as JSON
+        'videos' => $videos, // Store the videos array as JSON
+    ]);
+
+    return response()->json([
+        'message' => 'Blog created successfully',
+        'data' => $blog,
+    ], 201);
+}
+
 
     /**
      * Display the specified resource.
@@ -70,11 +122,14 @@ class BlogController extends Controller
         $blog = Blog::find($id);
 
 
+
         if(!$blog){
             return response()->json([
-                'message' => 'Undefine blog id',
+                'message' => 'Undefine blog',
             ]);
         }
+
+        $blog->load('comments');
 
         return $blog;
     }
@@ -140,4 +195,49 @@ class BlogController extends Controller
     {
         //
     }
+
+
+
+
+    public function addComment(Request $request, $id)
+    {
+        // Validate the comment
+        $validator = Validator::make($request->all(), [
+            'comment' => 'required|string|min:15',
+        ]);
+
+        // If validation fails, return error response
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        // Find the blog by ID
+        $blog = Blog::find($id);
+
+        if (!$blog) {
+            return response()->json([
+                'message' => 'Undefined blog',
+            ], 404);
+        }
+
+        // Get the authenticated user
+        $user = Auth::user();
+
+        // Add the comment to the blog
+        $comment = $blog->comments()->create([
+            'comment' => $request->comment,
+            'user_id' => $user->id,
+            'user_type' => $user->userType, // Save the user's model type
+        ]);
+
+        // Return success response
+        return response()->json([
+            'message' => 'Comment added successfully',
+            'data' => $comment,
+        ], 201);
+    }
+
 }

@@ -37,7 +37,9 @@ class DatabaseSeeder extends Seeder
             FeedbackSeeder::class,
             ContactSeeder::class,
             VideoSeeder::class,
-            BlogSeeder::class
+            BlogSeeder::class,
+            BlogCommentSeeder::class,
+            PrescriptionAssistSeeder::class
         ]);
 
 

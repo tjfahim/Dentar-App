@@ -19,6 +19,7 @@ class CaseResource extends JsonResource
             'name' => $this->name,
             'age' => $this->age,
             'number' => $this->number,
+            'gender' => $this->gender,
             'image_url' => $this->image ? asset('patient_images/' . $this->image) : null, // Full URL for the image
             'problem' => $this->problem,
             'created_at' => $this->created_at->toDateTimeString(), // Format timestamp

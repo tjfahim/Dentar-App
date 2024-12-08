@@ -19,9 +19,10 @@ class PatientMiddleware
     {
         $user = Auth::user();
 
+
         if($user->userType !== 'patient'){
             return response()->json([
-                'message' => 'unauthorize'
+                'message' => 'unauthorize patient'
             ]);
         }
 

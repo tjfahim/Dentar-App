@@ -120,6 +120,8 @@ Route::middleware(['auth:sanctum', 'auth.doctor_or_student'])->group(function(){
     Route::post('blog/add', [BlogController::class, 'store']);
     Route::post('blog/update/{id}', [BlogController::class, 'update']);
     Route::get('blog/delete', [BlogController::class, 'destroy']);
+
+    Route::post('blog/comment/{id}', [BlogController::class, 'addComment']);
 });
 
 
@@ -134,13 +136,12 @@ Route::middleware(['auth:sanctum', 'auth.doctor'])->group(function(){
 
 // patient section only
 Route::middleware('auth:sanctum', 'auth.patient')->group(function(){
-    Route::get('/patient/cases/list', [PatientProblemController::class, 'problemList'])->middleware('auth:sanctum');
-    Route::post('/patient/cases/add', [PatientProblemController::class, 'store'])->middleware('auth:sanctum');
+    Route::get('/patient/cases/list', [PatientProblemController::class, 'problemList']);
+    Route::post('/patient/cases/add', [PatientProblemController::class, 'store']);
 });
 
 
 // common api
-
 Route::get('notification', [NotificationController::class, 'index']);
 Route::get('privacypolicy', function(){
     return PrivacyPolicy::first();
@@ -179,26 +180,33 @@ Route::get('lists', function(){
 
 Route::get('leaderboard', function () {
     return response()->json([
-        [
-            'name' => 'John Doe',
-            'score' => 1500,
-            'image' => 'https://via.placeholder.com/150',
-        ],
-        [
-            'name' => 'Jane Smith',
-            'score' => 1400,
-            'image' => 'https://via.placeholder.com/150',
-        ],
-        [
-            'name' => 'Alice Johnson',
-            'score' => 1350,
-            'image' => 'https://via.placeholder.com/150',
-        ],
-        [
-            'name' => 'Bob Brown',
-            'score' => 1300,
-            'image' => 'https://via.placeholder.com/150',
-        ],
+        'message' => "Leaderboard December 2024",
+        'data' => [
+            [
+                'id' => 1,
+                'name' => 'John Doe',
+                'score' => 1500,
+                'image' => 'https://via.placeholder.com/150',
+            ],
+            [
+                'id' => 2,
+                'name' => 'Jane Smith',
+                'score' => 1400,
+                'image' => 'https://via.placeholder.com/150',
+            ],
+            [
+                'id' => 3,
+                'name' => 'Alice Johnson',
+                'score' => 1350,
+                'image' => 'https://via.placeholder.com/150',
+            ],
+            [
+                'id' => 4,
+                'name' => 'Bob Brown',
+                'score' => 1300,
+                'image' => 'https://via.placeholder.com/150',
+            ],
+        ]
     ]);
 });
 

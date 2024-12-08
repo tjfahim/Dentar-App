@@ -22,7 +22,7 @@ class StudentFactory extends Factory
             'email' => $this->faker->unique()->safeEmail, // Unique email
             'phone' => $this->faker->unique()->phoneNumber, // Unique phone number
             'address' => $this->faker->address, // Random address
-            'password' => Hash::make('1234'),
+            'password' => Hash::make('123456'),
             'dob' => $this->faker->date, // Random date of birth
             'gender' => $this->faker->randomElement(['Male', 'Female', 'Other']), // Random gender
             'university' => $this->faker->company, // Random university name

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->id(); // Auto-incrementing primary key
             $table->string('name'); // Patient's name
             $table->integer('age'); // Patient's age
+            $table->string('gender'); // Contact number
             $table->string('number'); // Contact number
             $table->string('image')->nullable(); // Path to image, nullable
             $table->text('problem'); // Description of the problem

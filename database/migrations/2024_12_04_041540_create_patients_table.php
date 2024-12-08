@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('phone')->unique();
             $table->string('image')->nullable();
             $table->string('token')->nullable();
-            $table->string('userType')->default('patinet');
+            $table->string('userType')->default('patient');
             $table->string('password');
             $table->string('address')->nullable();
             $table->date('dob')->nullable(); // Date of Birth

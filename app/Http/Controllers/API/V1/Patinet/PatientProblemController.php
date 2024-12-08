@@ -29,6 +29,7 @@ class PatientProblemController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'age' => 'required|integer|min:1|max:120',
+            'gender' => 'required|string',
             'number' => 'required|string|max:20',
             'image' => 'nullable|image|max:2048', // Optional image with max size 2MB
             'problem' => 'required|string',

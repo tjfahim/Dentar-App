@@ -20,7 +20,7 @@ class DoctorFactory extends Factory
             'name' => $this->faker->name(), // Fake doctor's name
             'email' => $this->faker->unique()->safeEmail(), // Unique email address
             'phone' => $this->faker->unique()->phoneNumber(), // Unique phone number
-            'password' => bcrypt('1234'), // Default password (hashed)
+            'password' => bcrypt('123456'), // Default password (hashed)
             'specialization' => $this->faker->word(), // Fake specialization (e.g., "Cardiology")
             'hospital' => $this->faker->company(), // Fake hospital/clinic name
             'gender' => $this->faker->randomElement(['Male', 'Female']), // Random gender
