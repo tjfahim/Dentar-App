@@ -8,6 +8,7 @@ use App\Http\Controllers\API\V1\Auth\ProfileController;
 use App\Http\Controllers\API\V1\Auth\RegisterController;
 use App\Http\Controllers\API\V1\Auth\StudentController;
 use App\Http\Controllers\API\V1\Auth\UserController;
+use App\Http\Controllers\API\V1\BlogController;
 use Illuminate\Support\Facades\Route;
 
 use Illuminate\Support\Facades\Broadcast;
@@ -87,8 +88,15 @@ Route::post('register', RegisterController::class);
 
 Route::middleware('auth:sanctum')->group(function(){
     Route::get('profile', [ProfileController::class, 'profile']);
-    Route::post('profile/update', [ProfileController::class, 'update']);
+    Route::post('profile/update', [ProfileController::class, 'updateProfile']);
 });
+
+
+
+// blog api
+Route::get('blog/lists', [BlogController::class, 'index']);
+Route::get('blog/show/{id}', [BlogController::class, 'show']);
+
 
 
 
@@ -103,6 +111,11 @@ Route::middleware(['auth:sanctum', 'auth.doctor_or_student'])->group(function(){
     Route::get('pdf', [BookController::class, 'pdf_index']);
     Route::post('book/search', [BookController::class, 'search'])
         ->name('search');
+
+
+    Route::post('blog/add', [BlogController::class, 'store']);
+    Route::post('blog/update', [BlogController::class, 'update']);
+    Route::get('blog/delete', [BlogController::class, 'destroy']);
 });
 
 
@@ -162,11 +175,33 @@ Route::get('lists', function(){
 });
 
 
-Route::get('leaderboard', function(){
+
+
+Route::get('leaderboard', function () {
     return response()->json([
-        
+        [
+            'name' => 'John Doe',
+            'score' => 1500,
+            'image' => 'https://via.placeholder.com/150',
+        ],
+        [
+            'name' => 'Jane Smith',
+            'score' => 1400,
+            'image' => 'https://via.placeholder.com/150',
+        ],
+        [
+            'name' => 'Alice Johnson',
+            'score' => 1350,
+            'image' => 'https://via.placeholder.com/150',
+        ],
+        [
+            'name' => 'Bob Brown',
+            'score' => 1300,
+            'image' => 'https://via.placeholder.com/150',
+        ],
     ]);
 });
+
 
 
 

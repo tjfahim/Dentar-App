@@ -13,10 +13,12 @@ class ContactController extends Controller
         // Validate incoming request
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:15',
-            'email' => 'required|email|max:255',
+            'user_info' => 'required|max:255',
             'message' => 'required|string|max:1000',
         ]);
+
+
+
 
         // Create a new contact record
         $contact = Contact::create($validatedData);

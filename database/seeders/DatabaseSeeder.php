@@ -36,7 +36,8 @@ class DatabaseSeeder extends Seeder
             PrivacyPolicySeeder::class,
             FeedbackSeeder::class,
             ContactSeeder::class,
-            VideoSeeder::class
+            VideoSeeder::class,
+            BlogSeeder::class
         ]);
 
 
