@@ -95,9 +95,9 @@ class LoginController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
         if($userType == 'doctor'){
-            $userRes = new DoctorResource($user);
+            $userRes = new UserResource($user);
         }elseif($userType == 'student'){
-            $userRes = new StudentResource($user);
+            $userRes = new UserResource($user);
         }elseif($userType == 'patient'){
             $userRes = new UserResource($user);
         }

@@ -118,7 +118,7 @@ Route::middleware(['auth:sanctum', 'auth.doctor_or_student'])->group(function(){
 
 
     Route::post('blog/add', [BlogController::class, 'store']);
-    Route::post('blog/update', [BlogController::class, 'update']);
+    Route::post('blog/update/{id}', [BlogController::class, 'update']);
     Route::get('blog/delete', [BlogController::class, 'destroy']);
 });
 

@@ -19,15 +19,25 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'phone' => $this->phone,
-            'image' => $this->image ? asset('storage/' . $this->image) : null, // Return image URL if exists
-            'address' => $this->address,
-            'dob' => $this->dob,
+            'userType' => $this->userType,
+            'specialization' => $this->specialization,
+            'hospital' => $this->hospital,
             'gender' => $this->gender,
-            'medical_history' => $this->medical_history,
-            'created_at' => $this->created_at->toDateTimeString(),
-            'updated_at' => $this->updated_at->toDateTimeString(),
+            'biography' => $this->biography,
+            'dob' => $this->dob,
+            'degree' => $this->degree,
+            'image' => $this->image,
+            'signature' => $this->signature,
+            'role' => $this->role,
+            'address' => $this->address,
+            'bmdc_number' => $this->bmdc_number,
+            'bmdc_type' => $this->bmdc_type,
+            'nextPatient' => $this->nextPatient,
             'organization' => $this->organization,
-            'occupation' => $this->occupation
+            'occupation' => $this->occupation,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+            'deleted_at' => $this->deleted_at,
         ];
     }
 }

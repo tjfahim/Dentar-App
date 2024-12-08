@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -14,7 +15,7 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
 
-        return $user;
+        return new  UserResource($user);
     }
 
     public function updateProfile(Request $request)
@@ -35,7 +36,7 @@ class ProfileController extends Controller
 
         $userType = $user->userType;
 
-      
+
 
         if ($userType == 'patient') {
             $validator = Validator::make($request->all(), [

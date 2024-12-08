@@ -72,8 +72,7 @@ class BlogController extends Controller
 
         if(!$blog){
             return response()->json([
-                'message' => 'Blog added successfully',
-                'data' => $blog,
+                'message' => 'Undefine blog id',
             ]);
         }
 
@@ -89,8 +88,47 @@ class BlogController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // Get the authenticated user
+        $user = Auth::user();
+
+        // Validate the incoming data
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+        ]);
+
+        // Find the blog post by ID
+        $blog = Blog::find($id);
+
+        // Check if the blog post exists
+        if (!$blog) {
+            return response()->json([
+                'message' => 'Blog post not found',
+            ], 404);
+        }
+
+        // Ensure that the authenticated user is the owner of the blog post
+        if ($blog->user_id !== $user->id) {
+            return response()->json([
+                'message' => 'You are not authorized to update this blog post',
+            ], 403);
+        }
+
+        // Update the blog post with the validated data
+        $blog->update([
+            'title' => $request->title,
+            'content' => $request->content,
+            'user_type' => $user->userType,  // Optionally, you can also update the user type, if required
+            'user_id' => $user->id,  // Optionally, you can also update the user ID, if required
+        ]);
+
+        // Return the updated blog as JSON response
+        return response()->json([
+            'message' => 'Blog updated successfully',
+            'data' => $blog,
+        ], 200);
     }
+
 
     /**
      * Remove the specified resource from storage.
