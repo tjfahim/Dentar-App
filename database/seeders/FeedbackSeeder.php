@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Feedback;
+use App\Models\Student;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,6 +16,15 @@ class FeedbackSeeder extends Seeder
      */
     public function run()
     {
-        Feedback::factory(5)->create();
+
+        $students = Student::inRandomOrder()->limit(10)->get();
+
+
+        foreach($students as $student){
+            Feedback::factory()->create([
+                'user_id' => $student->id,
+                'user_type' => $student->userType,
+            ]);
+        }
     }
 }

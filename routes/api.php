@@ -89,6 +89,10 @@ Route::post('register', RegisterController::class);
 Route::middleware('auth:sanctum')->group(function(){
     Route::get('profile', [ProfileController::class, 'profile']);
     Route::post('profile/update', [ProfileController::class, 'updateProfile']);
+
+    Route::post('feedback/add', [FeedbackController::class, 'store']);
+    Route::post('contact/add', [ContactController::class, 'store']);
+    Route::get('youtube/videos', [VideoController::class, 'index']);
 });
 
 
@@ -148,10 +152,6 @@ Route::get('trumsandcondition', function(){
     ]);
 });
 
-
-Route::post('feedback/add', [FeedbackController::class, 'store']);
-Route::post('contact/add', [ContactController::class, 'store']);
-Route::get('youtube/videos', [VideoController::class, 'index']);
 
 
 

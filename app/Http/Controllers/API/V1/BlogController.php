@@ -72,7 +72,8 @@ class BlogController extends Controller
 
         if(!$blog){
             return response()->json([
-                
+                'message' => 'Blog added successfully',
+                'data' => $blog,
             ]);
         }
 
