@@ -20,6 +20,7 @@ use App\Http\Controllers\API\V1\Patinet\PatientProblemController;
 use App\Http\Controllers\API\V1\SliderController;
 use App\Http\Controllers\API\V1\Doctor\DoctorController;
 use App\Http\Controllers\API\V1\NotificationController;
+use App\Http\Controllers\DiagnosticController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\VideoController;
 use App\Http\Resources\DoctorSpecialtyResource;
@@ -93,8 +94,12 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('feedback/add', [FeedbackController::class, 'store']);
     Route::post('contact/add', [ContactController::class, 'store']);
     Route::get('youtube/videos', [VideoController::class, 'index']);
-});
+    Route::get('doctors/lists', [DoctorController::class, 'doctor_list']);
 
+
+    // diagnostic
+    Route::get('diagnostic', DiagnosticController::class);
+});
 
 
 // blog api
@@ -106,9 +111,12 @@ Route::get('blog/show/{id}', [BlogController::class, 'show']);
 
 // doctor and student  common section
 Route::middleware(['auth:sanctum', 'auth.doctor_or_student'])->group(function(){
-    Route::get('job', [JobController::class, 'index'])->name('job.index');
-    Route::get('job/{job}', [JobController::class, 'show'])->name('job.show');
-    Route::post('job/search', [JobController::class, 'search'])->name('job.search');
+    Route::get('job', [JobController::class, 'index']);
+    Route::post('job/show/{id}', [JobController::class, 'show']);
+    Route::post('job/add', [JobController::class, 'store']);
+    Route::post('job/update/{id}', [JobController::class, 'update']);
+    Route::post('job/delete/{id}', [JobController::class, 'destroy']);
+    Route::post('job/search', [JobController::class, 'search']);
 
 
     Route::get('book', [BookController::class, 'index']);
@@ -119,7 +127,7 @@ Route::middleware(['auth:sanctum', 'auth.doctor_or_student'])->group(function(){
 
     Route::post('blog/add', [BlogController::class, 'store']);
     Route::post('blog/update/{id}', [BlogController::class, 'update']);
-    Route::get('blog/delete', [BlogController::class, 'destroy']);
+    Route::delete('blog/delete/{id}', [BlogController::class, 'destroy']);
 
     Route::post('blog/comment/{id}', [BlogController::class, 'addComment']);
 });
@@ -129,14 +137,14 @@ Route::middleware(['auth:sanctum', 'auth.doctor_or_student'])->group(function(){
 
 // doctor section
 Route::middleware(['auth:sanctum', 'auth.doctor'])->group(function(){
-    Route::get('/doctor/patient/list', [DoctorController::class, 'caseList']);
+    //Route::get('/doctor/patient/list', [DoctorController::class, 'caseList']);
     Route::post('/doctor/patient/report/{id}', [DoctorController::class, 'addReport']);
 });
 
 
 // patient section only
 Route::middleware('auth:sanctum', 'auth.patient')->group(function(){
-    Route::get('/patient/cases/list', [PatientProblemController::class, 'problemList']);
+    //Route::get('/patient/cases/list', [PatientProblemController::class, 'problemList']);
     Route::post('/patient/cases/add', [PatientProblemController::class, 'store']);
 });
 

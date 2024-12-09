@@ -60,6 +60,7 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         'api_role' => \App\Http\Middleware\RoleManage::class,
         'auth.student' => \App\Http\Middleware\StudentMiddleware::class,
+        'auth.normal' => \App\Http\Middleware\NormalMiddleware::class,
         'auth.doctor' => \App\Http\Middleware\DoctorMiddleware::class,
         'auth.doctor_or_student' => \App\Http\Middleware\DoctorOrStudentMiddleware::class,
         'auth.patient' => \App\Http\Middleware\PatientMiddleware::class,

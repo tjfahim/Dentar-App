@@ -19,7 +19,8 @@ class FeedbackFactory extends Factory
         return [
             'name' => fake()->name,
             'email' =>fake()->email(),
-            'description' => fake()->paragraph(5)
+            'description' => fake()->paragraph(5),
+            'rating' => fake()->numberBetween(1,5)
         ];
     }
 }

@@ -15,5 +15,4 @@ class PrescriptionAssist extends Model
         'user_id',
         'userType'
     ];
-
 }

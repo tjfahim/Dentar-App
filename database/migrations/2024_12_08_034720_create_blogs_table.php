@@ -19,11 +19,9 @@ return new class extends Migration
             $table->longText('content');
             $table->string('user_type');
             $table->unsignedBigInteger('user_id');
-            $table->json('images')->nullable(); // Stores an array of base64 images
-            $table->json('videos')->nullable(); // Stores an array of base64 videos
+            $table->json('file')->nullable();
             $table->timestamps();
         });
-
 
     }
 

@@ -21,7 +21,7 @@ class DoctorOrStudentMiddleware
 
         if($user->userType !== 'doctor' && $user->userType !== 'student'){
             return response()->json([
-                'message' => 'unauthorize '
+                'message' => 'unauthorize doctor or Student'
             ]);
         }
 

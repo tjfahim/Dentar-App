@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\BlogResource;
 use App\Models\Blog;
 use App\Models\Media;
 use Illuminate\Http\Request;
@@ -27,7 +28,9 @@ class BlogController extends Controller
 
         $blogs = $blogs->sortBy('id')->values();
 
-        return $blogs;
+
+
+        return BlogResource::collection($blogs);
     }
 
     /**
@@ -39,69 +42,41 @@ class BlogController extends Controller
 
 public function store(Request $request)
 {
-    // Validate incoming data
+
+
     $validatedData = $request->validate([
         'title' => 'required|string|max:255',
         'content' => 'required|string',
-        'images' => 'array|nullable', // Accepts array of images
-        'videos' => 'array|nullable', // Accepts array of videos
+        'file' => 'array|nullable', // Accepts array of images
     ]);
 
-    // Decode base64 images and videos and store them in the database
-    $images = [];
-    $videos = [];
+    $allfiles = [];
+    if($request->has('file')){
+        $files = $request->file;
 
-    $user = Auth::user();
-    return $user->userType;
+        foreach($files as $key => $value){
+            $file = time() . $key. '.'. $value->getClientOriginalExtension();
 
-    // Handle base64 image upload
-    if ($request->has('images')) {
-        foreach ($request->images as $image) {
-            // Validate if the image is a valid base64 string
-            if (preg_match('/^data:image\/(\w+);base64,/', $image)) {
-                $imageData = substr($image, strpos($image, ',') + 1);
-                $imageData = base64_decode($imageData);
+            $path = public_path('images/blog');
 
-                // Generate a unique name for the image file
-                $imageName = uniqid('image_') . '.png';
+            $fullPath = 'images/blog/' . $file;
 
-                // Store the image to the public directory
-                \Storage::disk('public')->put('images/' . $imageName, $imageData);
 
-                // Save the image path to the images array
-                $images[] = asset('storage/images/' . $imageName);
-            }
+            array_push($allfiles, $fullPath);
+
+            $value->move($path, $file);
         }
     }
 
-    // Handle base64 video upload
-    if ($request->has('videos')) {
-        foreach ($request->videos as $video) {
-            // Validate if the video is a valid base64 string
-            if (preg_match('/^data:video\/(\w+);base64,/', $video)) {
-                $videoData = substr($video, strpos($video, ',') + 1);
-                $videoData = base64_decode($videoData);
 
-                // Generate a unique name for the video file
-                $videoName = uniqid('video_') . '.mp4';
-
-                // Store the video to the public directory
-                \Storage::disk('public')->put('videos/' . $videoName, $videoData);
-
-                // Save the video path to the videos array
-                $videos[] = asset('storage/videos/' . $videoName);
-            }
-        }
-    }
 
     // Create a new blog post with the images and videos as JSON
     $blog = Blog::create([
         'title' => $validatedData['title'],
         'content' => $validatedData['content'],
         'user_type' => Auth::user()->userType,
-        'user_id' => Auth::id(),
-        'images' => $images, // Store the images array as JSON
-        'videos' => $videos, // Store the videos array as JSON
+        'user_id' => Auth::user()->id,
+        'file' => json_encode($allfiles)
     ]);
 
     return response()->json([
@@ -131,7 +106,7 @@ public function store(Request $request)
 
         $blog->load('comments');
 
-        return $blog;
+        return new BlogResource($blog);
     }
 
     /**
@@ -142,47 +117,52 @@ public function store(Request $request)
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        // Get the authenticated user
-        $user = Auth::user();
+{
+    // Validate the request data
+    $validatedData = $request->validate([
+        'title' => 'required|string|max:255',
+        'content' => 'required|string',
+        'file' => 'array|nullable', // Accepts array of images
+    ]);
 
-        // Validate the incoming data
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-        ]);
+    // Find the blog post to update
+    $blog = Blog::findOrFail($id); // If the blog post doesn't exist, it will throw a 404 error
 
-        // Find the blog post by ID
-        $blog = Blog::find($id);
+    // If files are provided, process and save them
+    $allfiles = $blog->file ? json_decode($blog->file, true) : []; // Keep existing files if no new ones are provided
 
-        // Check if the blog post exists
-        if (!$blog) {
-            return response()->json([
-                'message' => 'Blog post not found',
-            ], 404);
+    if ($request->has('file')) {
+        $files = $request->file('file');
+
+        // If you are updating files, you can either replace them or add to the existing ones
+        foreach ($files as $key => $value) {
+            $file = time() . $key . '.' . $value->getClientOriginalExtension();
+            $path = public_path('images/blog');
+            $fullPath = 'images/blog/' . $file;
+
+            // Add the new file to the list
+            array_push($allfiles, $fullPath);
+
+            // Move the file to the server
+            $value->move($path, $file);
         }
-
-        // Ensure that the authenticated user is the owner of the blog post
-        if ($blog->user_id !== $user->id) {
-            return response()->json([
-                'message' => 'You are not authorized to update this blog post',
-            ], 403);
-        }
-
-        // Update the blog post with the validated data
-        $blog->update([
-            'title' => $request->title,
-            'content' => $request->content,
-            'user_type' => $user->userType,  // Optionally, you can also update the user type, if required
-            'user_id' => $user->id,  // Optionally, you can also update the user ID, if required
-        ]);
-
-        // Return the updated blog as JSON response
-        return response()->json([
-            'message' => 'Blog updated successfully',
-            'data' => $blog,
-        ], 200);
     }
+
+    // Update the blog post with the new data
+    $blog->update([
+        'title' => $validatedData['title'],
+        'content' => $validatedData['content'],
+        'user_type' => Auth::user()->userType,
+        'user_id' => Auth::user()->id,
+        'file' => json_encode($allfiles) // Save the updated list of files
+    ]);
+
+    return response()->json([
+        'message' => 'Blog updated successfully',
+        'data' => new BlogResource($blog),
+    ], 200);
+}
+
 
 
     /**
@@ -193,7 +173,29 @@ public function store(Request $request)
      */
     public function destroy($id)
     {
-        //
+        // Find the blog post by its ID
+        $blog = Blog::findOrFail($id); // If not found, it will throw a 404 error
+
+        // Optionally, delete associated files if needed
+        if ($blog->file) {
+            $files = json_decode($blog->file, true);
+
+            // Loop through the file paths and delete the files from the server
+            foreach ($files as $file) {
+                $filePath = public_path($file);
+
+                if (file_exists($filePath)) {
+                    unlink($filePath); // Delete the file
+                }
+            }
+        }
+
+        // Delete the blog post from the database
+        $blog->delete();
+
+        return response()->json([
+            'message' => 'Blog deleted successfully',
+        ], 200);
     }
 
 

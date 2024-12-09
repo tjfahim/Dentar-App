@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('image');
             $table->longtext('description');
-            $table->bool('is_read')->default(false);
+            $table->boolean('is_read')->default(false);
             $table->unsignedBigInteger('user_id');
             $table->string('userType');
             $table->timestamps();

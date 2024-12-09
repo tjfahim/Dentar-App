@@ -12,14 +12,14 @@ use Illuminate\Support\Facades\Auth;
 
 class PatientProblemController extends Controller
 {
-    public function problemList()
-    {
-        $user = Auth::user();
+    // public function problemList()
+    // {
+    //     $user = Auth::user();
 
-        $cases = $user->cases;
+    //     $cases = $user->cases;
 
-        return CaseResource::collection($cases);
-    }
+    //     return CaseResource::collection($cases);
+    // }
 
 
     public function store(Request $request)

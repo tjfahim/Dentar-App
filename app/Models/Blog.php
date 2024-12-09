@@ -10,7 +10,7 @@ class Blog extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 'content', 'user_id', 'user_type', 'videos', 'images'
+        'title', 'content', 'user_id', 'user_type', 'file'
     ];
 
     public function student_user()

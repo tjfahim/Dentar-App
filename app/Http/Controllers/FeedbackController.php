@@ -22,7 +22,8 @@ class FeedbackController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'description' => 'required|string|min:10|max:1000',
+            'description' => 'string',
+            'rating' => 'required'
         ]);
 
         // Merge the validated data with user_id and user_type

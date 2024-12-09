@@ -4,18 +4,20 @@ namespace App\Http\Controllers\API\V1\Doctor;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CaseResource;
+use App\Http\Resources\DoctorResource;
+use App\Models\Doctor;
 use App\Models\PatientProblem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class DoctorController extends Controller
 {
-    public function caseList()
-    {
-        $doctor = Auth::user();
+    // public function caseList()
+    // {
+    //     $doctor = Auth::user();
 
-        return CaseResource::collection($doctor->cases);
-    }
+    //     return CaseResource::collection($doctor->cases);
+    // }
 
 
     public function addReport($id)
@@ -30,5 +32,10 @@ class DoctorController extends Controller
 
 
         return request()->all();
+    }
+
+    public function doctor_list()
+    {
+        return DoctorResource::collection(Doctor::all());
     }
 }

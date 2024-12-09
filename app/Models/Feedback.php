@@ -14,9 +14,9 @@ class Feedback extends Model
         'user_type',
         'name',
         'email',
-        'description'
+        'description',
+        'rating'
     ];
-
 
 
 }
