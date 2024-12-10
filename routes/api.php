@@ -23,6 +23,7 @@ use App\Http\Controllers\API\V1\Doctor\DoctorController;
 use App\Http\Controllers\API\V1\NationalGuideLineController;
 use App\Http\Controllers\API\V1\NotificationController;
 use App\Http\Controllers\API\V1\PrescriptionAssistController;
+use App\Http\Controllers\API\V1\TeenagerHelpController;
 use App\Http\Controllers\DiagnosticController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\VideoController;
@@ -116,6 +117,7 @@ Route::get('blog/lists', [BlogController::class, 'index']);
 Route::get('blog/show/{id}', [BlogController::class, 'show']);
 
 Route::get('national/guideline', [NationalGuideLineController::class, 'index']);
+Route::get('teenager/help', [TeenagerHelpController::class, 'index']);
 
 
 // doctor and student  common section

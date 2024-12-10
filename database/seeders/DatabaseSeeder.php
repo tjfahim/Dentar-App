@@ -14,6 +14,7 @@ use App\Models\Doctor;
 use App\Models\Slider;
 use App\Models\Job;
 use App\Models\NationalGuideLine;
+use App\Models\TeenagerHelp;
 
 class DatabaseSeeder extends Seeder
 {
@@ -42,7 +43,8 @@ class DatabaseSeeder extends Seeder
             BlogCommentSeeder::class,
             PrescriptionAssistSeeder::class,
             DiognosticSeeder::class,
-            NationalGuideLineSeeder::class
+            NationalGuideLineSeeder::class,
+            TeenagerHelpSeeder::class,
         ]);
 
 

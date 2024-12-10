@@ -16,7 +16,7 @@ class NatioalGuideResource extends JsonResource
     {
         return [
             'title' => $this->title,
-            'descrioption' => $this->discription,
+            'descrioption' => $this->description,
             'file' => asset($this->file)
         ];
     }
