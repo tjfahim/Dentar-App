@@ -32,6 +32,6 @@ class Patient extends Model
 
     public function cases()
     {
-        return $this->hasMany(PatientProblem::class);
+        return $this->hasMany(Diognostic::class, 'patient_id', 'id');
     }
 }

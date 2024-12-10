@@ -8,7 +8,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable; // Add this
 use Illuminate\Notifications\Notifiable;
 
-class Doctor extends Model
+class Doctor extends Authenticatable
 {
     use HasFactory;
     use HasApiTokens;
@@ -38,6 +38,6 @@ class Doctor extends Model
 
     public function cases()
     {
-        return $this->hasMany(PatientProblem::class);
+        return $this->hasMany(Diognostic::class);
     }
 }

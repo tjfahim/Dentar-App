@@ -2,13 +2,14 @@
 
 namespace Database\Seeders;
 
-use App\Models\Doctor;
+use App\Models\Diognostic;
 use App\Models\Patient;
-use App\Models\PatientProblem;
+use App\Models\Student;
+use App\Models\Doctor;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class PatientProblemSeeder extends Seeder
+class DiognosticSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -18,27 +19,24 @@ class PatientProblemSeeder extends Seeder
     public function run()
     {
 
-        $patients = Patient::all();
 
+        $normal_user = Patient::all();
+        $student = Student::all();
 
-        foreach ($patients as $patient) {
-            $problem = rand(0, 5);
+        $patients = $normal_user->merge($student);
+
+        foreach($patients as $patient){
             $doctor_id = null;
 
-            
+
             $doctors = Doctor::where('role', 'admin')->get();
 
-
-            // if ($doctors->where('nextPatient', true)->count() === 0) {
-            //     $doctors->first()->nextPatient = true;
-            //     $doctors->first()->save();
-            // }
-
-
             $length = count($doctors);
+            $problem = rand(0, 5);
 
-            for ($i = 0; $i < $problem; $i++) {
-                // Loop through the doctors to find the one with nextPatient set to true
+            for($i = 0; $i<$problem; $i++){
+
+
                 foreach ($doctors as $index => $doctor) {
                     if ($doctor->nextPatient) {
                         // Assign doctor_id and handle nextPatient logic
@@ -57,14 +55,16 @@ class PatientProblemSeeder extends Seeder
 
                 // If a valid doctor_id is assigned, create the PatientProblem
                 if ($doctor_id) {
-                    PatientProblem::factory()->create([
+                    Diognostic::factory()->create([
+                        'patient_type' => $patient->userType,
                         'patient_id' => $patient->id,
                         'doctor_id' => $doctor_id,
                     ]);
                 }
+
+
+
             }
         }
-
     }
-
 }

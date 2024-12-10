@@ -39,7 +39,8 @@ class DatabaseSeeder extends Seeder
             VideoSeeder::class,
             BlogSeeder::class,
             BlogCommentSeeder::class,
-            PrescriptionAssistSeeder::class
+            PrescriptionAssistSeeder::class,
+            DiognosticSeeder::class
         ]);
 
 

@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Broadcast;
 
 use App\Http\Controllers\API\V1\BookController;
 use App\Http\Controllers\API\V1\ContactController;
+use App\Http\Controllers\API\V1\DiognosticController;
 use App\Http\Controllers\API\V1\JobController;
 use App\Http\Controllers\API\V1\Patinet\PatientProblemController;
 use App\Http\Controllers\API\V1\SliderController;
@@ -97,8 +98,8 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('doctors/lists', [DoctorController::class, 'doctor_list']);
 
 
-    // diagnostic
-    Route::get('diagnostic', DiagnosticController::class);
+
+    Route::get('diagnostic', [DiognosticController::class, 'index']);
 });
 
 
