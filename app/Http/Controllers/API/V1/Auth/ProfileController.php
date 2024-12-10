@@ -22,7 +22,6 @@ class ProfileController extends Controller
     {
 
 
-
         // $validator = Validator::make($request->all(), [
         //     'userType' => 'required|in:patient,student,doctor',
         // ]);
@@ -60,6 +59,8 @@ class ProfileController extends Controller
                 $imagePath = $request->file('image')->store('images/patients', 'public');
             }
 
+            $date = date_create($request->dob);
+
             // Update patient data
             $user->update([
                 'name' => $request->name ?? $user->name,
@@ -67,7 +68,7 @@ class ProfileController extends Controller
                 'phone' => $request->phone ?? $user->phone,
                 'image' => $imagePath,
                 'address' => $request->address ?? $user->address,
-                'dob' => $request->dob ?? $user->dob,
+                'dob' => date_format($date, "Y-m-d") ??  $user->dob,
                 'gender' => $request->gender ?? $user->gender,
                 'medical_history' => $request->medical_history ?? $user->medical_history,
             ]);
@@ -99,6 +100,8 @@ class ProfileController extends Controller
                 $imagePath = $request->file('image')->store('images/students', 'public');
             }
 
+            $date = date_create($request->dob);
+
             // Update student data
             $user->update([
                 'name' => $request->name ?? $user->name,
@@ -106,14 +109,13 @@ class ProfileController extends Controller
                 'phone' => $request->phone ?? $user->phone,
                 'image' => $imagePath,
                 'address' => $request->address ?? $user->address,
-                'dob' => $request->dob ?? $user->dob,
+                'dob' => date_format($date, "Y-m-d") ??  $user->dob,
                 'gender' => $request->gender ?? $user->gender,
                 'university' => $request->university ?? $user->university,
                 'year' => $request->year ?? $user->year,
                 'specialization' => $request->specialization ?? $user->specialization,
                 'medical_history' => $request->medical_history ?? $user->medical_history,
                 'additional_info' => $request->additional_info ?? $user->additional_info,
-                'bio' => $request->bio ?? $user->bio,
             ]);
 
         } elseif ($userType == 'doctor') {
@@ -134,7 +136,6 @@ class ProfileController extends Controller
                 'bmdc_type' => 'nullable|string',
                 'occupation' => 'nullable|string',
                 'organization' => 'nullable|string',
-                'role' => 'nullable|in:normal,admin',
             ]);
 
             if ($validator->fails()) {
@@ -151,6 +152,7 @@ class ProfileController extends Controller
                 $signaturePath = $request->file('signature')->store('images/signatures', 'public');
             }
 
+            $date = date_create($request->dob);
             // Update doctor data
             $user->update([
                 'name' => $request->name ?? $user->name,
@@ -162,21 +164,20 @@ class ProfileController extends Controller
                 'hospital' => $request->hospital ?? $user->hospital,
                 'gender' => $request->gender ?? $user->gender,
                 'biography' => $request->biography ?? $user->biography,
-                'dob' => $request->dob ?? $user->dob,
+                'dob' => date_format($date, "Y-m-d") ??  $user->dob,
                 'degree' => $request->degree ?? $user->degree,
                 'address' => $request->address ?? $user->address,
                 'bmdc_number' => $request->bmdc_number ?? $user->bmdc_number,
                 'bmdc_type' => $request->bmdc_type ?? $user->bmdc_type,
                 'occupation' => $request->occupation ?? $user->occupation,
                 'organization' => $request->organization ?? $user->organization,
-                'role' => $request->role ?? $user->role,
             ]);
         }
 
         // Return updated user data
         return response()->json([
             'message' => 'Profile updated successfully',
-            'user' => $user
+            'user' => new UserResource($user)
         ]);
     }
 

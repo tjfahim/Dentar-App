@@ -21,8 +21,8 @@ class DiognosticResource extends JsonResource
             'number' => $this->number,
             'image' => $this->image,
             'problem' => $this->problem,
-            'patient' => $this->patient_id,
-            'doctor_id' => $this->doctor_id,
+            'doctor' => new UserResource($this->doctor),
+            'patient' => new UserResource($this->patient) ??  new UserResource($this->student)
         ];
     }
 }

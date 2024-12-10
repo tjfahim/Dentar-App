@@ -26,20 +26,20 @@ class BookSeeder extends Seeder
         // Create 10 fake books
         for ($i = 0; $i < 10; $i++) {
             // Generate a random PDF file and save it in the storage directory
-            $pdfFileName = $faker->word . '.pdf';
-            $pdfPath = 'pdfs/' . 'dummy.pdf'; // Relative path
-            $pdfFullPath = public_path($pdfPath); // Full path to save the PDF
-            $fakePdfContent = "Fake PDF content for book " . $faker->word . ".";
+            // $pdfFileName = $faker->word . '.pdf';
+            // $pdfPath = 'pdfs/' . 'dummy.pdf'; // Relative path
+            // $pdfFullPath = public_path($pdfPath); // Full path to save the PDF
+            // $fakePdfContent = "Fake PDF content for book " . $faker->word . ".";
 
             // Save the fake PDF file
-            File::put($pdfFullPath, $fakePdfContent);
+            // File::put($pdfFullPath, $fakePdfContent);
 
             // Create the book entry in the database
             Book::create([
                 'title' => $faker->sentence(3),
                 'description' => $faker->paragraph(3),
                 'image' => $faker->imageUrl(640, 480, 'books', true),
-                'pdf' => 'pdfs/dummy.pdf', // Store the relative path in the database
+                'pdf' => 'pdfs/dummy.pdf',
                 'book_type' => $faker->randomElement(['book', 'pdf']),
                 'status' => $faker->randomElement(['active', 'inactive']),
             ]);

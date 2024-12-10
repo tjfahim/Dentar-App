@@ -20,12 +20,15 @@ use App\Http\Controllers\API\V1\JobController;
 use App\Http\Controllers\API\V1\Patinet\PatientProblemController;
 use App\Http\Controllers\API\V1\SliderController;
 use App\Http\Controllers\API\V1\Doctor\DoctorController;
+use App\Http\Controllers\API\V1\NationalGuideLineController;
 use App\Http\Controllers\API\V1\NotificationController;
+use App\Http\Controllers\API\V1\PrescriptionAssistController;
 use App\Http\Controllers\DiagnosticController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\VideoController;
 use App\Http\Resources\DoctorSpecialtyResource;
 use App\Models\DoctorSpecialty;
+use App\Models\NationalGuideLine;
 use App\Models\PrivacyPolicy;
 use Illuminate\Support\Facades\Auth;
 
@@ -98,8 +101,13 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('doctors/lists', [DoctorController::class, 'doctor_list']);
 
 
+    Route::get('prescription/lists', [PrescriptionAssistController::class, 'index']);
+
+
 
     Route::get('diagnostic', [DiognosticController::class, 'index']);
+    Route::post('diagnostic/add', [DiognosticController::class, 'add']);
+    Route::post('diagnostic/report', [DiognosticController::class, 'report']);
 });
 
 
@@ -107,7 +115,7 @@ Route::middleware('auth:sanctum')->group(function(){
 Route::get('blog/lists', [BlogController::class, 'index']);
 Route::get('blog/show/{id}', [BlogController::class, 'show']);
 
-
+Route::get('national/guideline', [NationalGuideLineController::class, 'index']);
 
 
 // doctor and student  common section
@@ -161,8 +169,6 @@ Route::get('trumsandcondition', function(){
         'description' => "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text"
     ]);
 });
-
-
 
 
 

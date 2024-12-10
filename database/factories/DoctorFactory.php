@@ -27,7 +27,7 @@ class DoctorFactory extends Factory
             'biography' => $this->faker->paragraph(), // Fake biography
             'dob' => $this->faker->date(), // Fake date of birth
             'degree' => $this->faker->word(), // Fake degree
-            'image' => $this->faker->imageUrl(640, 480, 'people'), // Fake image URL
+            'image' => 'images/doctors/doctor.jpg', // Fake image URL
             'signature' => $this->faker->imageUrl(640, 480, 'business'), // Fake signature image URL
             'role' => $this->faker->randomElement(['normal', 'admin']), // Random role
             'address' => $this->faker->address(), // Fake address

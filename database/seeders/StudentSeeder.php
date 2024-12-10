@@ -27,6 +27,7 @@ class StudentSeeder extends Seeder
             'password' => Hash::make('123456'),
             'dob' => '1972-02-25', // Random date of birth
             'gender' => 'male',
+            'image' => 'images/students/student.jpg',
             'university' => 'Dhaka Univerisy', // Random university name
             'year' => '1st Year',
             'specialization' => 'Neurology',

@@ -13,6 +13,7 @@ use App\Models\Book;
 use App\Models\Doctor;
 use App\Models\Slider;
 use App\Models\Job;
+use App\Models\NationalGuideLine;
 
 class DatabaseSeeder extends Seeder
 {
@@ -40,7 +41,8 @@ class DatabaseSeeder extends Seeder
             BlogSeeder::class,
             BlogCommentSeeder::class,
             PrescriptionAssistSeeder::class,
-            DiognosticSeeder::class
+            DiognosticSeeder::class,
+            NationalGuideLineSeeder::class
         ]);
 
 

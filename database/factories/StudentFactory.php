@@ -25,6 +25,7 @@ class StudentFactory extends Factory
             'password' => Hash::make('123456'),
             'dob' => $this->faker->date, // Random date of birth
             'gender' => $this->faker->randomElement(['Male', 'Female', 'Other']), // Random gender
+            'image' => 'images/students/student.jpg',
             'university' => $this->faker->company, // Random university name
             'year' => $this->faker->randomElement(['1st Year', '2nd Year', '3rd Year', '4th Year', 'Final Year']), // Random year of study
             'specialization' => $this->faker->randomElement(['Cardiology', 'Neurology', 'Orthopedics', 'Pediatrics', 'Surgery']), // Random specialization

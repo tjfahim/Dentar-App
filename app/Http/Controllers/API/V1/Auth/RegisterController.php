@@ -137,7 +137,7 @@ class RegisterController extends Controller
             return response()->json([
                 'message' => 'Registration successful',
                 'token' => $token,
-                'user' => new StudentResource($student),  // Adjust to StudentResource if needed
+                'user' => new UserResource($student),  // Adjust to StudentResource if needed
             ]);
 
 
@@ -210,7 +210,7 @@ class RegisterController extends Controller
         return response()->json([
             'message' => 'Registration successful',
             'token' => $token,
-            'user' => new DoctorResource($doctor),  // Adjust to DoctorResource if needed
+            'user' => new UserResource($doctor),  // Adjust to DoctorResource if needed
         ]);
 
 

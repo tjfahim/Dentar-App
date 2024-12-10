@@ -5,7 +5,9 @@ namespace App\Http\Controllers\API\V1\Patinet;
 use App\Models\PatientProblem;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CaseResource;
+use App\Http\Resources\DiognosticResource;
 use App\Http\Resources\PatientProblemResource;
+use App\Models\Diognostic;
 use App\Models\Doctor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -70,12 +72,12 @@ class PatientProblemController extends Controller
 
 
         // Add the patient problem record to the database
-        $patientProblem = PatientProblem::create($attributes);
+        $patientProblem = Diognostic::create($attributes);
 
         // Return a JSON response
         return response()->json([
             'message' => 'Patient Case added successfully!',
-            'data' => new CaseResource($patientProblem),
+            'data' => new DiognosticResource($patientProblem),
         ], 201);
     }
 

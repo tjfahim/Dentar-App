@@ -17,6 +17,7 @@ class PrescriptionAssistFactory extends Factory
     public function definition()
     {
         return [
+            'title' => $this->faker->name,
             'image' => $this->faker->imageUrl(400, 400, 'medical', true, 'Prescription'), // Random image
             'description' => $this->faker->paragraphs(2, true), // Random description
         ];

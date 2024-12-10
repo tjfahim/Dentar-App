@@ -22,7 +22,7 @@ class PatientSeeder extends Seeder
             'email' => 'userpatient@g.c',// Generate a unique email
             'phone' => '012333333333', // Generate a unique phone number
             'password' => Hash::make('123456'), // Encrypt and store the password "1234"j
-            'image' => 'https://placeholder',
+            'image' => 'images/patients/patients.png',
             'address' => 'dhaka', // Generate a fake address
             'dob' => '2000-01-01', // Generate a date before 2000-01-01
             'gender' => 'male',

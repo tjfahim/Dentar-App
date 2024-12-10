@@ -29,8 +29,12 @@ class BlogController extends Controller
         $blogs = $blogs->sortBy('id')->values();
 
 
+        return response()->json([
+            'success' => true,
+            'message' => "All blogs lists",
+            'data' => BlogResource::collection($blogs)
+        ], 200);
 
-        return BlogResource::collection($blogs);
     }
 
     /**

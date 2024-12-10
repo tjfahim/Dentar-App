@@ -5,31 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PrescriptionAssist extends Model
+class NationalGuideLine extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'title',
-        'image',
         'description',
-        'user_id',
-        'userType'
+        'file'
     ];
-
-
-    public function patient()
-    {
-
-    }
-
-    public function student()
-    {
-
-    }
-
-    public function doctor()
-    {
-
-    }
 }

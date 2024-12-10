@@ -22,5 +22,22 @@ class Diognostic extends Model
     ];
 
 
+
+    public function doctor()
+    {
+        return $this->belongsTo(Doctor::class);
+    }
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class, 'patient_id', 'id');
+    }
+
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class, 'patient_id', 'id');
+    }
+
     
+
 }

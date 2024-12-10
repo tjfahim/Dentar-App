@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('hospital')->nullable(); // Hospital or clinic the doctor works at
             $table->string('gender')->nullable(); // Gender
             $table->text('biography')->nullable(); // Biography of the doctor
-            $table->date('dob')->nullable(); // Date of Birth
+            $table->dateTime('dob')->nullable(); // Date of Birth
             $table->string('degree')->nullable(); // Degree or qualifications
             $table->string('image')->nullable(); // Doctor's image (optional)
             $table->string('signature')->nullable(); // Doctor's signature image

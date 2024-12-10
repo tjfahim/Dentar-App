@@ -13,14 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('prescription_assists', function (Blueprint $table) {
+        Schema::create('national_guide_lines', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('image');
-            $table->longtext('description');
-            $table->boolean('is_read')->default(false);
-            $table->unsignedBigInteger('user_id');
-            $table->string('userType');
+            $table->longText('description');
+            $table->string('file');
+            $table->boolean('status')->default(1);
             $table->timestamps();
         });
     }
@@ -32,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('prescription_assists');
+        Schema::dropIfExists('national_guide_lines');
     }
 };

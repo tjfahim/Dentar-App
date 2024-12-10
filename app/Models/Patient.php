@@ -34,4 +34,12 @@ class Patient extends Model
     {
         return $this->hasMany(Diognostic::class, 'patient_id', 'id');
     }
+
+
+
+    public function prescriptions()
+    {
+        return $this->hasMany(PrescriptionAssist::class, 'user_id', 'id');
+    }
+
 }
