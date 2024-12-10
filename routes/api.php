@@ -101,7 +101,6 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('youtube/videos', [VideoController::class, 'index']);
     Route::get('doctors/lists', [DoctorController::class, 'doctor_list']);
 
-
     Route::get('prescription/lists', [PrescriptionAssistController::class, 'index']);
     Route::post('prescription/add', [PrescriptionAssistController::class, 'store']);
 
