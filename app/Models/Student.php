@@ -20,6 +20,7 @@ class Student extends Authenticatable
         'token',
         'address',
         'dob',
+        'image',
         'password',
         'gender',
         'university',

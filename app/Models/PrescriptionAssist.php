@@ -18,18 +18,18 @@ class PrescriptionAssist extends Model
     ];
 
 
-    public function patient()
-    {
+    // public function patient()
+    // {
 
-    }
+    // }
 
-    public function student()
-    {
+    // public function student()
+    // {
 
-    }
+    // }
 
-    public function doctor()
-    {
+    // public function doctor()
+    // {
 
-    }
+    // }
 }

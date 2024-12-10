@@ -54,10 +54,20 @@ class ProfileController extends Controller
             }
 
             // Handle file upload
-            $imagePath = $user->image; // Retain existing image if not replaced
+            $imagePath = $user->image;
+
             if ($request->hasFile('image')) {
-                $imagePath = $request->file('image')->store('images/patients', 'public');
+
+                $file = time() . '.' . $request->image->extension();
+
+                $request->image->move(public_path('images/patients/'), $file);
+
+                $imagePath = 'images/patients/' . $file;
             }
+            // Retain existing image if not replaced
+            // if ($request->hasFile('image')) {
+            //     $imagePath = $request->file('image')->store('images/patients', 'public');
+            // }
 
             $date = date_create($request->dob);
 
@@ -96,9 +106,18 @@ class ProfileController extends Controller
 
             // Handle file upload
             $imagePath = $user->image;
+
             if ($request->hasFile('image')) {
-                $imagePath = $request->file('image')->store('images/students', 'public');
+
+                $file = time() . '.' . $request->image->extension();
+
+                $request->image->move(public_path('images/students/'), $file);
+
+                $imagePath = 'images/students/' . $file;
             }
+            // if ($request->hasFile('image')) {
+            //     $imagePath = $request->file('image')->store('images/students', 'public');
+            // }
 
             $date = date_create($request->dob);
 
@@ -145,12 +164,39 @@ class ProfileController extends Controller
             // Handle file uploads
             $imagePath = $user->image;
             $signaturePath = $user->signature;
-            if ($request->hasFile('image')) {
-                $imagePath = $request->file('image')->store('images/doctors', 'public');
+
+            if ($request->image) {
+
+                $file = time() . '.' . $request->image->extension();
+
+                $request->image->move(public_path('images/doctors/'), $file);
+
+                $imagePath = 'images/doctors/' . $file;
             }
+
             if ($request->hasFile('signature')) {
-                $signaturePath = $request->file('signature')->store('images/signatures', 'public');
+
+                $file = time() . '.' . $request->image->extension();
+
+                $request->image->move(public_path('images/signature/'), $file);
+
+                $imagePath = 'images/signature/' . $file;
             }
+            // if ($request->hasFile('image')) {
+
+            //     $file = time() . '.' . $request->image->extension();
+
+            //     $request->image->move(public_path('images/doctor'), $file);
+
+            //     $imagePath = 'images/doctor' . $file;
+            // }
+            // if ($request->hasFile('image')) {
+
+            //     $imagePath = $request->file('image')->store('images/doctors', 'public');
+            // }
+            // if ($request->hasFile('signature')) {
+            //     $signaturePath = $request->file('signature')->store('images/signatures', 'public');
+            // }
 
             $date = date_create($request->dob);
             // Update doctor data
