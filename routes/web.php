@@ -8,19 +8,13 @@ use App\Http\Controllers\AppSettingManageController;
 use Illuminate\Support\Facades\Route;
 
 use Illuminate\Support\Facades\Artisan;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingsControler;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\QuizManageController;
+use App\Http\Controllers\QuizQuestionManageController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingManageController;
-use App\Http\Controllers\UserSettingController;
-use App\Http\Controllers\SubscriptionController;
-use App\Http\Controllers\ItemsController;
-
-use App\Http\Controllers\RoomController;
-use App\Http\Controllers\MessageController;
-use App\Http\Controllers\WithdrawController;
 use App\Models\AppSettingManage;
 use App\Models\User;
 use Carbon\Carbon;
@@ -102,6 +96,10 @@ Route::middleware(['jwt'])->group(function () {
     Route::resource('job', JobController::class);
     // h
 
+    
+    Route::resource('quizManage', QuizManageController::class);
+    Route::resource('quizQuestionManage', QuizQuestionManageController::class);
+    
 
 });
 

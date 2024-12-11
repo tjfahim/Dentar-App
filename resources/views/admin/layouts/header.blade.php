@@ -120,6 +120,8 @@
                         <ul>
                             <li class="nav-item"><a class="nav-link" href="{{ url('settings') }}">Settings</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ url('user/settings/' . Auth::user()->id) }}">Profile Settings</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url('quizManage') }}">Quiz Manage</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url('quizQuestionManage') }}">Quiz Question Manage</a></li>
                         </ul>
                     </div>
                 </li>

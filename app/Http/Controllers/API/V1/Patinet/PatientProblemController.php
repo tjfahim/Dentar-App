@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers\API\V1\Patinet;
 
-use App\Models\PatientProblem;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CaseResource;
 use App\Http\Resources\DiognosticResource;
-use App\Http\Resources\PatientProblemResource;
 use App\Models\Diognostic;
 use App\Models\Doctor;
 use Illuminate\Http\Request;

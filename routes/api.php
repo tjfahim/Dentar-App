@@ -20,9 +20,11 @@ use App\Http\Controllers\API\V1\JobController;
 use App\Http\Controllers\API\V1\Patinet\PatientProblemController;
 use App\Http\Controllers\API\V1\SliderController;
 use App\Http\Controllers\API\V1\Doctor\DoctorController;
+use App\Http\Controllers\API\V1\MessageManageApi;
 use App\Http\Controllers\API\V1\NationalGuideLineController;
 use App\Http\Controllers\API\V1\NotificationController;
 use App\Http\Controllers\API\V1\PrescriptionAssistController;
+use App\Http\Controllers\API\V1\QuizQuestionManageApi;
 use App\Http\Controllers\API\V1\TeenagerHelpController;
 use App\Http\Controllers\DiagnosticController;
 use App\Http\Controllers\FeedbackController;
@@ -54,6 +56,7 @@ use Illuminate\Support\Facades\Auth;
 // Route::post('reset-password', [AuthApi::class, 'resetPassword']);
 
 
+Route::get('getQuiz', [ QuizQuestionManageApi::class, 'getQuiz']);
 
 Route::group(['middleware'=>'jwt_auth'], function($router){
 
@@ -140,6 +143,10 @@ Route::middleware(['auth:sanctum', 'auth.doctor_or_student'])->group(function(){
     Route::delete('blog/delete/{id}', [BlogController::class, 'destroy']);
 
     Route::post('blog/comment/{id}', [BlogController::class, 'addComment']);
+
+
+    Route::post('submitquiz', [ QuizQuestionManageApi::class, 'submitquiz']);
+
 });
 
 
@@ -149,6 +156,12 @@ Route::middleware(['auth:sanctum', 'auth.doctor_or_student'])->group(function(){
 Route::middleware(['auth:sanctum', 'auth.doctor'])->group(function(){
     //Route::get('/doctor/patient/list', [DoctorController::class, 'caseList']);
     Route::post('/doctor/patient/report/{id}', [DoctorController::class, 'addReport']);
+    
+
+    Route::post('send-message', [MessageManageApi::class, 'sendMessage']);
+    Route::get('conversation-list', [MessageManageApi::class, 'conversationList']);
+    Route::get('searchConversationList', [MessageManageApi::class, 'searchConversationList']);
+    Route::get('get-messages', [MessageManageApi::class, 'getMessages']);
 });
 
 

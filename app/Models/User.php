@@ -19,8 +19,6 @@ class User extends Authenticatable implements JWTSubject
     use Notifiable;
     use TwoFactorAuthenticatable;
     use HasRoles;
-
-
     use SoftDeletes;
 
     /**
@@ -66,10 +64,6 @@ class User extends Authenticatable implements JWTSubject
         'status',
     ];
 
-
-
-
- 
 
     public function getJWTIdentifier()
     {

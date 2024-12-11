@@ -31,16 +31,15 @@ return [
     'connections' => [
 
       'pusher' => [
-    'driver' => 'pusher',
-    'key' => '0bb1d0215c0158be673b', // Pusher App Key
-    'secret' => '8dae2ec7d0f01a9a881b', // Pusher App Secret
-    'app_id' => '1890174',              // Pusher App ID
-    'options' => [
-        'cluster' => 'ap2',              // Pusher App Cluster
-        'useTLS' => true,
-    ],
+        'driver' => 'pusher',
+        'key' => '2536c67c9ebef6fb6ba8', // Pusher App Key
+        'secret' => '2d65a403367ce351d31a', // Pusher App Secret
+        'app_id' => '1909472',              // Pusher App ID
+        'options' => [
+            'cluster' => 'ap1',              // Pusher App Cluster
+            'useTLS' => true,
+        ],
 ],
-
 
 
 

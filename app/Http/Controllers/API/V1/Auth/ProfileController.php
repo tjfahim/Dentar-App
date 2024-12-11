@@ -21,21 +21,9 @@ class ProfileController extends Controller
     public function updateProfile(Request $request)
     {
 
-
-        // $validator = Validator::make($request->all(), [
-        //     'userType' => 'required|in:patient,student,doctor',
-        // ]);
-
-        // if ($validator->fails()) {
-        //     return response()->json(['error' => $validator->errors()], 422);
-        // }
-
-        // // Get the authenticated user
         $user = $request->user();
 
         $userType = $user->userType;
-
-
 
         if ($userType == 'patient') {
             $validator = Validator::make($request->all(), [
@@ -74,8 +62,6 @@ class ProfileController extends Controller
             // Update patient data
             $user->update([
                 'name' => $request->name ?? $user->name,
-                'email' => $request->email ?? $user->email,
-                'phone' => $request->phone ?? $user->phone,
                 'image' => $imagePath,
                 'address' => $request->address ?? $user->address,
                 'dob' => date_format($date, "Y-m-d") ??  $user->dob,
@@ -124,8 +110,6 @@ class ProfileController extends Controller
             // Update student data
             $user->update([
                 'name' => $request->name ?? $user->name,
-                'email' => $request->email ?? $user->email,
-                'phone' => $request->phone ?? $user->phone,
                 'image' => $imagePath,
                 'address' => $request->address ?? $user->address,
                 'dob' => date_format($date, "Y-m-d") ??  $user->dob,
@@ -182,28 +166,11 @@ class ProfileController extends Controller
 
                 $imagePath = 'images/signature/' . $file;
             }
-            // if ($request->hasFile('image')) {
-
-            //     $file = time() . '.' . $request->image->extension();
-
-            //     $request->image->move(public_path('images/doctor'), $file);
-
-            //     $imagePath = 'images/doctor' . $file;
-            // }
-            // if ($request->hasFile('image')) {
-
-            //     $imagePath = $request->file('image')->store('images/doctors', 'public');
-            // }
-            // if ($request->hasFile('signature')) {
-            //     $signaturePath = $request->file('signature')->store('images/signatures', 'public');
-            // }
 
             $date = date_create($request->dob);
             // Update doctor data
             $user->update([
                 'name' => $request->name ?? $user->name,
-                'email' => $request->email ?? $user->email,
-                'phone' => $request->phone ?? $user->phone,
                 'specialization' => $request->specialization ?? $user->specialization,
                 'image' => $imagePath,
                 'signature' => $signaturePath,
@@ -226,5 +193,4 @@ class ProfileController extends Controller
             'user' => new UserResource($user)
         ]);
     }
-
 }
