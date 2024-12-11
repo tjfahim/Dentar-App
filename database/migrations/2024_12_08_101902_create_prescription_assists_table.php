@@ -21,6 +21,8 @@ return new class extends Migration
             $table->boolean('is_read')->default(false);
             $table->unsignedBigInteger('user_id');
             $table->string('userType');
+            $table->unsignedBigInteger('replay_user_id')->nullable();
+            $table->string('replay_user_type')->nullable();
             $table->timestamps();
         });
     }

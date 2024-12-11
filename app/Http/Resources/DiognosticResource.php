@@ -15,12 +15,14 @@ class DiognosticResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'name' => $this->name,
             'age' => $this->age,
             'gender' => $this->gender,
             'number' => $this->number,
             'image' => $this->image,
             'problem' => $this->problem,
+            'problem_title' => $this->problem_title,
             'doctor' => new UserResource($this->doctor),
             'patient' => new UserResource($this->patient) ??  new UserResource($this->student)
         ];

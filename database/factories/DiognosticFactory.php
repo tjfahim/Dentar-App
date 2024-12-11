@@ -22,7 +22,8 @@ class DiognosticFactory extends Factory
             'gender' => $this->faker->randomElement(['male', 'female', 'other']), // Generates a random age between 1 and 100
             'number' => $this->faker->phoneNumber(), // Generates a random phone number
             'image' => $this->faker->imageUrl(640, 480, 'people', true, 'Patient'), // Generates a placeholder image URL
-            'problem' => $this->faker->sentence(10), // Generates a random short description
+            'problem' => $this->faker->sentence(15), // Generates a random short description
+            'problem_title' => $this->faker->sentence(), // Generates a random short description
         ];
     }
 }

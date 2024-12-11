@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PrescriptionAssistResource;
 use App\Models\PrescriptionAssist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,20 +19,38 @@ class PrescriptionAssistController extends Controller
 
         switch($user->userType){
             case 'student':
-                $prescription = $user->prescriptions;
+                $prescriptions = $user->prescriptions;
                 break;
             case 'patient':
-                $prescription = $user->prescriptions;
+                $prescriptions = $user->prescriptions;
                 break;
             case 'doctor' :
-                $prescription = PrescriptionAssist::latest()->get();
+                $prescriptions = PrescriptionAssist::latest()->get();
                 break;
         }
+
+
+        foreach($prescriptions as $prescription){
+                $prescription->load('replayDoctor');
+                switch($prescription->userType){
+                    case 'student':
+                        $prescription->load('student');
+                        break;
+                    case 'patient':
+                        $prescription->load('patient');
+                        break;
+                    case 'doctor' :
+                        $prescription->load('doctor');
+                        break;
+                }
+
+        }
+
 
         return response()->json([
             'message'=> 'Prescription data',
             'success'=> true,
-            'prescription' => $prescription
+            'prescription' => PrescriptionAssistResource::collection($prescriptions)
         ]);
     }
 

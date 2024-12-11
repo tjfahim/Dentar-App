@@ -14,22 +14,32 @@ class PrescriptionAssist extends Model
         'image',
         'description',
         'user_id',
-        'userType'
+        'userType',
+        'replay_user_type',
+        'replay_user_id'
     ];
 
 
-    // public function patient()
-    // {
 
-    // }
 
-    // public function student()
-    // {
 
-    // }
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class, 'user_id', 'id');
+    }
 
-    // public function doctor()
-    // {
+    public function student()
+    {
+        return $this->belongsTo(Student::class, 'user_id', 'id');
+    }
 
-    // }
+    public function doctor()
+    {
+        return $this->belongsTo(Doctor::class, 'user_id', 'id');
+    }
+
+    public function replayDoctor()
+    {
+        return $this->belongsTo(Doctor::class, 'replay_user_id', 'id');
+    }
 }
