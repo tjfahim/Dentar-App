@@ -15,6 +15,7 @@ class Diognostic extends Model
         'gender',
         'number',
         'image',
+        'problem_title',
         'problem',
         'patient_type',
         'patient_id',
@@ -38,6 +39,6 @@ class Diognostic extends Model
         return $this->belongsTo(Patient::class, 'patient_id', 'id');
     }
 
-    
+
 
 }

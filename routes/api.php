@@ -20,6 +20,7 @@ use App\Http\Controllers\API\V1\JobController;
 use App\Http\Controllers\API\V1\Patinet\PatientProblemController;
 use App\Http\Controllers\API\V1\SliderController;
 use App\Http\Controllers\API\V1\Doctor\DoctorController;
+use App\Http\Controllers\API\V1\FileStoregeController;
 use App\Http\Controllers\API\V1\MessageManageApi;
 use App\Http\Controllers\API\V1\NationalGuideLineController;
 use App\Http\Controllers\API\V1\NotificationController;
@@ -104,9 +105,9 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('youtube/videos', [VideoController::class, 'index']);
     Route::get('doctors/lists', [DoctorController::class, 'doctor_list']);
 
-
     Route::get('prescription/lists', [PrescriptionAssistController::class, 'index']);
     Route::post('prescription/add', [PrescriptionAssistController::class, 'store']);
+
 
     Route::get('diagnostic', [DiognosticController::class, 'index']);
     Route::post('diagnostic/add', [DiognosticController::class, 'add']);
@@ -162,6 +163,9 @@ Route::middleware(['auth:sanctum', 'auth.doctor'])->group(function(){
     Route::get('conversation-list', [MessageManageApi::class, 'conversationList']);
     Route::get('searchConversationList', [MessageManageApi::class, 'searchConversationList']);
     Route::get('get-messages', [MessageManageApi::class, 'getMessages']);
+
+
+    Route::post('prescription/replay/{id}', [PrescriptionAssistController::class, 'replayAssist']);
 });
 
 
@@ -249,4 +253,7 @@ Route::get('/test', function(){
     $user = Auth::user();
     return $user;
 })->middleware('auth:sanctum');
+
+
+Route::post('store', FileStoregeController::class);
 // h

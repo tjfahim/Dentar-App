@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Doctor;
+use App\Models\PrescriptionAssist;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,16 +15,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('prescription_assists', function (Blueprint $table) {
+        Schema::create('prescription_assist_replays', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('image');
-            $table->longtext('description');
-            $table->boolean('is_read')->default(false);
-            $table->unsignedBigInteger('user_id');
-            $table->string('userType');
-            $table->unsignedBigInteger('replay_user_id')->nullable();
-            $table->string('replay_user_type')->nullable();
+            $table->text('description');
+            $table->json('files_url');
+            $table->foreignIdFor(Doctor::class)->nullable();
+            $table->foreignIdFor(PrescriptionAssist::class)->nullable();
             $table->timestamps();
         });
     }
@@ -34,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('prescription_assists');
+        Schema::dropIfExists('prescription_assist_replays');
     }
 };

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PrescriptionAssistResource;
 use App\Models\PrescriptionAssist;
+use App\Models\PrescriptionAssistReplay;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -18,20 +20,40 @@ class PrescriptionAssistController extends Controller
 
         switch($user->userType){
             case 'student':
-                $prescription = $user->prescriptions;
+                $prescriptions = $user->prescriptions;
                 break;
             case 'patient':
-                $prescription = $user->prescriptions;
+                $prescriptions = $user->prescriptions;
                 break;
             case 'doctor' :
-                $prescription = PrescriptionAssist::latest()->get();
+                $prescriptions = PrescriptionAssist::latest()->get();
                 break;
         }
+
+
+        foreach($prescriptions as $prescription){
+                $prescription->load('replayDoctor', 'reports');
+
+                switch($prescription->userType){
+                    case 'student':
+                        $prescription->load('student');
+                        break;
+                    case 'patient':
+                        $prescription->load('patient');
+                        break;
+                    case 'doctor' :
+                        $prescription->load('doctor');
+                        break;
+                }
+
+        }
+
+        return $prescriptions;
 
         return response()->json([
             'message'=> 'Prescription data',
             'success'=> true,
-            'prescription' => $prescription
+            'prescription' => PrescriptionAssistResource::collection($prescriptions)
         ]);
     }
 
@@ -39,10 +61,11 @@ class PrescriptionAssistController extends Controller
     {
 
 
+
         $validator = Validator::make($request->all(), [
-            'title' => 'sometimes|required|string|max:255',
-            'description' => 'nullable|string',
-            'image' => 'nullable',
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'image' => 'nullable|string',
         ]);
 
 
@@ -73,9 +96,62 @@ class PrescriptionAssistController extends Controller
 
         return response()->json([
             'message' => 'Prescription Assist create successfully!',
-            'prescriptionAssist' => $prescription
+            'prescriptionAssist' => new PrescriptionAssistResource($prescription)
         ], 200);
 
+    }
+
+
+
+    public function replayAssist(Request $request, $id)
+    {
+        $prescription = PrescriptionAssist::find($id);
+
+        if(!$prescription){
+            return response()->json([
+                'message' => 'undefine prescription',
+                'success' => false,
+            ], 404);
+        }
+
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'files_url' => 'nullable|string',
+        ]);
+
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
+
+        $file = explode(',', $request->files_url);
+
+
+
+
+        $replay = PrescriptionAssistReplay::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'files_url' => json_encode($file),
+            'doctor_id' => Auth::user()->id,
+            'prescription_assist_id' => $id
+        ]);
+
+        $prescription->replay_user_id = Auth::user()->id;
+        $prescription->replay_user_type = Auth::user()->userType;
+        $prescription->save;
+
+
+        if($replay){
+            return response()->json([
+                'message' => "Prescription assist replay successfully",
+                'success' => true,
+                'data' => $replay
+            ]);
+        }
 
     }
+
 }
