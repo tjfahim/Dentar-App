@@ -18,10 +18,10 @@ return new class extends Migration
             $table->id(); // Auto-incrementing primary key
             $table->string('name'); // Patient's name
             $table->integer('age'); // Patient's age
-            $table->string('gender'); // Contact number
-            $table->string('number'); // Contact number
+            $table->string('gender')->nullable(); // Contact number
+            $table->string('number')->nullable(); // Contact number
             $table->string('image')->nullable(); // Path to image, nullable
-            $table->text('problem_title'); // Description of the problem
+            $table->text('problem_title')->nullable(); // Description of the problem
             $table->text('problem'); // Description of the problem
             $table->string('patient_type');
             $table->integer('patient_id');

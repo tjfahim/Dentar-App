@@ -51,28 +51,31 @@ public function store(Request $request)
     $validatedData = $request->validate([
         'title' => 'required|string|max:255',
         'content' => 'required|string',
-        'file' => 'array|nullable', // Accepts array of images
+        'file' => 'string|nullable', // Accepts array of images
     ]);
 
-    $allfiles = [];
-    if($request->has('file')){
-        $files = $request->file;
+    // $allfiles = [];
+    // if($request->has('file')){
+    //     $files = $request->file;
 
-        foreach($files as $key => $value){
-            $file = time() . $key. '.'. $value->getClientOriginalExtension();
+    //     foreach($files as $key => $value){
+    //         $file = time() . $key. '.'. $value->getClientOriginalExtension();
 
-            $path = public_path('images/blog');
+    //         $path = public_path('images/blog');
 
-            $fullPath = 'images/blog/' . $file;
-
-
-            array_push($allfiles, $fullPath);
-
-            $value->move($path, $file);
-        }
-    }
+    //         $fullPath = 'images/blog/' . $file;
 
 
+    //         array_push($allfiles, $fullPath);
+
+    //         $value->move($path, $file);
+    //     }
+    // }
+
+
+    $files = explode(',', $request->file);
+
+   
 
     // Create a new blog post with the images and videos as JSON
     $blog = Blog::create([
@@ -80,7 +83,7 @@ public function store(Request $request)
         'content' => $validatedData['content'],
         'user_type' => Auth::user()->userType,
         'user_id' => Auth::user()->id,
-        'file' => json_encode($allfiles)
+        'file' => json_encode($files)
     ]);
 
     return response()->json([

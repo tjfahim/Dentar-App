@@ -17,7 +17,7 @@ class PrescriptionFactory extends Factory
     public function definition()
     {
         return [
-            //
+             'note'=> fake()->sentence(10)
         ];
     }
 }

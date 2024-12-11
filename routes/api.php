@@ -111,7 +111,7 @@ Route::middleware('auth:sanctum')->group(function(){
 
     Route::get('diagnostic', [DiognosticController::class, 'index']);
     Route::post('diagnostic/add', [DiognosticController::class, 'add']);
-    Route::post('diagnostic/report', [DiognosticController::class, 'report']);
+
 });
 
 
@@ -157,7 +157,7 @@ Route::middleware(['auth:sanctum', 'auth.doctor_or_student'])->group(function(){
 Route::middleware(['auth:sanctum', 'auth.doctor'])->group(function(){
     //Route::get('/doctor/patient/list', [DoctorController::class, 'caseList']);
     Route::post('/doctor/patient/report/{id}', [DoctorController::class, 'addReport']);
-    
+
 
     Route::post('send-message', [MessageManageApi::class, 'sendMessage']);
     Route::get('conversation-list', [MessageManageApi::class, 'conversationList']);
@@ -166,6 +166,7 @@ Route::middleware(['auth:sanctum', 'auth.doctor'])->group(function(){
 
 
     Route::post('prescription/replay/{id}', [PrescriptionAssistController::class, 'replayAssist']);
+    Route::post('diagnostic/report/{id}', [DiognosticController::class, 'report']);
 });
 
 

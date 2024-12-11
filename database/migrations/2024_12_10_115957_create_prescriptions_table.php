@@ -18,6 +18,7 @@ return new class extends Migration
         Schema::create('prescriptions', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Diognostic::class);
+            $table->text('note');
             $table->timestamps();
         });
     }

@@ -6,6 +6,7 @@ use App\Models\Doctor;
 use App\Models\Diognostic;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DiognosticResource;
+use App\Models\Prescription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -43,17 +44,18 @@ class DiognosticController extends Controller
         // Validate the incoming request data
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'age' => 'required|integer|min:1|max:120',
-            'gender' => 'required|string',
+            'age' => 'required|string',
+            'gender' => 'nullable|string',
             'number' => 'required|string|max:20',
-            'image' => 'nullable|image|max:2048', // Optional image with max size 2MB
+            'image' => 'nullable|string', // Optional image with max size 2MB
             'problem' => 'required|string',
+            'problem_title' => 'string|nullable',
         ]);
 
         // Handle file upload for the image, if provided
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('patient_images', 'public');
-        }
+        // if ($request->hasFile('image')) {
+        //     $validated['image'] = $request->file('image')->store('patient_images', 'public');
+        // }
 
         $user = Auth::user();
         $doctor_id = null;
@@ -95,9 +97,42 @@ class DiognosticController extends Controller
     }
 
 
-    public function report()
+    public function report(Request $request, $id)
     {
-        return "up comeing";
+        $case = Diognostic::find($id);
+
+
+        $validator = validator()->make($request->all(), [
+            'note'=> 'nullable|string',
+            'medicines.name' => 'required|string',
+            'medicines.dose' => 'required|array',
+            'medicines.meal' => 'required|string',
+            'medicines.duration' => 'string'
+        ]);
+
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
+
+        $perscription =new Prescription();
+        $perscription->diognostic_id = $case->id;
+        $perscription->note = "good note";
+        $perscription->save();
+
+
+
+
+        $perscription->medicines()->create([
+            'name' => 'napa 500',
+            'prescription_id' => $perscription->id,
+            'dose' => json_encode([0, 0, 1]),
+            'meal' => 'after',
+            'duration' => '75'
+        ]);
+
+        return $perscription;
+
     }
 
 }
