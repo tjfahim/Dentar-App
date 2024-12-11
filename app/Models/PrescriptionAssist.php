@@ -42,4 +42,9 @@ class PrescriptionAssist extends Model
     {
         return $this->belongsTo(Doctor::class, 'replay_user_id', 'id');
     }
+
+    public function reports()
+    {
+        return $this->hasMany(PrescriptionAssistReplay::class, 'prescription_assist_id', 'id');
+    }
 }

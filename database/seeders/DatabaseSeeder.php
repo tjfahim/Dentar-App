@@ -14,6 +14,7 @@ use App\Models\Doctor;
 use App\Models\Slider;
 use App\Models\Job;
 use App\Models\NationalGuideLine;
+use App\Models\PrescriptionAssistReplay;
 use App\Models\TeenagerHelp;
 
 class DatabaseSeeder extends Seeder
@@ -45,6 +46,8 @@ class DatabaseSeeder extends Seeder
             DiognosticSeeder::class,
             NationalGuideLineSeeder::class,
             TeenagerHelpSeeder::class,
+            MedicineSeeder::class,
+            PrescriptionAssistReplaySeeder::class
         ]);
 
 

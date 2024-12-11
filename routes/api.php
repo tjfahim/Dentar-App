@@ -20,6 +20,7 @@ use App\Http\Controllers\API\V1\JobController;
 use App\Http\Controllers\API\V1\Patinet\PatientProblemController;
 use App\Http\Controllers\API\V1\SliderController;
 use App\Http\Controllers\API\V1\Doctor\DoctorController;
+use App\Http\Controllers\API\V1\FileStoregeController;
 use App\Http\Controllers\API\V1\NationalGuideLineController;
 use App\Http\Controllers\API\V1\NotificationController;
 use App\Http\Controllers\API\V1\PrescriptionAssistController;
@@ -104,6 +105,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('prescription/lists', [PrescriptionAssistController::class, 'index']);
     Route::post('prescription/add', [PrescriptionAssistController::class, 'store']);
 
+
     Route::get('diagnostic', [DiognosticController::class, 'index']);
     Route::post('diagnostic/add', [DiognosticController::class, 'add']);
     Route::post('diagnostic/report', [DiognosticController::class, 'report']);
@@ -148,6 +150,9 @@ Route::middleware(['auth:sanctum', 'auth.doctor_or_student'])->group(function(){
 Route::middleware(['auth:sanctum', 'auth.doctor'])->group(function(){
     //Route::get('/doctor/patient/list', [DoctorController::class, 'caseList']);
     Route::post('/doctor/patient/report/{id}', [DoctorController::class, 'addReport']);
+
+
+    Route::post('prescription/replay/{id}', [PrescriptionAssistController::class, 'replayAssist']);
 });
 
 
@@ -235,4 +240,7 @@ Route::get('/test', function(){
     $user = Auth::user();
     return $user;
 })->middleware('auth:sanctum');
+
+
+Route::post('store', FileStoregeController::class);
 // h

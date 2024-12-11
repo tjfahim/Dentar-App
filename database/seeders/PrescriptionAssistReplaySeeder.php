@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Medicine;
+use App\Models\PrescriptionAssistReplay;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class MedicineSeeder extends Seeder
+class PrescriptionAssistReplaySeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,6 +15,6 @@ class MedicineSeeder extends Seeder
      */
     public function run()
     {
-        Medicine::factory(10)->create();
+        PrescriptionAssistReplay::factory(10)->create();
     }
 }

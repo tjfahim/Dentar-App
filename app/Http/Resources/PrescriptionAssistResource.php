@@ -17,7 +17,7 @@ class PrescriptionAssistResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'image' => $this->image,
+            'image' => $this->image ? asset($this->image) : '',
             'description' => $this->description,
             'is_read' => $this->is_read,
             'user' => new UserResource($this->patient) ?? new UserResource($this->student) ?? new  UserResource($this->doctor),  // Include the associated user data
