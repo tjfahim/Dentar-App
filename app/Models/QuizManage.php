@@ -21,4 +21,5 @@ class QuizManage extends Model
     {
         return $this->hasMany(QuizQuestionManage::class, 'quiz_manage_id');
     }
+    
 }

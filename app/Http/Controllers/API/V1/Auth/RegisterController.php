@@ -15,6 +15,7 @@ use App\Http\Resources\DoctorResource;
 use App\Models\Patient;
 use App\Models\Student;
 use App\Models\Doctor;
+use Illuminate\Support\Facades\DB;
 
 class RegisterController extends Controller
 {
@@ -164,7 +165,6 @@ class RegisterController extends Controller
             'bmdc_type' => 'string|nullable',
             'occupation' => 'string|nullable',
             'organization' => 'string|nullable',
-
         ]);
 
         if ($validator->fails()) {
@@ -202,6 +202,8 @@ class RegisterController extends Controller
             'occupation' => $request->occupation,
             'organization' => $request->organization,
             'role' => $request->role ?? 'normal', // Default to normal role
+            'status' => 0,
+
         ]);
 
         // Generate a token for the doctor after successful registration
@@ -217,6 +219,101 @@ class RegisterController extends Controller
 
         }
 
+    }
+
+    
+
+    public function verifyOtp(Request $request){
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:doctors,email',
+            'otp' => 'required', 
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors()->all();
+            $errorString = implode(', ', $errors);
+        
+            return response()->json(['error' => $errorString], 422);
+        }
+
+        $otpRecord = DB::table('password_resets')
+            ->where('email', $request->email)
+            ->where('token', $request->otp)
+            ->first();
+
+        if (!$otpRecord) {
+            return response()->json(['message' => 'Invalid OTP'], 400);
+        }
+
+        $user = Doctor::where('email', $request->email)->first();
+        $user->update(['status' => 1]);
+        DB::table('password_resets')->where('email', $user->email)->delete();
+
+        return response()->json([
+            'message' => 'Email verified successfully',
+        ], 201);
+
+    }
+
+    public function sendOtp(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:doctors,email'
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors()->all();
+            $errorString = implode(', ', $errors);
+        
+            return response()->json(['error' => $errorString], 422);
+        }
+
+        $user = Doctor::where('email', $request->email)->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'Email not found'], 404);
+        }
+
+        $otp = rand(10000, 99999);
+        $otp = 12345;
+
+        DB::table('password_resets')->updateOrInsert(
+            ['email' => $user->email],
+            [
+                'token' => $otp,
+                'created_at' => now()
+            ]
+        );
+
+        // Mail::to($user->email)->send(new OtpEmail($user, $otp));
+
+        return response()->json(['message' => 'OTP sent to your email'], 201);
+    }
+
+    public function checkOtp(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email',
+            'otp' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors()->all();
+            $errorString = implode(', ', $errors);
+        
+            return response()->json(['error' => $errorString], 422);
+        }
+
+        $otpRecord = DB::table('password_resets')
+            ->where('email', $request->email)
+            ->where('token', $request->otp)
+            ->first();
+
+        if (!$otpRecord) {
+            return response()->json(['message' => 'Invalid OTP'], 400);
+        }
+
+        return response()->json(['message' => 'OTP verified'], 201);
     }
 
 }
