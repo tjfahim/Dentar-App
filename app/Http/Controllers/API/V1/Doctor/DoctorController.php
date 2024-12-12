@@ -37,6 +37,8 @@ class DoctorController extends Controller
     public function doctor_list()
     {
 
+        
+
         return response()->json([
             'message' => "All Doctor Lists",
             'success' => true,

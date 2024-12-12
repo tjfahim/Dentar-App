@@ -9,6 +9,7 @@ use App\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Svg\Tag\Rect;
 
 class BlogController extends Controller
 {
@@ -17,19 +18,28 @@ class BlogController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $filter = null;
+        $filter = $request->input('filter');
 
-        $blogs_student = Blog::where('user_type', 'student')
-            ->with('student_user')
-            ->orderBy('created_at', 'desc')
-            ->get();
-        $blogs_doctor = Blog::where('user_type', 'doctor')
-            ->with('doctor_user')
-            ->orderBy('created_at', 'desc')
-            ->get();
+        if($filter === 'all' || !$filter){
+            // $blogs_student = Blog::where('user_type', 'student')
+            //     ->with('student_user')
+            //     ->orderBy('created_at', 'desc')
+            //     ->get();
+            $blogs_doctor = Blog::where('user_type', 'doctor')
+                ->with('doctor_user')
+                ->orderBy('created_at', 'desc')
+                ->get();
+                $blogs = $blogs_doctor;
+        }else{
+            $blogs = Blog::where('user_id', $filter)->latest()->get();
+        }
 
-        $blogs = $blogs_student->merge($blogs_doctor);
+
+
+        // $blogs = $blogs_student->merge($blogs_doctor);
 
         $blogs = $blogs->sortByDesc('id')->values();
 

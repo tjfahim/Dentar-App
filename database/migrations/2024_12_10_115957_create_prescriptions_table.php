@@ -19,6 +19,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Diognostic::class);
             $table->text('note');
+            $table->string('report_file')->nullable();
             $table->timestamps();
         });
     }

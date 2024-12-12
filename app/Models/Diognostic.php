@@ -40,5 +40,8 @@ class Diognostic extends Model
     }
 
 
-
+    public function prescription()
+    {
+        return $this->hasMany(Prescription::class, 'diognostic_id', 'id');
+    }
 }

@@ -81,7 +81,7 @@ class LoginController extends Controller
             }
         }
 
-        if(!$user->status && $user->type == 'doctor'){
+        if(!$user->status && $user->userType == 'doctor'){
             return response()->json(['error' => 'Account Suspended'], 401);
         }
 

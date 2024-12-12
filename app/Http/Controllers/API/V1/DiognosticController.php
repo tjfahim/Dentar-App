@@ -18,7 +18,12 @@ class DiognosticController extends Controller
     {
         $user = Auth::user();
 
-        $cases = $user->cases()->with('doctor')->get();
+
+
+        $cases = $user->cases()->with('doctor','prescription')->get();
+
+
+        // $cases = $user->cases()->with('doctor', 'prescrption')->get();
 
 
         foreach($cases as $case){
@@ -28,6 +33,11 @@ class DiognosticController extends Controller
                 $case->load('student');
             }
         }
+
+
+
+        $cases  = $cases->sortByDesc('id')->values();
+
 
 
         return DiognosticResource::collection($cases);
@@ -115,39 +125,49 @@ class DiognosticController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        $perscription =new Prescription();
-        $perscription->diognostic_id = $case->id;
-        $perscription->note = "good note";
-        $perscription->save();
+        $prescription =new Prescription();
+        $prescription->diognostic_id = $case->id;
+        $prescription->note = "good note";
+        $prescription->save();
 
 
         $medicines = $request->medicines;
 
 
         foreach($medicines as $med){
-            $perscription->medicines()->create([
+            $prescription->medicines()->create([
                 'name' => $med['name'],
-                'prescription_id' => $perscription->id,
+                'prescription_id' => $prescription->id,
                 'dose' => json_encode($med['dose']),
                 'meal' => $med['meal'],
                 'duration' => $med['duration']
             ]);
         }
 
-        $perscription = $perscription->medicines;
+        $allMedicine = $prescription->medicines;
 
 
-        $pdf = Pdf::loadView('pdfview.prescription', ['data' => $perscription]);
+        $pdf = Pdf::loadView('pdfview.prescription', ['data' => $allMedicine]);
+
+        $path = public_path('files/prescriptions/');
+        $filePath = 'files/prescriptions/prescription_'. $prescription->id . '.pdf';
 
 
-        return $pdf->download();
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
 
+
+        file_put_contents($path .'prescription_'.  $prescription->id . '.pdf', $pdf->output());
+
+        $prescription->report_file = $filePath;
+        $prescription->save();
 
 
         return response()->json([
             'message' => 'Prescription add Succssfully!',
             'success' => true,
-
+            'data' => $prescription
         ]);
 
     }
