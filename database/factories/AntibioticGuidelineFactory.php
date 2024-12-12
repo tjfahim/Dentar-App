@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Prescription>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\AntibioticGuideline>
  */
-class PrescriptionFactory extends Factory
+class AntibioticGuidelineFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +17,9 @@ class PrescriptionFactory extends Factory
     public function definition()
     {
         return [
-             'note'=> fake()->sentence(10)
+            'title' => fake()->sentence(),
+            'description' => fake()->paragraph(),
+            'file' => 'pdfs/dummy.pdf'
         ];
     }
 }

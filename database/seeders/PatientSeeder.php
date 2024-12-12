@@ -19,7 +19,7 @@ class PatientSeeder extends Seeder
 
         Patient::factory()->create([
             'name' => 'Md Jamal', // Generate a fake name
-            'email' => 'userpatient@g.c',// Generate a unique email
+            'email' => 'userpatient@gmail.com',// Generate a unique email
             'phone' => '012333333333', // Generate a unique phone number
             'password' => Hash::make('123456'), // Encrypt and store the password "1234"j
             'image' => 'images/patients/patients.png',

@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\Diognostic;
-use App\Models\PatientProblem;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,10 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('prescriptions', function (Blueprint $table) {
+        Schema::create('antibiotic_guidelines', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Diognostic::class);
-            $table->text('note');
+            $table->string('title');
+            $table->longText('description');
+            $table->string('file');
+            $table->boolean('status')->default(1);
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('prescriptions');
+        Schema::dropIfExists('antibiotic_guidelines');
     }
 };

@@ -3,13 +3,19 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\Contact;
 use Illuminate\Http\Request;
+use App\Models\Feedback;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
-class ContactController extends Controller
+class FeedbackController extends Controller
 {
+
+    public function index()
+    {
+        return Feedback::all();
+    }
+
     public function store(Request $request)
     {
         $user = Auth::user();
@@ -17,32 +23,36 @@ class ContactController extends Controller
         // Define the validation rules
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'user_info' => 'required|string|max:255',
-            'message' => 'required|string|max:1000',
+            'email' => 'required|string|max:255',
+            'description' => 'required|string|max:1000',
+            'rating' => 'string'
         ]);
 
 
-        if ($validator->fails()) {
 
+        // Check if validation fails
+        if ($validator->fails()) {
+            // Validation failed, return errors
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-
+        // Get the validated data
         $validatedData = $validator->validated();
 
-
-        $contactData = array_merge($validatedData, [
+        // Merge the validated data with additional data (user_id and user_type)
+        $feedbackData = array_merge($validatedData, [
             'user_id' => $user->id,
             'user_type' => $user->userType,
         ]);
 
-        // Create a new contact record
-        $contact = Contact::create($contactData);
+        // Create a new feedback record
+        $feedback = Feedback::create($feedbackData);
 
         // Return a success response
         return response()->json([
-            'message' => 'Contact saved successfully!',
-            'data' => $contact
+            'message' => 'feedback saved successfully!',
+            'data' => $feedback
         ], 201);
     }
+
 }

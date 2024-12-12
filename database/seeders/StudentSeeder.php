@@ -21,7 +21,7 @@ class StudentSeeder extends Seeder
 
         Student::factory()->create([
             'name' => 'Md Student',
-            'email' => 'userstudent@g.c', // Unique email
+            'email' => 'userstudent@gmail.com', // Unique email
             'phone' => '01223335555', // Unique phone number
             'address' => 'Dhaka Bangladesh',
             'password' => Hash::make('123456'),

@@ -96,10 +96,10 @@ Route::middleware(['jwt'])->group(function () {
     Route::resource('job', JobController::class);
     // h
 
-    
+
     Route::resource('quizManage', QuizManageController::class);
     Route::resource('quizQuestionManage', QuizQuestionManageController::class);
-    
+
 
 });
 
@@ -118,4 +118,9 @@ Route::get('/clear', function () {
     Artisan::call('optimize:clear');
     Artisan::call('storage:link');
     return "Cleared!";
+});
+
+
+Route::get('pdf', function(){
+    return view('pdfview.prescription');
 });

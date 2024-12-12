@@ -32,7 +32,8 @@ class Doctor extends Authenticatable
         'bmdc_number',
         'bmdc_type',
         'organization',
-        'occupation'
+        'occupation',
+        'status'
     ];
 
 

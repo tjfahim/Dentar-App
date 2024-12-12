@@ -20,7 +20,7 @@ class DoctorSeeder extends Seeder
 
         Doctor::factory()->create([
             'name' => 'Mr. Doctor',
-            'email' => 'userdoctor@g.c',
+            'email' => 'userdoctor@gmail.com',
             'phone' => 01223334444,
             'password' => bcrypt('123456'),
             'specialization' => 'doctor',

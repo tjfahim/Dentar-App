@@ -65,7 +65,7 @@ class PrescriptionAssistController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'image' => 'nullable|string',
+            'image' => 'nullable|file',
         ]);
 
 
