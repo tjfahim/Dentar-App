@@ -96,6 +96,13 @@ Route::post('login', [ LoginController::class, 'login']);
 Route::post('logout', [ LoginController::class, 'logout'])->middleware('auth:sanctum');
 Route::post('register', RegisterController::class);
 
+
+
+Route::post('verify-otp', [RegisterController::class, 'verifyOtp']);
+Route::post('send-otp', [RegisterController::class, 'sendOtp']);
+Route::post('check-otp', [RegisterController::class, 'checkOtp']);
+
+
 Route::middleware('auth:sanctum')->group(function(){
     Route::get('profile', [ProfileController::class, 'profile']);
     Route::post('profile/update', [ProfileController::class, 'updateProfile']);

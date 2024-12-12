@@ -27,4 +27,6 @@ class QuizQuestionManage extends Model
         return $this->belongsTo(QuizManage::class);
     }
 
+   
+
 }
