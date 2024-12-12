@@ -81,6 +81,10 @@ class LoginController extends Controller
             }
         }
 
+        if(!$user->status && $user->type == 'doctor'){
+            return response()->json(['error' => 'Account Suspended'], 401);
+        }
+
         if(!$user){
             if($email){
                 return response()->json(['error' => 'Incorrect email'], 401);
@@ -91,6 +95,8 @@ class LoginController extends Controller
         }elseif(!Hash::check($request->password, $user->password)){
             return response()->json(['error' => 'Incorrect password'], 401);
         }
+
+
 
 
         $token = $user->createToken('auth_token')->plainTextToken;
