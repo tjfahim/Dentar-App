@@ -274,8 +274,8 @@ class RegisterController extends Controller
             return response()->json(['message' => 'Email not found'], 404);
         }
 
-        $otp = rand(100000, 999999);
-        $otp = 123456;
+        $otp = rand(10000, 99999);
+        $otp = 12345;
 
         DB::table('password_resets')->updateOrInsert(
             ['email' => $user->email],
