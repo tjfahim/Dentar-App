@@ -71,6 +71,7 @@ class RegisterController extends Controller
                 'dob' => $request->dob,
                 'gender' => $request->gender,
                 'medical_history' => $request->medical_history,
+
             ]);
 
             // Create a token for the patient after successful registration
@@ -89,7 +90,7 @@ class RegisterController extends Controller
                 'name' => 'required|string|max:255',
                 'email' => 'email|unique:patients,email|unique:students,email|unique:doctors,email',
                 'phone' => 'required|string|max:15|unique:patients,phone|unique:students,phone|unique:doctors,phone',
-                'password' => 'required|string|min:4', // Confirm password
+                'password' => 'required|string|min:4', 
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
                 'address' => 'nullable|string',
                 'dob' => 'nullable|date',

@@ -22,7 +22,7 @@ class FileStoregeController extends Controller
 
                 $path = public_path('files/all/');
 
-                $fullPath = 'files/all' . $file;
+                $fullPath = 'files/all/' . $file;
 
 
                 array_push($allfiles, $fullPath);

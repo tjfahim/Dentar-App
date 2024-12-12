@@ -20,14 +20,18 @@ class BlogController extends Controller
     public function index()
     {
 
+        $blogs_student = Blog::where('user_type', 'student')
+            ->with('student_user')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $blogs_doctor = Blog::where('user_type', 'doctor')
+            ->with('doctor_user')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-        $blogs_student = Blog::where('user_type', 'student')->with('student_user')->get();
-        $blogs_docoter = Blog::where('user_type', 'doctor')->with('doctor_user')->get();
+        $blogs = $blogs_student->merge($blogs_doctor);
 
-        $blogs = $blogs_student->merge($blogs_docoter);
-
-        $blogs = $blogs->sortBy('id')->values();
-
+        $blogs = $blogs->sortByDesc('id')->values();
 
         return response()->json([
             'success' => true,
@@ -48,11 +52,19 @@ public function store(Request $request)
 {
 
 
-    $validatedData = $request->validate([
-        'title' => 'required|string|max:255',
+     $validator = Validator::make($request->all(), [
+        'title' => 'required|string',
         'content' => 'required|string',
-        'file' => 'string|nullable', // Accepts array of images
+        'file' => 'string|nullable',
     ]);
+
+
+
+    if ($validator->fails()) {
+        return response()->json([
+            'errors' => $validator->errors(),
+        ], 422);
+    }
 
     // $allfiles = [];
     // if($request->has('file')){
@@ -75,15 +87,16 @@ public function store(Request $request)
 
     $files = explode(',', $request->file);
 
-   
+
+
 
     // Create a new blog post with the images and videos as JSON
     $blog = Blog::create([
-        'title' => $validatedData['title'],
-        'content' => $validatedData['content'],
+        'title' => $request->title,
+        'content' => $request->content,
         'user_type' => Auth::user()->userType,
         'user_id' => Auth::user()->id,
-        'file' => json_encode($files)
+        'file' => json_encode($files) ?? ''
     ]);
 
     return response()->json([
@@ -125,14 +138,19 @@ public function store(Request $request)
      */
     public function update(Request $request, $id)
 {
-    // Validate the request data
-    $validatedData = $request->validate([
+    $validator = Validator::make($request->all(), [
         'title' => 'required|string|max:255',
         'content' => 'required|string',
-        'file' => 'array|nullable', // Accepts array of images
+        'file' => 'string|nullable',
     ]);
 
-    // Find the blog post to update
+
+    if ($validator->fails()) {
+        return response()->json([
+            'errors' => $validator->errors(),
+        ], 422);
+    }
+
     $blog = Blog::findOrFail($id); // If the blog post doesn't exist, it will throw a 404 error
 
     // If files are provided, process and save them
@@ -157,8 +175,8 @@ public function store(Request $request)
 
     // Update the blog post with the new data
     $blog->update([
-        'title' => $validatedData['title'],
-        'content' => $validatedData['content'],
+        'title' => $validator['title'],
+        'content' => $validator['content'],
         'user_type' => Auth::user()->userType,
         'user_id' => Auth::user()->id,
         'file' => json_encode($allfiles) // Save the updated list of files

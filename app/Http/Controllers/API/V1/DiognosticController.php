@@ -10,6 +10,8 @@ use App\Models\Prescription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use Barryvdh\DomPDF\Facade\Pdf;
+
 class DiognosticController extends Controller
 {
     public function index()
@@ -26,7 +28,6 @@ class DiognosticController extends Controller
                 $case->load('student');
             }
         }
-
 
 
         return DiognosticResource::collection($cases);
@@ -101,13 +102,12 @@ class DiognosticController extends Controller
     {
         $case = Diognostic::find($id);
 
-
         $validator = validator()->make($request->all(), [
             'note'=> 'nullable|string',
-            'medicines.name' => 'required|string',
-            'medicines.dose' => 'required|array',
-            'medicines.meal' => 'required|string',
-            'medicines.duration' => 'string'
+            'medicines.*.name' => 'required|string',
+            'medicines.*.dose' => 'required|array',
+            'medicines.*.meal' => 'required|string',
+            'medicines.*.duration' => 'required|string'
         ]);
 
 
@@ -121,17 +121,34 @@ class DiognosticController extends Controller
         $perscription->save();
 
 
+        $medicines = $request->medicines;
 
 
-        $perscription->medicines()->create([
-            'name' => 'napa 500',
-            'prescription_id' => $perscription->id,
-            'dose' => json_encode([0, 0, 1]),
-            'meal' => 'after',
-            'duration' => '75'
+        foreach($medicines as $med){
+            $perscription->medicines()->create([
+                'name' => $med['name'],
+                'prescription_id' => $perscription->id,
+                'dose' => json_encode($med['dose']),
+                'meal' => $med['meal'],
+                'duration' => $med['duration']
+            ]);
+        }
+
+        $perscription = $perscription->medicines;
+
+
+        $pdf = Pdf::loadView('pdfview.prescription', ['data' => $perscription]);
+
+
+        return $pdf->download();
+
+
+
+        return response()->json([
+            'message' => 'Prescription add Succssfully!',
+            'success' => true,
+
         ]);
-
-        return $perscription;
 
     }
 

@@ -30,10 +30,10 @@ class BlogFactory extends Factory
         return [
             'title' => $this->faker->sentence,
             'content' => $this->faker->paragraphs(3, true),
-           
+
             'file' => json_encode([
-                'https://placehold.co/400x600', // Fake image URL
-                'https://placehold.co/800x600', // Another fake image URL
+                'https://placehold.co/400x600.png', // Fake image URL
+                'https://placehold.co/800x600.png', // Another fake image URL
             ]),
             'user_id' => $userId,
             'user_type' => ucfirst($userType), // Match model names

@@ -36,6 +36,7 @@ return new class extends Migration
             $table->boolean('nextPatient')->default(false);
             $table->string('organization')->nullable();
             $table->string('occupation')->nullable();
+            $table->boolean('status')->default(true);
             $table->timestamps();
             $table->softDeletes(); // Soft delete functionality
         });

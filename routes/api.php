@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\API\AuthApi;
+use App\Http\Controllers\API\V1\AntibioticGuideController;
 use App\Http\Controllers\API\V1\Auth\LoginController;
 use App\Http\Controllers\API\V1\Auth\ProfileController;
 use App\Http\Controllers\API\V1\Auth\RegisterController;
@@ -20,6 +21,7 @@ use App\Http\Controllers\API\V1\JobController;
 use App\Http\Controllers\API\V1\Patinet\PatientProblemController;
 use App\Http\Controllers\API\V1\SliderController;
 use App\Http\Controllers\API\V1\Doctor\DoctorController;
+use App\Http\Controllers\API\V1\FeedbackController;
 use App\Http\Controllers\API\V1\FileStoregeController;
 use App\Http\Controllers\API\V1\MessageManageApi;
 use App\Http\Controllers\API\V1\NationalGuideLineController;
@@ -28,7 +30,7 @@ use App\Http\Controllers\API\V1\PrescriptionAssistController;
 use App\Http\Controllers\API\V1\QuizQuestionManageApi;
 use App\Http\Controllers\API\V1\TeenagerHelpController;
 use App\Http\Controllers\DiagnosticController;
-use App\Http\Controllers\FeedbackController;
+
 use App\Http\Controllers\VideoController;
 use App\Http\Resources\DoctorSpecialtyResource;
 use App\Models\DoctorSpecialty;
@@ -120,6 +122,7 @@ Route::get('blog/lists', [BlogController::class, 'index']);
 Route::get('blog/show/{id}', [BlogController::class, 'show']);
 
 Route::get('national/guideline', [NationalGuideLineController::class, 'index']);
+Route::get('antibiotic/guideline', AntibioticGuideController::class);
 Route::get('teenager/help', [TeenagerHelpController::class, 'index']);
 
 

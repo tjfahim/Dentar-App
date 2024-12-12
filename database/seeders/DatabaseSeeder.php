@@ -47,7 +47,8 @@ class DatabaseSeeder extends Seeder
             NationalGuideLineSeeder::class,
             TeenagerHelpSeeder::class,
             MedicineSeeder::class,
-            PrescriptionAssistReplaySeeder::class
+            PrescriptionAssistReplaySeeder::class,
+            AntibioticGuidelineSeeder::class,
         ]);
 
 
