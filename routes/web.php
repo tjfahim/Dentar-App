@@ -1,8 +1,11 @@
 <?php
 
 use App\Http\Controllers\Admin\BookController;
+use App\Http\Controllers\Admin\ContactController;
+use App\Http\Controllers\Admin\FeedbackController;
 // use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\Admin\JobController;
+use App\Http\Controllers\Admin\NationalGuideLineController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\AppSettingManageController;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +19,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingManageController;
 use App\Models\AppSettingManage;
+use App\Models\NationalGuideLine;
 use App\Models\User;
 use Carbon\Carbon;
 
@@ -94,6 +98,19 @@ Route::middleware(['jwt'])->group(function () {
     Route::resource('slider', SliderController::class);
     Route::resource('book', BookController::class);
     Route::resource('job', JobController::class);
+    // NationalGuideLine
+    Route::resource('guideline', NationalGuideLineController::class);
+
+
+
+    // feedback
+    Route::resource('feedback', FeedbackController::class);
+    // contact
+    Route::resource('contacts', ContactController::class);
+    // privaey_plicy
+    //Route::resource('privacy',  );
+    // videos add,
+
     // h
 
 

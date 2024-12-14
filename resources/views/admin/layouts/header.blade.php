@@ -107,6 +107,24 @@
                     </div>
                 </li>
 
+                 {{-- book, slider, job --}}
+                 <li class="nav-item {{ Request::is('rooms') || Request::is('rooms/*') || Request::is('messages') || Request::is('messages/*') ? 'active' : '' }}">
+                    <a href="#" class="nav-link">
+                        <i class="mdi mdi-chart-areaspline menu-icon"></i>
+                        <span class="menu-title">Additional Info</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="submenu">
+                        <ul>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('feedback.index') }}">Feedbacks</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('contacts.index') }}">Contacts</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('guideline.index') }}">National GuideLine</a></li>
+                            {{-- <li class="nav-item"><a class="nav-link" href="{{ url('rooms') }}">Rooms Manage</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url('messages') }}">Messages Manage</a></li> --}}
+                        </ul>
+                    </div>
+                </li>
+
 
 
                 <!-- Setting Menu Item -->

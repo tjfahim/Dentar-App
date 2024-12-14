@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('user_info');
             $table->text('message');
+            $table->boolean('status')->default(false);
             $table->unsignedBigInteger('user_id');
             $table->string('user_type');
             $table->timestamps();
