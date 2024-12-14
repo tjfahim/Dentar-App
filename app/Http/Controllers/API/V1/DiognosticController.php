@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Validator;
 
 class DiognosticController extends Controller
 {
@@ -52,16 +53,29 @@ class DiognosticController extends Controller
     public function add(Request $request)
     {
 
-        // Validate the incoming request data
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'age' => 'required|string',
             'gender' => 'nullable|string',
-            'number' => 'required|string|max:20',
-            'image' => 'nullable|string', // Optional image with max size 2MB
+            'number' => 'string|max:20',
+            'image' => 'nullable|string',
             'problem' => 'required|string',
             'problem_title' => 'string|nullable',
         ]);
+
+        $attributes = $request->all();
+
+
+
+
+       if($validator->fails()){
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+       }
+
+
+
 
         // Handle file upload for the image, if provided
         // if ($request->hasFile('image')) {
@@ -93,7 +107,7 @@ class DiognosticController extends Controller
         }
 
 
-        $attributes = [...$validated, 'patient_id' => $user->id, 'patient_type' => $user->userType, 'doctor_id' => $doctor_id];
+        $attributes = [...$attributes, 'patient_id' => $user->id, 'patient_type' => $user->userType, 'doctor_id' => $doctor_id];
 
 
 
@@ -112,8 +126,17 @@ class DiognosticController extends Controller
     {
         $case = Diognostic::find($id);
 
-        $validator = validator()->make($request->all(), [
+        if(!$case){
+            return response()->json([
+                'errors' => 'Case not found'
+            ]);
+        }
+
+
+
+        $validator = Validator::make($request->all(), [
             'note'=> 'nullable|string',
+            'medicines' => 'required',
             'medicines.*.name' => 'required|string',
             'medicines.*.dose' => 'required|array',
             'medicines.*.meal' => 'required|string',
@@ -121,13 +144,15 @@ class DiognosticController extends Controller
         ]);
 
 
+
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 422);
         }
 
+
         $prescription =new Prescription();
         $prescription->diognostic_id = $case->id;
-        $prescription->note = "good note";
+        $prescription->note = $request->note ?? '';
         $prescription->save();
 
 
@@ -147,7 +172,12 @@ class DiognosticController extends Controller
         $allMedicine = $prescription->medicines;
 
 
-        $pdf = Pdf::loadView('pdfview.prescription', ['data' => $allMedicine]);
+        $pdf = Pdf::loadView('pdfview.prescription', [
+            'patient' => $case,
+            'data' => $allMedicine,
+            'doctor' => Auth::user(),
+            'prescription' => $prescription
+        ]);
 
         $path = public_path('files/prescriptions/');
         $filePath = 'files/prescriptions/prescription_'. $prescription->id . '.pdf';

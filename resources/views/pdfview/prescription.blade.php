@@ -98,24 +98,45 @@
         </div>
 
         <!-- Patient Info -->
-        <div class="info">
+
+            <table style="border: none; margin-bottom: 20px;">
+                <tr>
+                    <td>Name</td>
+                    <td>{{ $patient->name }}</td>
+                </tr>
+                <tr>
+                    <td>Age</td>
+                    <td>{{ $patient->age }}</td>
+                </tr>
+                <tr>
+                    <td>Gender</td>
+                    <td>{{ $patient->gender }}</td>
+                </tr>
+                <tr>
+                    <td>Problem Title</td>
+                    <td>{{ $patient->problem_title }}</td>
+                </tr>
+            </table>
+            {{-- <div>
+                <span> <span style="width: 200px">Name:</span> </span>
+                <div style="flex-grow: 1; border-bottom: 1px solid #e2e8f0;"></div>
+            </div>
+
             <div>
-                <span>Name:</span>
+                <span> <span style="width: 200px">Age:</span> {{ $patient->age ?? '' }} Years</span>
+                <div style="flex-grow: 1; border-bottom: 1px solid #e2e8f0;"></div>
+
+            </div>
+
+            <div>
+                <span>Gender: {{ $patient->gender ?? '' }}</span>
                 <div style="flex-grow: 1; border-bottom: 1px solid #e2e8f0;"></div>
             </div>
             <div>
-                <span>Address:</span>
+                <span>Problem Title: {{ $patient->problem_title ?? '' }}</span>
                 <div style="flex-grow: 1; border-bottom: 1px solid #e2e8f0;"></div>
-            </div>
-            <div>
-                <span>Age:</span>
-                <div style="width: 4rem; border-bottom: 1px solid #e2e8f0; margin-right: 1rem;"></div>
-                <span>Male</span>
-                <input type="checkbox">
-                <span>Female</span>
-                <input type="checkbox" checked>
-            </div>
-        </div>
+            </div> --}}
+
 
         <!-- Table -->
          <table style="border: 1px solid #e2e8f0;">
@@ -210,10 +231,9 @@
 
         <!-- Footer -->
         <div class="footer">
-            <p>Dr. Abdullah</p>
-            <p>License No: 1234</p>
-            <p>DD/MM/YY</p>
-            <button>Send</button>
+            <p>Name: {{ $doctor->name }}</p>
+            <p>License No: {{ $doctor->bmdc_number }} </p>
+            <p>{{ $prescription->created_at }}</p>
         </div>
     </div>
 </body>
