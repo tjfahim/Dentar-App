@@ -127,14 +127,28 @@ public function store(Request $request)
         $blog = Blog::find($id);
 
 
-
         if(!$blog){
             return response()->json([
                 'message' => 'Undefine blog',
             ]);
         }
 
-        $blog->load('comments');
+        $blog = $blog->load('comments');
+
+        return $blog;
+
+
+        switch($blog->user_type){
+            case 'patient':
+                $blog = $blog->load('patient');
+            case 'student':
+                $blog = $blog->load('student');
+            case 'doctor' :
+                $blog = $blog->load('doctor');
+        }
+
+
+        return $blog;
 
         return new BlogResource($blog);
     }
@@ -161,40 +175,39 @@ public function store(Request $request)
         ], 422);
     }
 
-    $blog = Blog::findOrFail($id); // If the blog post doesn't exist, it will throw a 404 error
+    $blog = Blog::findOrFail($id);
 
-    // If files are provided, process and save them
-    $allfiles = $blog->file ? json_decode($blog->file, true) : []; // Keep existing files if no new ones are provided
 
-    if ($request->has('file')) {
-        $files = $request->file('file');
+    if($request->has('file')){
+        $files = json_decode($blog->file);
+        $files = explode(',', $files);
 
-        // If you are updating files, you can either replace them or add to the existing ones
-        foreach ($files as $key => $value) {
-            $file = time() . $key . '.' . $value->getClientOriginalExtension();
-            $path = public_path('images/blog');
-            $fullPath = 'images/blog/' . $file;
-
-            // Add the new file to the list
-            array_push($allfiles, $fullPath);
-
-            // Move the file to the server
-            $value->move($path, $file);
+        foreach($files as $file){
+            $filePath = public_path($file);
+            if(file_exists($filePath)){
+                unlink($filePath);
+            }
         }
     }
 
-    // Update the blog post with the new data
+
+
     $blog->update([
-        'title' => $validator['title'],
-        'content' => $validator['content'],
+        'title' => $request->title,
+        'content' => $request->content,
         'user_type' => Auth::user()->userType,
         'user_id' => Auth::user()->id,
-        'file' => json_encode($allfiles) // Save the updated list of files
+        'file' => $request->file ? json_encode($request->file) : $blog->file
     ]);
+
+
+
+    $blog = $blog->load('doctor_user');
+
 
     return response()->json([
         'message' => 'Blog updated successfully',
-        'data' => new BlogResource($blog),
+        'data' => $blog,
     ], 200);
 }
 
@@ -208,24 +221,24 @@ public function store(Request $request)
      */
     public function destroy($id)
     {
-        // Find the blog post by its ID
-        $blog = Blog::findOrFail($id); // If not found, it will throw a 404 error
 
-        // Optionally, delete associated files if needed
-        if ($blog->file) {
-            $files = json_decode($blog->file, true);
+        $blog = Blog::findOrFail($id);
 
-            // Loop through the file paths and delete the files from the server
-            foreach ($files as $file) {
+
+
+
+            $files = json_decode($blog->file);
+            $files = explode(',', $files);
+
+            foreach($files as $file){
                 $filePath = public_path($file);
-
-                if (file_exists($filePath)) {
-                    unlink($filePath); // Delete the file
+                if(file_exists($filePath)){
+                    unlink($filePath);
                 }
             }
-        }
 
-        // Delete the blog post from the database
+
+
         $blog->delete();
 
         return response()->json([
@@ -235,15 +248,14 @@ public function store(Request $request)
 
 
 
-
     public function addComment(Request $request, $id)
     {
-        // Validate the comment
+
         $validator = Validator::make($request->all(), [
-            'comment' => 'required|string|min:15',
+            'comment' => 'required|string',
         ]);
 
-        // If validation fails, return error response
+
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Validation error',
@@ -251,7 +263,7 @@ public function store(Request $request)
             ], 422);
         }
 
-        // Find the blog by ID
+
         $blog = Blog::find($id);
 
         if (!$blog) {
@@ -260,21 +272,30 @@ public function store(Request $request)
             ], 404);
         }
 
-        // Get the authenticated user
-        $user = Auth::user();
 
-        // Add the comment to the blog
+        $user = Auth::user();
         $comment = $blog->comments()->create([
             'comment' => $request->comment,
             'user_id' => $user->id,
-            'user_type' => $user->userType, // Save the user's model type
+            'user_type' => $user->userType,
         ]);
 
-        // Return success response
+
         return response()->json([
             'message' => 'Comment added successfully',
             'data' => $comment,
         ], 201);
+    }
+
+
+    public function updateComment()
+    {
+
+    }
+
+    public function destroyComment()
+    {
+
     }
 
 }

@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PrescriptionResource extends JsonResource
+class MedicineResourecs extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,10 +15,12 @@ class PrescriptionResource extends JsonResource
     public function toArray($request)
     {
         // return parent::toArray($request);
+
         return [
-            'report_file' => $this->report_file ? asset($this->report_file) : '',
-            'note' => $this->note,
-            'medicines' => MedicineResourecs::collection($this->medicines)
+            'name' => $this->name,
+            'dose' => $this->dose,
+            'meal' => $this->meal,
+            'duration' => $this->duration
         ];
     }
 }

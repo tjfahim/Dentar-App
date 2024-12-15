@@ -16,4 +16,11 @@ class PrescriptionAssistReplay extends Model
         'doctor_id',
         'prescription_assist_id'
     ];
+
+
+    public function doctor()
+    {
+        return $this->belongsTo(Doctor::class, 'doctor_id', 'id');
+    }
+    
 }

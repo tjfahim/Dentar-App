@@ -20,12 +20,14 @@ class BlogFactory extends Factory
     public function definition()
     {
         // Randomly assign a user type (student or doctor)
-        $userType = $this->faker->randomElement(['student', 'doctor']);
+        // $userType = $this->faker->randomElement(['student', 'doctor']);
 
-        // Get a random user ID from the respective table
-        $userId = $userType === 'student'
-            ? Student::inRandomOrder()->first()->id
-            : Doctor::inRandomOrder()->first()->id;
+        // // Get a random user ID from the respective table
+        // $userId = $userType === 'student'
+        //     ? Student::inRandomOrder()->first()->id
+        //     : Doctor::inRandomOrder()->first()->id;
+
+            $userId = Doctor::inRandomOrder()->first()->id;
 
         return [
             'title' => $this->faker->sentence,
@@ -36,7 +38,7 @@ class BlogFactory extends Factory
                 'https://placehold.co/800x600.png', // Another fake image URL
             ]),
             'user_id' => $userId,
-            'user_type' => ucfirst($userType), // Match model names
+            'user_type' => 'doctor', // Match model names
         ];
     }
 }

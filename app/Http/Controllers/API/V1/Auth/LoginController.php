@@ -81,9 +81,7 @@ class LoginController extends Controller
             }
         }
 
-        if(!$user->status && $user->userType == 'doctor'){
-            return response()->json(['error' => 'Account Suspended'], 401);
-        }
+
 
         if(!$user){
             if($email){
@@ -95,6 +93,11 @@ class LoginController extends Controller
         }elseif(!Hash::check($request->password, $user->password)){
             return response()->json(['error' => 'Incorrect password'], 401);
         }
+        
+        if( $user->userType == 'doctor'  && !$user->status){
+            return response()->json(['error' => 'Account Suspended'], 401);
+        }
+
 
 
 

@@ -46,4 +46,9 @@ class Doctor extends Authenticatable
     {
         return $this->hasMany(PrescriptionAssist::class, 'user_id', 'id');
     }
+
+    public function blogs()
+    {
+        return $this->hasMany(Blog::class, 'user_id', 'id');
+    }
 }

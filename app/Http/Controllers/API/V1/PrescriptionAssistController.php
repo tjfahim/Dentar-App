@@ -32,7 +32,7 @@ class PrescriptionAssistController extends Controller
 
 
         foreach($prescriptions as $prescription){
-                $prescription->load('replayDoctor', 'reports');
+                $prescription->load('reports');
 
                 switch($prescription->userType){
                     case 'student':
@@ -48,7 +48,11 @@ class PrescriptionAssistController extends Controller
 
         }
 
-        return $prescriptions;
+        foreach($prescriptions as $prescription){
+            foreach($prescription->reports as $report){
+                $report->load('doctor');
+             }
+        }
 
         return response()->json([
             'message'=> 'Prescription data',

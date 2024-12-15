@@ -21,7 +21,10 @@ class DiognosticController extends Controller
 
 
 
-        $cases = $user->cases()->with('doctor','prescription')->get();
+        $cases = $user->cases()->with('doctor','prescription.medicines')->get();
+
+
+
 
 
         // $cases = $user->cases()->with('doctor', 'prescrption')->get();
@@ -34,7 +37,6 @@ class DiognosticController extends Controller
                 $case->load('student');
             }
         }
-
 
 
         $cases  = $cases->sortByDesc('id')->values();
