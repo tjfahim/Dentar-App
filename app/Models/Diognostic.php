@@ -14,7 +14,7 @@ class Diognostic extends Model
         'age',
         'gender',
         'number',
-        'image',
+        'file',
         'problem_title',
         'problem',
         'patient_type',

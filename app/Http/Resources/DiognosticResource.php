@@ -14,13 +14,51 @@ class DiognosticResource extends JsonResource
      */
     public function toArray($request)
     {
+        $files = $this->file ? json_decode($this->file, true) : [];
+
+
+        $output_file = ['mp_4' => [], 'mp_3' => [], 'image' => [], 'pdf' => []];
+
+        foreach($files as $file){
+
+            $start = null;
+            for($i =0; $i<strlen($file); $i++){
+                if($file[$i] == '.'){
+
+                    $start = ++$i;
+                }
+            }
+
+            $ext = substr($file, $start);
+
+
+            switch($ext){
+                case 'mp4':
+                    $output_file['mp_4'][] = asset($file);
+                    break;
+                case 'mp3':
+                    $output_file['mp_3'][] = asset($file);
+                    break;
+                case 'pdf':
+                    $output_file['pdf'][] = asset($file);
+                    break;
+                case 'jpg':
+                case 'png':
+                case 'jpge':
+                    $output_file['image'][] = asset($file);
+                    break;
+            }
+
+        }
+
+
         return [
             'id' => $this->id,
             'name' => $this->name,
             'age' => $this->age,
             'gender' => $this->gender,
             'number' => $this->number,
-            'image' => $this->image ? asset($this->image) : '',
+            'file' => $output_file,
             'problem' => $this->problem,
             'problem_title' => $this->problem_title,
             'doctor' => new UserResource($this->doctor),

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('age'); // Patient's age
             $table->string('gender')->nullable(); // Contact number
             $table->string('number')->nullable(); // Contact number
-            $table->string('image')->nullable(); // Path to image, nullable
+            $table->json('file')->nullable(); // Path to image, nullable
             $table->text('problem_title')->nullable(); // Description of the problem
             $table->text('problem'); // Description of the problem
             $table->string('patient_type');

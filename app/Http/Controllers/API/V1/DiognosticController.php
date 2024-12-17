@@ -25,8 +25,6 @@ class DiognosticController extends Controller
 
 
 
-
-
         // $cases = $user->cases()->with('doctor', 'prescrption')->get();
 
 
@@ -60,13 +58,21 @@ class DiognosticController extends Controller
             'age' => 'required|string',
             'gender' => 'nullable|string',
             'number' => 'string|max:20',
-            'image' => 'nullable|string',
+            'file' => 'nullable|string',
             'problem' => 'required|string',
             'problem_title' => 'string|nullable',
         ]);
 
+        if($request->file){
+            $files = explode(',', $request->file);
+            $files = json_encode($files);
+        }else{
+            $files = '';
+        }
+
         $attributes = $request->all();
 
+        $attributes = [...$attributes, 'file' => $files];
 
 
 
@@ -131,7 +137,7 @@ class DiognosticController extends Controller
         if(!$case){
             return response()->json([
                 'errors' => 'Case not found'
-            ]);
+            ], 404);
         }
 
 
@@ -200,7 +206,7 @@ class DiognosticController extends Controller
             'message' => 'Prescription add Succssfully!',
             'success' => true,
             'data' => $prescription
-        ]);
+        ], 201);
 
     }
 
