@@ -12,19 +12,38 @@ use Illuminate\Support\Facades\Validator;
 
 class QuizQuestionManageApi extends Controller
 {
-    public function getQuiz(Request $request)
-    {
-        $quizzes = QuizManage::with(['quizQuestionManage' => function ($query) {
-            $query->where('status', 1); // Include only active questions
-        }])->where('status', 1) // Include only active quizzes
-        ->get();
+public function getQuiz(Request $request)
+{
+    $quizzes = QuizManage::where('status', 1)->get();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Quiz retrieved successfully',
-            'data' => $quizzes,
-        ], 200);
-    }
+    $quizQuestionManage = QuizQuestionManage::where('status', 1)->get();
+
+    // Transform each question to include options
+    $quizQuestionManage->each(function ($question) {
+        $question->options = array_filter([
+            $question->option_1,
+            $question->option_2,
+            $question->option_3,
+            $question->option_4,
+        ]);
+        unset($question->option_1, $question->option_2, $question->option_3, $question->option_4);
+    });
+
+    // Attach questions to each quiz
+    $quizzes->each(function ($quiz) use ($quizQuestionManage) {
+        $quiz->questions = $quizQuestionManage
+            ->where('quiz_manage_id', $quiz->id)
+            ->values(); // Reindex the questions collection
+    });
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Quiz retrieved successfully',
+        'data' => $quizzes->toArray(), 
+    ], 200);
+}
+
+
 
 
     public function submitquiz(Request $request){
