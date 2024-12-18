@@ -58,9 +58,10 @@ class DiognosticResource extends JsonResource
             'age' => $this->age,
             'gender' => $this->gender,
             'number' => $this->number,
-            'file' => $output_file,
             'problem' => $this->problem,
             'problem_title' => $this->problem_title,
+            'file' => $output_file,
+            'patient' => new UserResource($this->patient),
             'doctor' => new UserResource($this->doctor),
             // 'patient' => new UserResource($this->patient) ??  new UserResource($this->student),
             'prescription' =>   PrescriptionResource::collection($this->prescription)
