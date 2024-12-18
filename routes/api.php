@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Broadcast;
 use App\Http\Controllers\API\V1\BookController;
 use App\Http\Controllers\API\V1\ContactController;
 use App\Http\Controllers\API\V1\DiognosticController;
+use App\Http\Controllers\API\V1\EmergencyHelpGuideController;
 use App\Http\Controllers\API\V1\JobController;
 use App\Http\Controllers\API\V1\Patinet\PatientProblemController;
 use App\Http\Controllers\API\V1\SliderController;
@@ -189,6 +190,7 @@ Route::middleware('auth:sanctum', 'auth.patient')->group(function(){
 
 
 // common api
+Route::get('emergency/guide', [EmergencyHelpGuideController::class, 'index']);
 Route::get('notification', [NotificationController::class, 'index']);
 Route::get('privacypolicy', function(){
     return PrivacyPolicy::first();

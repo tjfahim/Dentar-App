@@ -8,6 +8,16 @@ use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
 use Illuminate\Support\Facades\File;
 
+use App\Models\ChronicCare;
+use App\Models\DiabeticGuide;
+use App\Models\FemaleHealthGuide;
+use App\Models\HeartGuide;
+use App\Models\KidneyGuide;
+use App\Models\MentelHelthGuide;
+use App\Models\PregnantMotherGuide;
+use App\Models\SkinGuide;
+use App\Models\HepaticGuide;
+
 
 use App\Models\Book;
 use App\Models\Doctor;
@@ -16,6 +26,7 @@ use App\Models\Job;
 use App\Models\NationalGuideLine;
 use App\Models\PrescriptionAssistReplay;
 use App\Models\TeenagerHelp;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -53,6 +64,15 @@ class DatabaseSeeder extends Seeder
 
 
 
+        ChronicCare::factory(15)->create();
+        DiabeticGuide::factory(15)->create();
+        FemaleHealthGuide::factory(15)->create();
+        HeartGuide::factory(15)->create();
+        KidneyGuide::factory(15)->create();
+        MentelHelthGuide::factory(15)->create();
+        PregnantMotherGuide::factory(15)->create();
+        SkinGuide::factory(15)->create();
+        HepaticGuide::factory(15)->create();
 
 
 
