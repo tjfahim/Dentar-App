@@ -107,6 +107,31 @@
                     </div>
                 </li>
 
+                {{-- book, slider, job --}}
+                <li class="nav-item {{ Request::is('rooms') || Request::is('rooms/*') || Request::is('messages') || Request::is('messages/*') ? 'active' : '' }}">
+                    <a href="#" class="nav-link">
+                        <i class="mdi mdi-chart-areaspline menu-icon"></i>
+                        <span class="menu-title">Guideline Control</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="submenu">
+                        <ul>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('slider.index') }}">Chronic Care</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('book.index') }}">Teenager Guide</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('book.index') }}">Diabetic Guide</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('book.index') }}">Female Helth Guide</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('book.index') }}">Heart Guide</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('book.index') }}">Kidney Guide</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('book.index') }}">Mentel Helth Guide</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('book.index') }}">Pregnant Mother Guide</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('book.index') }}">Skine  Guide</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('job.index') }}">Hepatic Guide</a></li>
+                            {{-- <li class="nav-item"><a class="nav-link" href="{{ url('rooms') }}">Rooms Manage</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url('messages') }}">Messages Manage</a></li> --}}
+                        </ul>
+                    </div>
+                </li>
+
                  {{-- book, slider, job --}}
                  <li class="nav-item {{ Request::is('rooms') || Request::is('rooms/*') || Request::is('messages') || Request::is('messages/*') ? 'active' : '' }}">
                     <a href="#" class="nav-link">

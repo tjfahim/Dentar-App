@@ -10,6 +10,9 @@ use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\AppSettingManageController;
 use Illuminate\Support\Facades\Route;
 
+
+use App\Http\Controllers\Admin\GuideLine\KidneyGuideController;
+
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\SettingsControler;
 use App\Http\Controllers\DashboardController;
@@ -100,6 +103,7 @@ Route::middleware(['jwt'])->group(function () {
     Route::resource('job', JobController::class);
     // NationalGuideLine
     Route::resource('guideline', NationalGuideLineController::class);
+    Route::resource('guide/kidney', KidneyGuideController::class);
 
 
 
