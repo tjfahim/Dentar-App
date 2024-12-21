@@ -30,6 +30,7 @@ use App\Http\Controllers\API\V1\NotificationController;
 use App\Http\Controllers\API\V1\PrescriptionAssistController;
 use App\Http\Controllers\API\V1\QuizQuestionManageApi;
 use App\Http\Controllers\API\V1\TeenagerHelpController;
+use App\Http\Controllers\API\V1\UnknowMedicineSupportController;
 use App\Http\Controllers\DiagnosticController;
 
 use App\Http\Controllers\VideoController;
@@ -122,6 +123,11 @@ Route::middleware('auth:sanctum')->group(function(){
 
     Route::get('diagnostic', [DiognosticController::class, 'index']);
     Route::post('diagnostic/add', [DiognosticController::class, 'add']);
+
+
+    Route::get('unknown/medicine', [UnknowMedicineSupportController::class, 'index']);
+    Route::post('unknown/medicine', [UnknowMedicineSupportController::class, 'store']);
+    Route::post('unknown/medicine/report/{id}', [UnknowMedicineSupportController::class, 'addReport']);
 
 });
 

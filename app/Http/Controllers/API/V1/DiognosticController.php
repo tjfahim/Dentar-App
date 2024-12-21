@@ -142,6 +142,13 @@ class DiognosticController extends Controller
         }
 
 
+        if($case->doctor_id !== Auth::user()->id){
+            return response()->json([
+               'message' => 'You are not authorized to view this case'
+            ], 403);
+        }
+
+
 
         $validator = Validator::make($request->all(), [
             'note'=> 'nullable|string',

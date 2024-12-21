@@ -43,4 +43,10 @@ class Patient extends Authenticatable
         return $this->hasMany(PrescriptionAssist::class, 'user_id', 'id');
     }
 
+
+    public function UnknownMedicineCase()
+    {
+        return $this->hasMany(UnknownMedicine::class, 'user_id', 'id');
+    }
+
 }

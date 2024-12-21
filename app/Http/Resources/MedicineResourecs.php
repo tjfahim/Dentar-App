@@ -18,7 +18,7 @@ class MedicineResourecs extends JsonResource
 
         return [
             'name' => $this->name,
-            'dose' => $this->dose,
+            'dose' => json_decode($this->dose),
             'meal' => $this->meal,
             'duration' => $this->duration
         ];
