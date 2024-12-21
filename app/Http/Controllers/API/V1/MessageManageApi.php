@@ -85,7 +85,10 @@ class MessageManageApi extends Controller
     $receiverName = $receiver ? $receiver->name : 'Unknown';
 
     $replyMessage = null;
-    
+    $sender_profile_image = $sender && !empty($sender->image)
+    ? asset('storage/' . $sender->image)
+    : null;
+
 
     $pusher = new Pusher(
         env('PUSHER_APP_KEY'),
@@ -100,6 +103,7 @@ class MessageManageApi extends Controller
     $pusher->trigger("public-user.{$input['sender_id']}.{$input['receiver_id']}", 'new-message', [
         'sender_id' => $input['sender_id'],
         'sender_name' => $senderName,
+        'sender_profile_image' => $sender_profile_image,
         'receiver_id' => $input['receiver_id'],
         'receiver_name' => $receiverName,
         'message' => $input['message'],
