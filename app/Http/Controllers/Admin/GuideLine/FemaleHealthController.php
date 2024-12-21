@@ -4,15 +4,15 @@ namespace App\Http\Controllers\Admin\GuideLine;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\KidneyGuide;
+use App\Models\FemaleHealthGuide;
 
-class KidneyGuideController extends Controller
+class FemaleHealthController extends Controller
 {
     public function index()
     {
-        $guidelines = KidneyGuide::latest()->paginate(15); // Fetch all guidelines
+        $guidelines = FemaleHealthGuide::latest()->paginate(15); // Fetch all guidelines
 
-        return view('admin.pages.guideline.kidney.index', compact('guidelines'));
+        return view('admin.pages.guideline.femaleHelth.index', compact('guidelines'));
     }
 
     /**
@@ -22,7 +22,7 @@ class KidneyGuideController extends Controller
      */
     public function create()
     {
-        return view('admin.pages.guideline.kidney.create'); // Show create form
+        return view('admin.pages.guideline.femaleHelth.create'); // Show create form
     }
 
     /**
@@ -41,8 +41,8 @@ class KidneyGuideController extends Controller
             'status' => 'required|in:active,inactive', // Ensure valid status
         ]);
 
-        // Create a new KidneyGuide model instance
-        $guideline = new KidneyGuide();
+        // Create a new FemaleHealthGuide model instance
+        $guideline = new FemaleHealthGuide();
         $guideline->title = $request->title;
         $guideline->description = $request->description;
         $guideline->status = $request->status == 'active' ? 1 : 0;
@@ -52,18 +52,18 @@ class KidneyGuideController extends Controller
             // Generate a unique file name for the file
             $fileName = time() . '.' . $request->file->extension();
 
-            // Store the file in the 'kidney_guides' folder in the public storage
-            $request->file->move(public_path('guide/kidney_guides'), $fileName);
+            // Store the file in the 'female_health_guides' folder in the public storage
+            $request->file->move(public_path('guide/female_health_guides'), $fileName);
 
             // Save the file path in the database
-            $guideline->file = 'guide/kidney_guides/' . $fileName;
+            $guideline->file = 'guide/female_health_guides/' . $fileName;
         }
 
         // Save the guideline data into the database
         $guideline->save();
 
         // Redirect to the index route with a success message
-        return redirect()->route('kidney.index')->with('success', 'Kidney guide created successfully');
+        return redirect()->route('femalehelth.index')->with('success', 'Female health guide created successfully');
     }
 
     /**
@@ -75,10 +75,10 @@ class KidneyGuideController extends Controller
     public function show($id)
     {
         // Retrieve the guideline by its ID
-        $guideline = KidneyGuide::findOrFail($id);
+        $guideline = FemaleHealthGuide::findOrFail($id);
 
         // Show the guideline details
-        return view('admin.pages.kidney_guide.show', compact('guideline'));
+        return view('admin.pages.guideline.femaleHelth.show', compact('guideline'));
     }
 
     /**
@@ -90,10 +90,10 @@ class KidneyGuideController extends Controller
     public function edit($id)
     {
         // Retrieve the guideline record by its ID
-        $guideline = KidneyGuide::findOrFail($id);
+        $guideline = FemaleHealthGuide::findOrFail($id);
 
         // Return the edit view with the guideline data
-        return view('admin.pages.guideline.kidney.edit', compact('guideline'));
+        return view('admin.pages.guideline.femaleHelth.edit', compact('guideline'));
     }
 
     /**
@@ -114,7 +114,7 @@ class KidneyGuideController extends Controller
         ]);
 
         // Find the existing guideline by its ID
-        $guideline = KidneyGuide::findOrFail($id);
+        $guideline = FemaleHealthGuide::findOrFail($id);
 
         // Update the guideline's fields
         $guideline->title = $request->title;
@@ -131,18 +131,18 @@ class KidneyGuideController extends Controller
             // Generate a unique file name for the new file
             $fileName = time() . '.' . $request->file->extension();
 
-            // Store the new file in the 'kidney_guides' folder in the public storage
-            $request->file->move(public_path('guide/kidney_guides'), $fileName);
+            // Store the new file in the 'female_health_guides' folder in the public storage
+            $request->file->move(public_path('guide/female_health_guides'), $fileName);
 
             // Update the file path in the database
-            $guideline->file = 'guide/kidney_guides/' . $fileName;
+            $guideline->file = 'guide/female_health_guides/' . $fileName;
         }
 
         // Save the updated guideline data into the database
         $guideline->save();
 
         // Redirect to the index route with a success message
-        return redirect()->route('kidney.index')->with('success', 'Kidney guide updated successfully');
+        return redirect()->route('femalehelth.index')->with('success', 'Female health guide updated successfully');
     }
 
     /**
@@ -154,7 +154,7 @@ class KidneyGuideController extends Controller
     public function destroy($id)
     {
         // Retrieve the guideline by its ID
-        $guideline = KidneyGuide::findOrFail($id);
+        $guideline = FemaleHealthGuide::findOrFail($id);
 
         // Delete the file from the server if it exists
         if (file_exists(public_path($guideline->file))) {
@@ -165,6 +165,6 @@ class KidneyGuideController extends Controller
         $guideline->delete();
 
         // Redirect back with a success message
-        return redirect()->route('kidney.index')->with('success', 'Kidney guide deleted successfully');
+        return redirect()->route('femalehelth.index')->with('success', 'Female health guide deleted successfully');
     }
 }

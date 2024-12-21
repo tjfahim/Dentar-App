@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Route;
 
 
 use App\Http\Controllers\Admin\GuideLine\KidneyGuideController;
+use App\Http\Controllers\Admin\GuideLine\FemaleHealthController;
+use App\Http\Controllers\Admin\GuideLine\FemaleMotherController;
 
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\SettingsControler;
@@ -104,6 +106,8 @@ Route::middleware(['jwt'])->group(function () {
     // NationalGuideLine
     Route::resource('guideline', NationalGuideLineController::class);
     Route::resource('guide/kidney', KidneyGuideController::class);
+    Route::resource('guide/femalehelth', FemaleHealthController::class);
+    Route::resource('guide/mother', FemaleMotherController::class);
 
 
 
