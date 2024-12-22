@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BlogResource;
 use App\Models\Blog;
+use App\Models\BlogComment;
 use App\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -132,25 +133,43 @@ public function store(Request $request)
                 'message' => 'Undefine blog',
             ]);
         }
+        $blog = $blog->load('comments.replay');
 
-        $blog = $blog->load('comments');
 
-        return $blog;
 
+        foreach($blog->comments as  $comment){
+            switch($comment->user_type){
+                case "doctor" :
+                    $comment  = $comment->load('doctor:name,image');
+                    break;
+                case 'patient':
+                    $comment = $comment->load('patient:name,image');
+                    break;
+                case'student':
+                    $comment = $comment->load('student:name,image');
+                    break;
+            }
+        }
 
         switch($blog->user_type){
             case 'patient':
-                $blog = $blog->load('patient');
+                $blog = $blog->load('patient_user');
             case 'student':
-                $blog = $blog->load('student');
+                $blog = $blog->load('student_user');
             case 'doctor' :
-                $blog = $blog->load('doctor');
+                $blog = $blog->load('doctor_user');
         }
 
 
-        return $blog;
+        // return $blog;
 
-        return new BlogResource($blog);
+        return response()->json([
+            'message' => 'Blog with all comments',
+            'success' => true,
+            'data' => BlogResource::make($blog),
+        ]);
+
+
     }
 
     /**
@@ -176,6 +195,13 @@ public function store(Request $request)
     }
 
     $blog = Blog::findOrFail($id);
+
+    if(Auth::user()->id !== $blog->user_id){
+        return response()->json([
+           'message' => 'Unauthorized to update this blog',
+        ], 401);
+    }
+
 
 
     if($request->has('file')){
@@ -225,6 +251,11 @@ public function store(Request $request)
         $blog = Blog::findOrFail($id);
 
 
+            if(Auth::user()->id !== $blog->user_id){
+                return response()->json([
+                   'message' => 'Unauthorized to delete this blog',
+                ], 401);
+            }
 
 
             $files = json_decode($blog->file);
@@ -288,13 +319,111 @@ public function store(Request $request)
     }
 
 
-    public function updateComment()
+    public function updateComment(Request $request, $id)
     {
+        $validator = Validator::make($request->all(), [
+            'comment' => 'required|string',
+        ]);
+
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+
+        $comment = BlogComment::find($id);
+
+        if (!$comment) {
+            return response()->json([
+                'message' => 'Undefined comment',
+            ], 404);
+        }
+
+
+        $user = Auth::user();
+        $comment = $comment->update([
+            'comment' => $request->comment,
+            'user_id' => $user->id,
+            'user_type' => $user->userType,
+        ]);
+
+
+        return response()->json([
+            'message' => 'Comment update successfully',
+            'data' => $comment,
+        ], 201);
+    }
+
+    public function commentDelete(Request $request, $id)
+    {
+
+        $user = Auth::user();
+
+        $comment = BlogComment::find($id);
+
+        if(!$comment){
+            return response()->json([
+               'message' => 'Undefined comment',
+            ], 404);
+        }
+
+        if($user->id !== $comment->user_id){
+            return response()->json([
+               'message' => 'You can not delete this comment',
+            ], 401);
+        }
+
+
+        $comment->replay()->delete();
+        $comment->delete();
+
+
+        return response()->json([
+           'message' => 'Comment deleted successfully',
+        ], 200);
 
     }
 
-    public function destroyComment()
+    public function replayComment(Request $request, $b_id, $c_id)
     {
+        $validator = Validator::make($request->all(), [
+            'comment' => 'required|string',
+        ]);
+
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+
+        $blog = Blog::find($b_id);
+        $comment = $blog->comments()->find($c_id);
+
+        if (!$blog || !$comment) {
+            return response()->json([
+                'message' => 'Undefined blog or comment',
+            ], 404);
+        }
+
+        $user = Auth::user();
+        $comment = $blog->comments()->create([
+            'comment' => $request->comment,
+            'user_id' => $user->id,
+            'user_type' => $user->userType,
+            'comment_id' => $comment->id
+        ]);
+
+
+        return response()->json([
+            'message' => 'Comment replay  successfully',
+            'data' => $comment,
+        ], 201);
 
     }
 

@@ -17,6 +17,11 @@ class BlogComment extends Model
         'comment_id',
     ];
 
+    public function commentable()
+    {
+        return $this->morphTo();
+    }
+
 
     public function user()
     {
@@ -36,5 +41,10 @@ class BlogComment extends Model
     public function doctor()
     {
         return $this->belongsTo(Doctor::class, 'user_id', 'id');
+    }
+
+    public function replay()
+    {
+        return $this->hasMany(BlogComment::class, 'comment_id', 'id');
     }
 }

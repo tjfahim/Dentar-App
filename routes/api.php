@@ -142,6 +142,16 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('prescription/read', [PrescriptionReadController::class, 'store']);
     Route::post('prescription/read/report/{id}', [PrescriptionReadController::class, 'addReport']);
 
+
+    Route::post('blog/add', [BlogController::class, 'store']);
+    Route::post('blog/update/{id}', [BlogController::class, 'update']);
+    Route::delete('blog/delete/{id}', [BlogController::class, 'destroy']);
+
+    Route::post('blog/comment/{id}', [BlogController::class, 'addComment']);
+    Route::post('blog/comment/update/{id}', [BlogController::class, 'updateComment']);
+    Route::post('blog/comment/delete/{id}', [BlogController::class, 'commentDelete']);
+    Route::post('blog/comment/{b_id}/replay/{c_id}', [BlogController::class, 'replayComment']);
+
 });
 
 
@@ -169,12 +179,6 @@ Route::middleware(['auth:sanctum', 'auth.doctor_or_student'])->group(function(){
     Route::post('book/search', [BookController::class, 'search'])
         ->name('search');
 
-
-    Route::post('blog/add', [BlogController::class, 'store']);
-    Route::post('blog/update/{id}', [BlogController::class, 'update']);
-    Route::delete('blog/delete/{id}', [BlogController::class, 'destroy']);
-
-    Route::post('blog/comment/{id}', [BlogController::class, 'addComment']);
 
 
     Route::post('submitquiz', [ QuizQuestionManageApi::class, 'submitquiz']);

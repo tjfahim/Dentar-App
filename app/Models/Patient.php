@@ -53,4 +53,9 @@ class Patient extends Authenticatable
         return $this->hasMany(PrescriptionRead::class, 'user_id', 'id');
     }
 
+    public function comments()
+    {
+        return $this->morphMany(BlogComment::class, 'commentable');
+    }
+
 }

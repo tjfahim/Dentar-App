@@ -32,7 +32,8 @@ class BlogResource extends JsonResource
         'files' => $output_file, // Return the processed file data
         'created_at' => $this->created_at,
         'updated_at' => $this->updated_at,
-        'user' => new UserResource($this->doctor_user)  ?? new UserResource($this->student_user)
+        'author' => new UserResource($this->doctor_user)  ?? new UserResource($this->student_user) ?? new UserResource($this->patient_user),
+        'comments' => $this->comments ? BlogCommentResource::collection($this->comments) : ''
     ];
 }
 

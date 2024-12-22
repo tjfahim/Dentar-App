@@ -18,6 +18,11 @@ class Blog extends Model
         return $this->belongsTo(Student::class, 'user_id', 'id');
     }
 
+    public function patient_user()
+    {
+        return $this->belongsTo(Patient::class, 'user_id', 'id');
+    }
+
 
     public function doctor_user()
     {
@@ -26,6 +31,6 @@ class Blog extends Model
 
     public function comments()
     {
-        return $this->hasMany(BlogComment::class);
+        return $this->hasMany(BlogComment::class)->whereNull('comment_id');
     }
 }

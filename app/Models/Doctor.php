@@ -51,4 +51,9 @@ class Doctor extends Authenticatable
     {
         return $this->hasMany(Blog::class, 'user_id', 'id');
     }
+
+    public function comments()
+    {
+        return $this->morphMany(BlogComment::class, 'commentable');
+    }
 }
