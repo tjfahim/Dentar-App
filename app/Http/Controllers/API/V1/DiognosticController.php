@@ -24,6 +24,17 @@ class DiognosticController extends Controller
         $cases = $user->cases()->with('doctor','prescription.medicines')->get();
 
 
+        $case_with_report = [];
+        $case_withOut_report = [];
+
+
+
+        // if(!count($cases[0]['prescription'])){
+        //     return "empty array";
+        // }
+        // return $cases[0]['prescription'];
+
+
 
         // $cases = $user->cases()->with('doctor', 'prescrption')->get();
 
@@ -40,8 +51,26 @@ class DiognosticController extends Controller
         $cases  = $cases->sortByDesc('id')->values();
 
 
+        foreach($cases as $case){
+            if(count($case['prescription'])) {
+                $case_with_report[] = $case;
+                continue;
+            }
+            $case_withOut_report[] = $case;
+        }
 
-        return DiognosticResource::collection($cases);
+
+
+        return response()->json([
+            'message' => "All Prescription lists",
+            'success' => true,
+            'case_with_report' => DiognosticResource::collection($case_with_report),
+            'case_withOut_report' => DiognosticResource::collection($case_withOut_report),
+        ]);
+
+
+
+        // return DiognosticResource::collection($cases);
 
         // if($user->userType == 'doctor'){
         //     return DiognosticResource::collection($user->cases);

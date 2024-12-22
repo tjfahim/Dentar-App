@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Mail\OtpEmail;
+use App\Models\Doctor;
+use App\Models\Patient;
+use App\Models\Student;
+use App\Rules\EmailExistsInAnyTable;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
 
@@ -68,7 +72,7 @@ class AuthApi extends Controller
     {
         try {
             $user = Auth::user();
-            
+
             $validator = Validator::make($request->all(), [
                 'name' => 'nullable|string|max:255',
                 'phone' => 'nullable',
@@ -148,7 +152,7 @@ class AuthApi extends Controller
 
         $request->validate([
             'current_password' => 'required',
-            'new_password' => 'required|min:5',
+            'new_password' => 'required|min:6',
         ]);
 
 
@@ -180,7 +184,7 @@ class AuthApi extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
-       
+
         try {
             if ($token = JWTAuth::attempt($credentials)) {
                 return response()->json(['token' => $token]);
@@ -234,7 +238,7 @@ class AuthApi extends Controller
     public function verifyOtp(Request $request){
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|exists:users,email',
-            'otp' => 'required', 
+            'otp' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -268,8 +272,11 @@ class AuthApi extends Controller
     public function sendOtp(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email|exists:users,email'
+            'email' => ['required', 'email', new EmailExistsInAnyTable()],
         ]);
+
+
+
 
         if ($validator->fails()) {
             $errors = $validator->errors()->all();
@@ -278,13 +285,25 @@ class AuthApi extends Controller
             return response()->json(['error' => $errorString], 422);
         }
 
-        $user = User::where('email', $request->email)->first();
+
+
+        $user = Patient::where('email', $request->email)->first();
+
+
+        if(!$user){
+            $user = Student::where('email', $request->email)->first();
+
+        }
+        if(!$user){
+            $user = Doctor::where('email', $request->email)->first();
+
+        }
 
         if (!$user) {
             return response()->json(['message' => 'Email not found'], 404);
         }
 
-        $otp = 1234;
+        $otp = 12345;
 
         DB::table('password_resets')->updateOrInsert(
             ['email' => $user->email],
@@ -302,7 +321,7 @@ class AuthApi extends Controller
     public function checkOtp(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email|exists:users,email',
+            'email' => ['required', 'email', new EmailExistsInAnyTable()],
             'otp' => 'required'
         ]);
 
@@ -329,9 +348,9 @@ class AuthApi extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email|exists:users,email',
+            'email' => ['required', 'email', new EmailExistsInAnyTable()],
             'otp' => 'required',
-            'password' => 'required'
+            'password' => 'required|min:6'
         ]);
 
         if ($validator->fails()) {
@@ -343,7 +362,19 @@ class AuthApi extends Controller
         }
 
 
-        $user = User::where('email', $request->email)->first();
+        $user = Patient::where('email', $request->email)->first();
+
+
+        if(!$user){
+            $user = Student::where('email', $request->email)->first();
+
+        }
+        if(!$user){
+            $user = Doctor::where('email', $request->email)->first();
+
+        }
+
+
         $otpRecord = DB::table('password_resets')
             ->where('email', $user->email)
             ->where('token', $request->otp)

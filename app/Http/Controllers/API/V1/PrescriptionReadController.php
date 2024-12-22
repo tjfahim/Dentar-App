@@ -6,26 +6,24 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use App\Models\UnknownMedicine;
-use App\Models\UnknownMedicineReport;
+use App\Models\PrescriptionRead;
+use App\Models\PrescriptionReadReport;
 use App\Http\Resources\UnknownMedicineResource;
 
-class UnknowMedicineSupportController extends Controller
+class PrescriptionReadController extends Controller
 {
     public function index()
     {
-
-
         $user = Auth::user();
 
         $with_report = [];
         $without_report = [];
 
-        if($user->userType == 'doctor'){
-            $unknownM = UnknownMedicine::with(['report.doctor'])->latest()->get();
+        if ($user->userType == 'doctor') {
+            $prescriptions = PrescriptionRead::with(['report.doctor'])->latest()->get();
 
 
-            foreach($unknownM as $case){
+            foreach($prescriptions as $case){
                 if(count($case['report'])) {
                     $with_report[] = $case;
                     continue;
@@ -41,23 +39,24 @@ class UnknowMedicineSupportController extends Controller
                     'without_report' => UnknownMedicineResource::collection($without_report),
                 ]
             ]);
-            // return  UnknownMedicineResource::collection($unknownM);
+
+            // return UnknownMedicineResource::collection($prescriptions);
         }
 
-        $medicine = $user->UnknownMedicineCase->load('report.doctor');
+        $prescriptions = $user->prescriptionReadCases->load('report.doctor');
 
 
-
-        $medicineCase = $medicine->map(function($item){
-            if($item->user_type == 'patient'){
+        $prescriptionCases = $prescriptions->map(function ($item) {
+            if ($item->user_type == 'patient') {
                 return $item->load('patient');
-            }elseif($item->user_type == 'student'){
+            } elseif ($item->user_type == 'student') {
                 return $item->load('student');
             }
         });
 
 
-        foreach($medicineCase as $case){
+
+        foreach($prescriptionCases as $case){
             if(count($case['report'])) {
                 $with_report[] = $case;
                 continue;
@@ -66,7 +65,7 @@ class UnknowMedicineSupportController extends Controller
         }
 
         return response()->json([
-            'message' => "All Unknown medicine  List",
+            'message' => "All Prescription Read List",
             'success' => true,
             'data' => [
                 'with_report' => UnknownMedicineResource::collection($with_report),
@@ -76,10 +75,8 @@ class UnknowMedicineSupportController extends Controller
 
 
 
-       // return  UnknownMedicineResource::collection($medicineCase);
-
+        // return UnknownMedicineResource::collection($prescriptionCases);
     }
-
 
     public function store(Request $request)
     {
@@ -89,41 +86,34 @@ class UnknowMedicineSupportController extends Controller
             'file' => 'nullable|string',
         ]);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        if($request->file){
-            $files = explode(',', $request->file);
-        }else{
-            $files = '';
-        }
+        $files = $request->file ? explode(',', $request->file) : '';
 
-
-
-        $case = UnknownMedicine::create([
+        $case = PrescriptionRead::create([
             'title' => $request->title,
             'description' => $request->description,
-            'files' =>  $files = json_encode($files),
+            'files' => json_encode($files),
             'user_id' => Auth::id(),
             'user_type' => Auth::user()->userType,
         ]);
 
         return response()->json([
-            'message' => 'add successfully',
+            'message' => 'Added successfully',
             'success' => true,
-            'case' => $case
+            'case' => $case,
         ]);
     }
 
     public function addReport(Request $request, $id)
     {
+        $prescription = PrescriptionRead::find($id);
 
-        $med = UnknownMedicine::find($id)->first();
-
-        if(!$med){
+        if (!$prescription) {
             return response()->json([
-                'errors' => 'Case not found'
+                'errors' => 'Case not found',
             ], 404);
         }
 
@@ -133,29 +123,24 @@ class UnknowMedicineSupportController extends Controller
             'file' => 'nullable|string',
         ]);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        if($request->file){
-            $files = explode(',', $request->file);
-        }else{
-            $files = '';
-        }
+        $files = $request->file ? explode(',', $request->file) : '';
 
-
-        $case = UnknownMedicineReport::create([
+        $report = PrescriptionReadReport::create([
             'title' => $request->title,
             'description' => $request->description,
-            'files' =>  $files = json_encode($files),
+            'files' => json_encode($files),
             'doctor_id' => Auth::id(),
-            'unkown_medicine_id' => $med->id,
-         ]);
+            'prescription_read_id' => $prescription->id,
+        ]);
 
         return response()->json([
-            'message' => 'add successfully',
+            'message' => 'Report added successfully',
             'success' => true,
-            'case' => $case
+            'report' => $report,
         ]);
     }
 }

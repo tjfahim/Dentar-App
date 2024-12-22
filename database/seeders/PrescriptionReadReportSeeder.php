@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\AntibioticGuideline;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class AntibioticGuidelineSeeder extends Seeder
+class PrescriptionReadReportSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,6 +14,6 @@ class AntibioticGuidelineSeeder extends Seeder
      */
     public function run()
     {
-        AntibioticGuideline::factory(50)->create();
+        //
     }
 }

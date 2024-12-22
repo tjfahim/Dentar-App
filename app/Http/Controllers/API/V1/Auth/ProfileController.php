@@ -193,4 +193,10 @@ class ProfileController extends Controller
             'user' => new UserResource($user)
         ]);
     }
+
+
+    public function forgetPassword()
+    {
+        
+    }
 }

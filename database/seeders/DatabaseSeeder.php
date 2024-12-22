@@ -61,6 +61,7 @@ class DatabaseSeeder extends Seeder
             PrescriptionAssistReplaySeeder::class,
             AntibioticGuidelineSeeder::class,
             UnknownMedicineSeeder::class,
+            PrescriptionReadSeeder::class
         ]);
 
 

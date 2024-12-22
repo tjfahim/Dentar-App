@@ -28,6 +28,7 @@ use App\Http\Controllers\API\V1\MessageManageApi;
 use App\Http\Controllers\API\V1\NationalGuideLineController;
 use App\Http\Controllers\API\V1\NotificationController;
 use App\Http\Controllers\API\V1\PrescriptionAssistController;
+use App\Http\Controllers\API\V1\PrescriptionReadController;
 use App\Http\Controllers\API\V1\QuizQuestionManageApi;
 use App\Http\Controllers\API\V1\TeenagerHelpController;
 use App\Http\Controllers\API\V1\UnknowMedicineSupportController;
@@ -102,14 +103,21 @@ Route::post('register', RegisterController::class);
 
 
 
-Route::post('verify-otp', [RegisterController::class, 'verifyOtp']);
-Route::post('send-otp', [RegisterController::class, 'sendOtp']);
-Route::post('check-otp', [RegisterController::class, 'checkOtp']);
+// Route::post('verify-otp', [RegisterController::class, 'verifyOtp']);
+// Route::post('send-otp', [RegisterController::class, 'sendOtp']);
+// Route::post('check-otp', [RegisterController::class, 'checkOtp']);
+
+Route::post('password/forget', [AuthApi::class, 'sendOtp']);
+Route::post('otp/verify', [AuthApi::class, 'checkOtp']);
+Route::post('password/reset', [AuthApi::class, 'resetPassword']);
 
 
 Route::middleware('auth:sanctum')->group(function(){
     Route::get('profile', [ProfileController::class, 'profile']);
     Route::post('profile/update', [ProfileController::class, 'updateProfile']);
+    Route::post('password/change', [AuthApi::class, 'passwordUpdate']);
+
+
 
     Route::post('feedback/add', [FeedbackController::class, 'store']);
     Route::post('contact/add', [ContactController::class, 'store']);
@@ -128,6 +136,11 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('unknown/medicine', [UnknowMedicineSupportController::class, 'index']);
     Route::post('unknown/medicine', [UnknowMedicineSupportController::class, 'store']);
     Route::post('unknown/medicine/report/{id}', [UnknowMedicineSupportController::class, 'addReport']);
+
+
+    Route::get('prescription/read', [PrescriptionReadController::class, 'index']);
+    Route::post('prescription/read', [PrescriptionReadController::class, 'store']);
+    Route::post('prescription/read/report/{id}', [PrescriptionReadController::class, 'addReport']);
 
 });
 

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UnknownMedicine extends Model
+class PrescriptionRead extends Model
 {
     use HasFactory;
 
@@ -18,10 +18,9 @@ class UnknownMedicine extends Model
         'user_id'
     ];
 
-
     public function report()
     {
-        return $this->hasMany(UnknownMedicineReport::class, 'unkown_medicine_id', 'id');
+        return $this->hasMany(PrescriptionReadReport::class, 'prescription_read_id', 'id');
     }
 
 
