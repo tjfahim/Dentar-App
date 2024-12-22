@@ -14,6 +14,7 @@ class UnknownMedicineReport extends Model
         'description',
         'files',
         'doctor_id',
+        'unkown_medicine_id',
     ];
 
     public function doctor(){

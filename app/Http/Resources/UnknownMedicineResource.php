@@ -37,7 +37,8 @@ class UnknownMedicineResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'files' => $output_file ,
-            'user' => new UserResource($this->user)
+            'user' => new UserResource($this->patient) ?? new UserResource($this->student),
+            'report' =>  UnknownMedicineReportResource::collection($this->report)
         ];
     }
 }

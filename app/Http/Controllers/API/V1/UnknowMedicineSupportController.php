@@ -19,13 +19,25 @@ class UnknowMedicineSupportController extends Controller
         $user = Auth::user();
 
         if($user->userType == 'doctor'){
-            return  UnknownMedicineResource::collection(UnknownMedicine::all());
+            $unknownM = UnknownMedicine::with(['report.doctor'])->latest()->get();
+            return  UnknownMedicineResource::collection($unknownM);
         }
 
-        $medicine = $user->UnknownMedicineCase;
+        $medicine = $user->UnknownMedicineCase->load('report.doctor');
 
 
-        return  UnknownMedicineResource::collection($medicine);
+
+        $medicineCase = $medicine->map(function($item){
+            if($item->user_type == 'patient'){
+                return $item->load('patient');
+            }elseif($item->user_type == 'student'){
+                return $item->load('student');
+            }
+        });
+
+
+
+        return  UnknownMedicineResource::collection($medicineCase);
 
     }
 
@@ -96,7 +108,8 @@ class UnknowMedicineSupportController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'files' =>  $files = json_encode($files),
-            'doctor_id' => Auth::id()
+            'doctor_id' => Auth::id(),
+            'unkown_medicine_id' => $med->id,
          ]);
 
         return response()->json([

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->longText('description')->nullable();
             $table->json('files')->nullable();
             $table->unsignedBigInteger('doctor_id')->nullable();
+            $table->unsignedBigInteger('unkown_medicine_id')->nullable();
             $table->timestamps();
         });
     }

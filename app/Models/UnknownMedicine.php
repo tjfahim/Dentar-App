@@ -19,7 +19,13 @@ class UnknownMedicine extends Model
     ];
 
 
-    public function patinet()
+    public function report()
+    {
+        return $this->hasMany(UnknownMedicineReport::class, 'unkown_medicine_id', 'id');
+    }
+
+
+    public function patient()
     {
         return $this->belongsTo(Patient::class, 'user_id', 'id');
     }
