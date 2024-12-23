@@ -113,6 +113,10 @@ Route::post('password/reset', [AuthApi::class, 'resetPassword']);
 
 
 Route::middleware('auth:sanctum')->group(function(){
+
+    Route::get('notification', [NotificationController::class, 'index']);
+    Route::get('notification/read/{id}', [NotificationController::class, 'read']);
+
     Route::get('profile', [ProfileController::class, 'profile']);
     Route::post('profile/update', [ProfileController::class, 'updateProfile']);
     Route::post('password/change', [AuthApi::class, 'passwordUpdate']);
@@ -214,7 +218,7 @@ Route::middleware('auth:sanctum', 'auth.patient')->group(function(){
 
 // common api
 Route::get('emergency/guide', [EmergencyHelpGuideController::class, 'index']);
-Route::get('notification', [NotificationController::class, 'index']);
+
 Route::get('privacypolicy', function(){
     return PrivacyPolicy::first();
 });

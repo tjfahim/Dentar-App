@@ -17,8 +17,9 @@ class NotificationFactory extends Factory
     public function definition()
     {
         return [
-            'title' => fake()->title,
-            'body' => fake()->paragraph(5)
+            'title' => fake()->sentence(),
+            'body' => fake()->paragraph(5),
+            'read' => fake()->randomElement([true, false])
         ];
     }
 }

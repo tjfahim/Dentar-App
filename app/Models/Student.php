@@ -54,4 +54,9 @@ class Student extends Authenticatable
     {
         return $this->morphMany(BlogComment::class, 'commentable');
     }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'user_id', 'id');
+    }
 }
