@@ -34,6 +34,7 @@ class UnknownMedicineResource extends JsonResource
         },  $files);
 
         return [
+            'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
             'files' => $output_file ,

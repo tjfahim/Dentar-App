@@ -18,7 +18,7 @@ class BlogCommentResource extends JsonResource
         return [
             'id' => $this->id,
             'comment' => $this->comment,
-            'user' => new BlogUserResource($this->patient) ?? new BlogUserResource($this->doctor) ?? new BlogUserResource($this->student),
+            'user' => new BlogUserResource($this->patient ?? $this->doctor ?? $this->student),
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
             'replay' => count($this->replay) ? BlogCommentResource::collection($this->replay) : ''
         ];

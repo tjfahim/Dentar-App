@@ -25,6 +25,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingManageController;
 use App\Models\AppSettingManage;
 use App\Models\NationalGuideLine;
+use App\Models\PrivacyPolicy;
 use App\Models\User;
 use Carbon\Carbon;
 
@@ -55,10 +56,10 @@ Route::get('/terms-and-conditions', function () {
     return view('terms-and-conditions', ['settings' => $settings]);
 });
 Route::get('/privacy-policy', function () {
-    $settings = AppSettingManage::first();
-    return view('privacy-policy', ['settings' => $settings]);
-});
+    $policy = PrivacyPolicy::first();
 
+    return view('privacy-policy', ['policy' => $policy]);
+})->name('privacy-policy');
 
 Route::post('user-register', [UserController::class, 'store'])->name('userRegister.store');
 Route::post('verify-login', [UserController::class, 'verifyLogin'])->name('verifyLogin');

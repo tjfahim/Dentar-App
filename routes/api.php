@@ -111,13 +111,14 @@ Route::post('password/forget', [AuthApi::class, 'sendOtp']);
 Route::post('otp/verify', [AuthApi::class, 'checkOtp']);
 Route::post('password/reset', [AuthApi::class, 'resetPassword']);
 
-
+Route::get('profile/delete/{id}', [ProfileController::class, 'profileDelete']);
 Route::middleware('auth:sanctum')->group(function(){
 
     Route::get('notification', [NotificationController::class, 'index']);
     Route::get('notification/read/{id}', [NotificationController::class, 'read']);
 
     Route::get('profile', [ProfileController::class, 'profile']);
+
     Route::post('profile/update', [ProfileController::class, 'updateProfile']);
     Route::post('password/change', [AuthApi::class, 'passwordUpdate']);
 
@@ -219,8 +220,15 @@ Route::middleware('auth:sanctum', 'auth.patient')->group(function(){
 // common api
 Route::get('emergency/guide', [EmergencyHelpGuideController::class, 'index']);
 
-Route::get('privacypolicy', function(){
+Route::get('privacy/policy', function(){
     return PrivacyPolicy::first();
+});
+
+Route::get('privacypolicy', function(){
+    return response()->json([
+        'message' => "privacy policy",
+        'url' =>  route('privacy-policy')
+    ]);
 });
 Route::get('trumsandcondition', function(){
     return response()->json([

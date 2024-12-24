@@ -139,17 +139,19 @@ public function store(Request $request)
 
         foreach($blog->comments as  $comment){
             switch($comment->user_type){
-                case "doctor" :
-                    $comment  = $comment->load('doctor:name,image');
+                case "doctor":
+                    $comment  = $comment->load('doctor');
                     break;
                 case 'patient':
-                    $comment = $comment->load('patient:name,image');
+                    $comment = $comment->load('patient');
                     break;
                 case'student':
-                    $comment = $comment->load('student:name,image');
+                    $comment = $comment->load('student');
                     break;
             }
         }
+
+
 
         switch($blog->user_type){
             case 'patient':
@@ -161,7 +163,7 @@ public function store(Request $request)
         }
 
 
-        // return $blog;
+
 
         return response()->json([
             'message' => 'Blog with all comments',

@@ -55,13 +55,13 @@
 </head>
 <body>
     <div class="container-fluid">
-        <div class="row justify-content-center">
-            <div class="col-md-10 col-lg-8 policy-container text-center">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-10 col-lg-8 policy-container">
                 <!-- Title -->
-                <h1>{{ $settings->policy2title }}</h1>
+                <h1>{{ $policy->title }}</h1>
 
                 <!-- Description -->
-                <p>{{ $settings->policy2description }}</p>
+                <p>{!! nl2br(e($policy->description)) !!}</p>
             </div>
         </div>
     </div>
