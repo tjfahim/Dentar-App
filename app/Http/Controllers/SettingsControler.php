@@ -25,7 +25,11 @@ class SettingsControler extends Controller
     public function index()
     {
         $settings = Setting::first();
-        return  view('admin.pages.settings.index', compact('settings'));
+
+        $user = Auth::user();
+
+
+        return  view('admin.pages.settings.index', compact('settings', 'user'));
     }
 
     /**
@@ -37,7 +41,7 @@ class SettingsControler extends Controller
     {
         //
     }
- 
+
     /**
      * Store a newly created resource in storage.
      *

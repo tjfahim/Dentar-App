@@ -42,7 +42,7 @@ class FemaleMotherController extends Controller
 
         $guideline->save();
 
-        return redirect()->route('mother.index')->with('success', 'Female mother guide created successfully');
+        return redirect()->route('mother.index')->with('success', 'Pregnancy  mother guide created successfully');
     }
 
     public function edit($id)
@@ -78,7 +78,7 @@ class FemaleMotherController extends Controller
 
         $guideline->save();
 
-        return redirect()->route('mother.index')->with('success', 'Female mother guide updated successfully');
+        return redirect()->route('mother.index')->with('success', 'Pregnancy mother guide updated successfully');
     }
 
     public function destroy($id)
@@ -91,6 +91,6 @@ class FemaleMotherController extends Controller
 
         $guideline->delete();
 
-        return redirect()->route('mother.index')->with('success', 'Female mother guide deleted successfully');
+        return redirect()->route('mother.index')->with('success', 'Pregnancy  mother guide deleted successfully');
     }
 }

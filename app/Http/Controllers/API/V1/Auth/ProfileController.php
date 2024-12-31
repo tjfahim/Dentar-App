@@ -172,13 +172,13 @@ class ProfileController extends Controller
                 $imagePath = 'images/doctors/' . $file;
             }
 
-            if ($request->hasFile('signature')) {
+            if ($request->signature) {
 
-                $file = time() . '.' . $request->image->extension();
+                $file = time() . '.' . $request->signature->extension();
 
-                $request->image->move(public_path('images/signature/'), $file);
+                $request->signature->move(public_path('images/signature/'), $file);
 
-                $imagePath = 'images/signature/' . $file;
+                $signaturePath = 'images/signature/' . $file;
             }
 
             $date = date_create($request->dob);

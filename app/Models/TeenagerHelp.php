@@ -12,6 +12,7 @@ class TeenagerHelp extends Model
     protected $fillable = [
         'title',
         'description',
-        'file'
+        'file',
+        'status',
     ];
 }
