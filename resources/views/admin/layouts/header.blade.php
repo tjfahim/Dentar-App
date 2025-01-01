@@ -60,7 +60,7 @@
                 </li>
 
                 <!-- User Manage Menu Item -->
-                <li class="nav-item {{ Request::is('users') || Request::is('users/*') ? 'active' : '' }}">
+                <li class="nav-item {{ Request::is('manage') || Request::is('manage/*') || Request::is('messages') || Request::is('messages/*') ? 'active' : '' }}">
                     <a href="#" class="nav-link">
                         <i class="mdi mdi-chart-areaspline menu-icon"></i>
                         <span class="menu-title">User Manage</span>
@@ -68,7 +68,9 @@
                     </a>
                     <div class="submenu">
                         <ul>
-                            <li class="nav-item"><a class="nav-link" href="{{ url('users') }}">User Manage</a></li>
+                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('doctor.index') ? 'active' : '' }}" href="{{ route('doctor.index') }}">Doctor Manage</a></li>
+                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('patient.index') ? 'active' : '' }}" href="{{ route('patient.index') }}">Patient Manage</a></li>
+                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('student.index') ? 'active' : '' }}" href="{{ route('student.index') }}">Student Manage</a></li>
                         </ul>
                     </div>
                 </li>

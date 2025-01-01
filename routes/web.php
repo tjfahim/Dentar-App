@@ -21,6 +21,9 @@ use App\Http\Controllers\Admin\GuideLine\HeartGuidesController;
 use App\Http\Controllers\Admin\Guideline\HepaticGuidesController;
 use App\Http\Controllers\Admin\Guideline\MentelHelthGuidesController;
 use App\Http\Controllers\Admin\Guideline\SkineGuidesController;
+use App\Http\Controllers\Admin\Manage\DoctorsController;
+use App\Http\Controllers\Admin\Manage\PatientsController;
+use App\Http\Controllers\Admin\Manage\StudentsController;
 use App\Http\Controllers\Admin\SettingsController;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\SettingsControler;
@@ -78,7 +81,7 @@ Route::get('/', function () {
 
 Route::middleware(['jwt'])->group(function () {
     Route::controller(DashboardController::class)->group(function () {
-        
+
         Route::get('/dashboard', 'dashboard')->name('dashboard');
     });
 
@@ -124,6 +127,12 @@ Route::middleware(['jwt'])->group(function () {
     Route::resource('guide/mentelhelth', MentelHelthGuidesController::class);
     Route::resource('guide/skine', SkineGuidesController::class);
     Route::resource('guide/hepatic', HepaticGuidesController::class);
+
+
+    // manage all users
+    Route::resource('manage/doctor', DoctorsController::class);
+    Route::resource('manage/student', StudentsController::class);
+    Route::resource('manage/patient', PatientsController::class);
 
 
 
