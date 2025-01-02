@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\Guideline\SkineGuidesController;
 use App\Http\Controllers\Admin\manage\DoctorsController;
 use App\Http\Controllers\Admin\manage\PatientsController;
 use App\Http\Controllers\Admin\manage\StudentsController;
+use App\Http\Controllers\Admin\manage\DiognosticManageController;
 use App\Http\Controllers\Admin\SettingsController;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\SettingsControler;
@@ -133,6 +134,7 @@ Route::middleware(['jwt'])->group(function () {
     Route::resource('manage/doctor', DoctorsController::class);
     Route::resource('manage/student', StudentsController::class);
     Route::resource('manage/patient', PatientsController::class);
+    Route::resource('manage/diagnostic_case', DiognosticManageController::class);
 
 
 
