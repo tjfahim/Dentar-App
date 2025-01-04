@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\FeedbackController;
 use App\Http\Controllers\Admin\GuideLine\ChronicsCareController;
 // use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\Admin\JobController;
+use App\Http\Controllers\Admin\manage\PrescriptionAssistsController;
+use App\Http\Controllers\Admin\Manage\PrescriptionReadController;
 use App\Http\Controllers\Admin\NationalGuideLineController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\AppSettingManageController;
@@ -135,6 +137,8 @@ Route::middleware(['jwt'])->group(function () {
     Route::resource('manage/student', StudentsController::class);
     Route::resource('manage/patient', PatientsController::class);
     Route::resource('manage/diagnostic_case', DiognosticManageController::class);
+    Route::resource('manage/prescription_assists', PrescriptionAssistsController::class);
+    Route::resource('manage/prescription_reads', PrescriptionReadController::class);
 
 
 
