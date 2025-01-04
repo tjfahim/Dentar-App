@@ -32,7 +32,7 @@ class PrescriptionAssistController extends Controller
 
 
         foreach($prescriptions as $prescription){
-                $prescription->load('replayDoctor', 'reports');
+                $prescription->load('reports');
 
                 switch($prescription->userType){
                     case 'student':
@@ -48,7 +48,11 @@ class PrescriptionAssistController extends Controller
 
         }
 
-        return $prescriptions;
+        foreach($prescriptions as $prescription){
+            foreach($prescription->reports as $report){
+                $report->load('doctor');
+             }
+        }
 
         return response()->json([
             'message'=> 'Prescription data',
@@ -65,7 +69,7 @@ class PrescriptionAssistController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'image' => 'nullable|file',
+            'image' => 'nullable|string',
         ]);
 
 
@@ -73,22 +77,24 @@ class PrescriptionAssistController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
+        $files = explode(',', $request->image);
 
-        if ($request->hasFile('image')) {
 
-            $fileName = time() . '.' . $request->image->extension();
+        // if ($request->hasFile('image')) {
 
-            $request->image->move(public_path('images/prescriptions/'), $fileName);
+        //     $fileName = time() . '.' . $request->image->extension();
 
-            $imagePath = 'images/prescriptions/' . $fileName;
-        }
+        //     $request->image->move(public_path('images/prescriptions/'), $fileName);
+
+        //     $imagePath = 'images/prescriptions/' . $fileName;
+        // }
 
         $user = Auth::user();
 
         $prescription = PrescriptionAssist::create([
             'title' => $request->title,
             'description' => $request->description,
-            'image' => $imagePath ?? '',
+            'image' => json_encode($files) ?? '',
             'user_id' => $user->id,
             'userType' => $user->userType,
         ]);

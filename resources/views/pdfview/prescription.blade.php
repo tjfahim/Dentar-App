@@ -4,89 +4,236 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prescription Design</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f7fafc;
+            padding: 2.5rem 0;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 40rem;
+            margin: auto;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        .logo-circle {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background: #48bb78;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.125rem;
+        }
+        .info {
+            margin-bottom: 1rem;
+        }
+        .info div {
+            display: flex;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+        .info div span {
+            margin-right: 1rem;
+        }
+        .info div input[type="checkbox"] {
+            margin-left: 0.5rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem;
+            text-align: left;
+        }
+        th {
+            background: #edf2f7;
+        }
+        .note {
+            margin-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 0.5rem;
+        }
+        .footer {
+            margin-top: 1.5rem;
+            font-size: 0.875rem;
+        }
+        .footer button {
+            margin-top: 1rem;
+            background: #3182ce;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 py-10">
-    <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+<body>
+    <div class="container">
         <!-- Header -->
-        <div class="flex justify-between items-center mb-4">
-            <div class="flex items-center space-x-2">
-                <div class="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center">
-                    <span class="text-white font-bold text-lg">DB</span>
-                </div>
-                <h1 class="font-bold text-lg">DENTER</h1>
-            </div>
-        </div>
-        
-        <!-- Patient Info -->
-        <div class="mb-4">
-            <div class="flex items-center space-x-4">
-                <span>Name:</span>
-                <div class="flex-grow border-b border-gray-300"></div>
-            </div>
-            <div class="flex items-center space-x-4 mt-2">
-                <span>Address:</span>
-                <div class="flex-grow border-b border-gray-300"></div>
-            </div>
-            <div class="flex items-center space-x-4 mt-2">
-                <span>Age:</span>
-                <div class="flex-grow border-b border-gray-300 w-16"></div>
-                <span>Male</span>
-                <input type="checkbox" class="form-checkbox text-gray-600">
-                <span>Female</span>
-                <input type="checkbox" checked class="form-checkbox text-purple-600">
+        <div class="header">
+            <div class="logo">
+                <div class="logo-circle">DB</div>
+                <h1 style="margin-left: 0.5rem; font-weight: bold; font-size: 1.125rem;">DENTER</h1>
             </div>
         </div>
 
+        <!-- Patient Info -->
+
+            <table style="border: none; margin-bottom: 20px;">
+                <tr>
+                    <td>Name</td>
+                    <td>{{ $patient->name }}</td>
+                </tr>
+                <tr>
+                    <td>Age</td>
+                    <td>{{ $patient->age }}</td>
+                </tr>
+                <tr>
+                    <td>Gender</td>
+                    <td>{{ $patient->gender }}</td>
+                </tr>
+                <tr>
+                    <td>Problem Title</td>
+                    <td>{{ $patient->problem_title }}</td>
+                </tr>
+            </table>
+            {{-- <div>
+                <span> <span style="width: 200px">Name:</span> </span>
+                <div style="flex-grow: 1; border-bottom: 1px solid #e2e8f0;"></div>
+            </div>
+
+            <div>
+                <span> <span style="width: 200px">Age:</span> {{ $patient->age ?? '' }} Years</span>
+                <div style="flex-grow: 1; border-bottom: 1px solid #e2e8f0;"></div>
+
+            </div>
+
+            <div>
+                <span>Gender: {{ $patient->gender ?? '' }}</span>
+                <div style="flex-grow: 1; border-bottom: 1px solid #e2e8f0;"></div>
+            </div>
+            <div>
+                <span>Problem Title: {{ $patient->problem_title ?? '' }}</span>
+                <div style="flex-grow: 1; border-bottom: 1px solid #e2e8f0;"></div>
+            </div> --}}
+
+
         <!-- Table -->
-        <table class="w-full text-sm border-collapse border border-gray-300">
+         <table style="border: 1px solid #e2e8f0;">
             <thead>
-                <tr class="bg-gray-100">
-                    <th class="border border-gray-300 p-2">Description</th>
-                    <th class="border border-gray-300 p-2">Guideline</th>
+                <tr>
+                    <th>Description</th>
+                    <th style="text-align: center; padding: 20px;">
+                        <div style="border-bottom: 1px solid black; padding-bottom: 5px">Guideline</div>
+                        <div style="clear: both;"> <!-- Clear float after the guideline row -->
+                            <div style="float: left; width: 33%;">Dose</div>
+                            <div style="float: left; width: 33%; text-align: center;">Male</div>
+                            <div style="float: left; width: 33%; text-align: right;">Duration</div>
+                        </div>
+                    </th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td class="border border-gray-300 p-2">01.</td>
-                    <td class="border border-gray-300 p-2">
-                        <div>1+0+1</div>
-                        <div>Before</div>
-                        <div>10 Days</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="border border-gray-300 p-2">02.</td>
-                    <td class="border border-gray-300 p-2">
-                        <div>1+0+1</div>
-                        <div>After</div>
-                        <div>01 Month</div>
-                    </td>
-                </tr>
-                <!-- Repeat rows as needed -->
-                <tr>
-                    <td class="border border-gray-300 p-2">03.</td>
-                    <td class="border border-gray-300 p-2">
-                        <div>1+0+1</div>
-                        <div>Before</div>
-                        <div>01 Week</div>
-                    </td>
-                </tr>
+            <tbody style="">
+                @foreach ($data as $item)
+                    <tr style="padding: 20px">
+                        <td style="border: none;">
+                            <span>01</span> <span> {{ $item->name }}</span>
+                        </td>
+                        <td style="clear: both;"> <!-- Clear float after each row -->
+                            <div style="float: left; width: 33%; text-align: center;">
+                                @php
+                                   $doses = json_decode($item->dose);
+
+                                @endphp
+                                @foreach ($doses as $key =>  $dose)
+                                    @if ($key === 0)
+                                        {{ $dose }}
+                                        @continue
+                                    @endif
+                                    + {{ $dose }}
+                                @endforeach
+                            </div>
+                            <div style="float: left; width: 33%; text-align: center;">{{ $item->meal }}</div>
+                            <div style="float: left; width: 33%; text-align: center;">{{ $item->duration }} Days</div>
+                        </td>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
 
+        {{-- <table>
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th style="text-align: center">
+                        <div style="border-bottom: 1px solid black; padding-bottom: 5px">Guideline</div>
+                        <div style="clear: both;"> <!-- Clear float after the guideline row -->
+                            <div style="float: left; width: 33%;">Dose</div>
+                            <div style="float: left; width: 33%; text-align: center;">Male</div>
+                            <div style="float: left; width: 33%; text-align: right;">Duration</div>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                    <tr style="padding: 10px">
+                        <td style="">
+                            <span>01</span> <span> Namap</span>
+                        </td>
+                        <td style="clear: both;"> <!-- Clear float after each row -->
+                            <div style="float: left; width: 33%;">1+0+1</div>
+                            <div style="float: left; width: 33%; text-align: center;">Before</div>
+                            <div style="float: left; width: 33%; text-align: right;">10 Days</div>
+                        </td>
+
+                    </tr>
+                    <tr style="padding: 10px">
+                        <td style="">
+                            <span>01</span> <span> Namap</span>
+                        </td>
+                        <td style="clear: both;"> <!-- Clear float after each row -->
+                            <div style="float: left; width: 33%;">1+0+1</div>
+                            <div style="float: left; width: 33%; text-align: center;">Before</div>
+                            <div style="float: left; width: 33%; text-align: right;">10 Days</div>
+                        </td>
+
+                    </tr>
+
+            </tbody>
+        </table> --}}
+
+
         <!-- Note -->
-        <div class="mt-4">
+        <div class="note">
             <span>Note:</span>
-            <div class="border-t border-gray-300 mt-2"></div>
         </div>
 
         <!-- Footer -->
-        <div class="mt-6 text-sm">
-            <p>Dr. Abdullah</p>
-            <p>License No: 1234</p>
-            <p>DD/MM/YY</p>
-            <button class="mt-4 bg-blue-600 text-white px-4 py-2 rounded">Send</button>
+        <div class="footer">
+            <p>Name: {{ $doctor->name }}</p>
+            <p>License No: {{ $doctor->bmdc_number }} </p>
+            <p>{{ $prescription->created_at }}</p>
         </div>
     </div>
 </body>

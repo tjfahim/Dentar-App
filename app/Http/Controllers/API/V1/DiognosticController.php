@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Validator;
 
 class DiognosticController extends Controller
 {
@@ -18,7 +19,24 @@ class DiognosticController extends Controller
     {
         $user = Auth::user();
 
-        $cases = $user->cases()->with('doctor')->get();
+
+
+        $cases = $user->cases()->with('doctor','prescription.medicines')->get();
+
+
+        $case_with_report = [];
+        $case_withOut_report = [];
+
+
+
+        // if(!count($cases[0]['prescription'])){
+        //     return "empty array";
+        // }
+        // return $cases[0]['prescription'];
+
+
+
+        // $cases = $user->cases()->with('doctor', 'prescrption')->get();
 
 
         foreach($cases as $case){
@@ -30,7 +48,29 @@ class DiognosticController extends Controller
         }
 
 
-        return DiognosticResource::collection($cases);
+        $cases  = $cases->sortByDesc('id')->values();
+
+
+        foreach($cases as $case){
+            if(count($case['prescription'])) {
+                $case_with_report[] = $case;
+                continue;
+            }
+            $case_withOut_report[] = $case;
+        }
+
+
+
+        return response()->json([
+            'message' => "All Prescription lists",
+            'success' => true,
+            'case_with_report' => DiognosticResource::collection($case_with_report),
+            'case_withOut_report' => DiognosticResource::collection($case_withOut_report),
+        ]);
+
+
+
+        // return DiognosticResource::collection($cases);
 
         // if($user->userType == 'doctor'){
         //     return DiognosticResource::collection($user->cases);
@@ -42,16 +82,38 @@ class DiognosticController extends Controller
     public function add(Request $request)
     {
 
-        // Validate the incoming request data
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'age' => 'required|string',
             'gender' => 'nullable|string',
-            'number' => 'required|string|max:20',
-            'image' => 'nullable|string', // Optional image with max size 2MB
+            'number' => 'string|max:20',
+            'file' => 'nullable|string',
             'problem' => 'required|string',
             'problem_title' => 'string|nullable',
         ]);
+
+        if($request->file){
+            $files = explode(',', $request->file);
+            $files = json_encode($files);
+        }else{
+            $files = '';
+        }
+
+        $attributes = $request->all();
+
+        $attributes = [...$attributes, 'file' => $files];
+
+
+
+
+       if($validator->fails()){
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+       }
+
+
+
 
         // Handle file upload for the image, if provided
         // if ($request->hasFile('image')) {
@@ -83,7 +145,7 @@ class DiognosticController extends Controller
         }
 
 
-        $attributes = [...$validated, 'patient_id' => $user->id, 'patient_type' => $user->userType, 'doctor_id' => $doctor_id];
+        $attributes = [...$attributes, 'patient_id' => $user->id, 'patient_type' => $user->userType, 'doctor_id' => $doctor_id];
 
 
 
@@ -102,8 +164,24 @@ class DiognosticController extends Controller
     {
         $case = Diognostic::find($id);
 
-        $validator = validator()->make($request->all(), [
+        if(!$case){
+            return response()->json([
+                'errors' => 'Case not found'
+            ], 404);
+        }
+
+
+        if($case->doctor_id !== Auth::user()->id){
+            return response()->json([
+               'message' => 'You are not authorized to view this case'
+            ], 403);
+        }
+
+
+
+        $validator = Validator::make($request->all(), [
             'note'=> 'nullable|string',
+            'medicines' => 'required',
             'medicines.*.name' => 'required|string',
             'medicines.*.dose' => 'required|array',
             'medicines.*.meal' => 'required|string',
@@ -111,44 +189,61 @@ class DiognosticController extends Controller
         ]);
 
 
+
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        $perscription =new Prescription();
-        $perscription->diognostic_id = $case->id;
-        $perscription->note = "good note";
-        $perscription->save();
+
+        $prescription =new Prescription();
+        $prescription->diognostic_id = $case->id;
+        $prescription->note = $request->note ?? '';
+        $prescription->save();
 
 
         $medicines = $request->medicines;
 
 
         foreach($medicines as $med){
-            $perscription->medicines()->create([
+            $prescription->medicines()->create([
                 'name' => $med['name'],
-                'prescription_id' => $perscription->id,
+                'prescription_id' => $prescription->id,
                 'dose' => json_encode($med['dose']),
                 'meal' => $med['meal'],
                 'duration' => $med['duration']
             ]);
         }
 
-        $perscription = $perscription->medicines;
+        $allMedicine = $prescription->medicines;
 
 
-        $pdf = Pdf::loadView('pdfview.prescription', ['data' => $perscription]);
+        $pdf = Pdf::loadView('pdfview.prescription', [
+            'patient' => $case,
+            'data' => $allMedicine,
+            'doctor' => Auth::user(),
+            'prescription' => $prescription
+        ]);
+
+        $path = public_path('files/prescriptions/');
+        $filePath = 'files/prescriptions/prescription_'. $prescription->id . '.pdf';
 
 
-        return $pdf->download();
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
 
+
+        file_put_contents($path .'prescription_'.  $prescription->id . '.pdf', $pdf->output());
+
+        $prescription->report_file = $filePath;
+        $prescription->save();
 
 
         return response()->json([
             'message' => 'Prescription add Succssfully!',
             'success' => true,
-
-        ]);
+            'data' => $prescription
+        ], 201);
 
     }
 

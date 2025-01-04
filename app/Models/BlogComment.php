@@ -13,12 +13,38 @@ class BlogComment extends Model
         'user_id',
         'user_type',
         'comment',
-        'blog_id'
+        'blog_id',
+        'comment_id',
     ];
+
+    public function commentable()
+    {
+        return $this->morphTo();
+    }
 
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class, 'user_id', 'id');
+    }
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class, 'user_id', 'id');
+    }
+
+    public function doctor()
+    {
+        return $this->belongsTo(Doctor::class, 'user_id', 'id');
+    }
+
+    public function replay()
+    {
+        return $this->hasMany(BlogComment::class, 'comment_id', 'id');
     }
 }

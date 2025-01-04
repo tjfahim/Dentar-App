@@ -90,8 +90,8 @@ class RegisterController extends Controller
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
                 'email' => 'email|unique:patients,email|unique:students,email|unique:doctors,email',
-                'phone' => 'required|string|max:15|unique:patients,phone|unique:students,phone|unique:doctors,phone',
-                'password' => 'required|string|min:4', 
+                'phone' => 'string|max:15|unique:patients,phone|unique:students,phone|unique:doctors,phone',
+                'password' => 'required|string|min:4',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
                 'address' => 'nullable|string',
                 'dob' => 'nullable|date',
@@ -221,18 +221,18 @@ class RegisterController extends Controller
 
     }
 
-    
+
 
     public function verifyOtp(Request $request){
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|exists:doctors,email',
-            'otp' => 'required', 
+            'otp' => 'required',
         ]);
 
         if ($validator->fails()) {
             $errors = $validator->errors()->all();
             $errorString = implode(', ', $errors);
-        
+
             return response()->json(['error' => $errorString], 422);
         }
 
@@ -264,7 +264,7 @@ class RegisterController extends Controller
         if ($validator->fails()) {
             $errors = $validator->errors()->all();
             $errorString = implode(', ', $errors);
-        
+
             return response()->json(['error' => $errorString], 422);
         }
 
@@ -300,7 +300,7 @@ class RegisterController extends Controller
         if ($validator->fails()) {
             $errors = $validator->errors()->all();
             $errorString = implode(', ', $errors);
-        
+
             return response()->json(['error' => $errorString], 422);
         }
 

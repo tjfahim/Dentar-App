@@ -19,7 +19,8 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('user_type');
             $table->string('comment');
-            $table->foreignIdFor(Blog::class);
+            $table->unsignedBigInteger('blog_id')->nullable();
+            $table->unsignedBigInteger('comment_id')->nullable();
             $table->timestamps();
         });
     }

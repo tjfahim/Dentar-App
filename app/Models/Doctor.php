@@ -33,7 +33,8 @@ class Doctor extends Authenticatable
         'bmdc_type',
         'organization',
         'occupation',
-        'status'
+        'status',
+        'total_points'
     ];
 
 
@@ -45,5 +46,20 @@ class Doctor extends Authenticatable
     public function prescriptions()
     {
         return $this->hasMany(PrescriptionAssist::class, 'user_id', 'id');
+    }
+
+    public function blogs()
+    {
+        return $this->hasMany(Blog::class, 'user_id', 'id');
+    }
+
+    public function comments()
+    {
+        return $this->morphMany(BlogComment::class, 'commentable');
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'user_id', 'id');
     }
 }

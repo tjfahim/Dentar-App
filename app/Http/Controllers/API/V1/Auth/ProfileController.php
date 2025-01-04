@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\V1\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\Models\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -16,6 +17,19 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         return new  UserResource($user);
+    }
+
+    public function profileDelete($id){
+
+        $user = Patient::find($id);
+
+        if(!$user){
+            return response()->json(['error' => 'User not found'], 404);
+        }
+
+        $user->delete();
+
+        return response()->json(['message' => 'User deleted successfully'], 200);
     }
 
     public function updateProfile(Request $request)
@@ -158,13 +172,13 @@ class ProfileController extends Controller
                 $imagePath = 'images/doctors/' . $file;
             }
 
-            if ($request->hasFile('signature')) {
+            if ($request->signature) {
 
-                $file = time() . '.' . $request->image->extension();
+                $file = time() . '.' . $request->signature->extension();
 
-                $request->image->move(public_path('images/signature/'), $file);
+                $request->signature->move(public_path('images/signature/'), $file);
 
-                $imagePath = 'images/signature/' . $file;
+                $signaturePath = 'images/signature/' . $file;
             }
 
             $date = date_create($request->dob);
@@ -192,5 +206,11 @@ class ProfileController extends Controller
             'message' => 'Profile updated successfully',
             'user' => new UserResource($user)
         ]);
+    }
+
+
+    public function forgetPassword()
+    {
+
     }
 }

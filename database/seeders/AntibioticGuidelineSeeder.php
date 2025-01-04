@@ -15,6 +15,6 @@ class AntibioticGuidelineSeeder extends Seeder
      */
     public function run()
     {
-        AntibioticGuideline::factory(15)->create();
+        AntibioticGuideline::factory(50)->create();
     }
 }

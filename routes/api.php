@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Broadcast;
 use App\Http\Controllers\API\V1\BookController;
 use App\Http\Controllers\API\V1\ContactController;
 use App\Http\Controllers\API\V1\DiognosticController;
+use App\Http\Controllers\API\V1\EmergencyHelpGuideController;
 use App\Http\Controllers\API\V1\JobController;
 use App\Http\Controllers\API\V1\Patinet\PatientProblemController;
 use App\Http\Controllers\API\V1\SliderController;
@@ -27,8 +28,10 @@ use App\Http\Controllers\API\V1\MessageManageApi;
 use App\Http\Controllers\API\V1\NationalGuideLineController;
 use App\Http\Controllers\API\V1\NotificationController;
 use App\Http\Controllers\API\V1\PrescriptionAssistController;
+use App\Http\Controllers\API\V1\PrescriptionReadController;
 use App\Http\Controllers\API\V1\QuizQuestionManageApi;
 use App\Http\Controllers\API\V1\TeenagerHelpController;
+use App\Http\Controllers\API\V1\UnknowMedicineSupportController;
 use App\Http\Controllers\DiagnosticController;
 
 use App\Http\Controllers\VideoController;
@@ -100,19 +103,32 @@ Route::post('register', RegisterController::class);
 
 
 
-Route::post('verify-otp', [RegisterController::class, 'verifyOtp']);
-Route::post('send-otp', [RegisterController::class, 'sendOtp']);
-Route::post('check-otp', [RegisterController::class, 'checkOtp']);
+// Route::post('verify-otp', [RegisterController::class, 'verifyOtp']);
+// Route::post('send-otp', [RegisterController::class, 'sendOtp']);
+// Route::post('check-otp', [RegisterController::class, 'checkOtp']);
 
+Route::post('password/forget', [AuthApi::class, 'sendOtp']);
+Route::post('otp/verify', [AuthApi::class, 'checkOtp']);
+Route::post('password/reset', [AuthApi::class, 'resetPassword']);
 
+Route::get('profile/delete/{id}', [ProfileController::class, 'profileDelete']);
 Route::middleware('auth:sanctum')->group(function(){
+
+    Route::get('notification', [NotificationController::class, 'index']);
+    Route::get('notification/read/{id}', [NotificationController::class, 'read']);
+
     Route::get('profile', [ProfileController::class, 'profile']);
+
     Route::post('profile/update', [ProfileController::class, 'updateProfile']);
+    Route::post('password/change', [AuthApi::class, 'passwordUpdate']);
+
+
 
     Route::post('feedback/add', [FeedbackController::class, 'store']);
     Route::post('contact/add', [ContactController::class, 'store']);
     Route::get('youtube/videos', [VideoController::class, 'index']);
     Route::get('doctors/lists', [DoctorController::class, 'doctor_list']);
+    // Route::get('doctors/lists/blog', [DoctorController::class, 'blogDoctorList']);
 
     Route::get('prescription/lists', [PrescriptionAssistController::class, 'index']);
     Route::post('prescription/add', [PrescriptionAssistController::class, 'store']);
@@ -120,6 +136,26 @@ Route::middleware('auth:sanctum')->group(function(){
 
     Route::get('diagnostic', [DiognosticController::class, 'index']);
     Route::post('diagnostic/add', [DiognosticController::class, 'add']);
+
+
+    Route::get('unknown/medicine', [UnknowMedicineSupportController::class, 'index']);
+    Route::post('unknown/medicine', [UnknowMedicineSupportController::class, 'store']);
+    Route::post('unknown/medicine/report/{id}', [UnknowMedicineSupportController::class, 'addReport']);
+
+
+    Route::get('prescription/read', [PrescriptionReadController::class, 'index']);
+    Route::post('prescription/read', [PrescriptionReadController::class, 'store']);
+    Route::post('prescription/read/report/{id}', [PrescriptionReadController::class, 'addReport']);
+
+
+    Route::post('blog/add', [BlogController::class, 'store']);
+    Route::post('blog/update/{id}', [BlogController::class, 'update']);
+    Route::delete('blog/delete/{id}', [BlogController::class, 'destroy']);
+
+    Route::post('blog/comment/{id}', [BlogController::class, 'addComment']);
+    Route::post('blog/comment/update/{id}', [BlogController::class, 'updateComment']);
+    Route::post('blog/comment/delete/{id}', [BlogController::class, 'commentDelete']);
+    Route::post('blog/comment/{b_id}/replay/{c_id}', [BlogController::class, 'replayComment']);
 
 });
 
@@ -148,12 +184,6 @@ Route::middleware(['auth:sanctum', 'auth.doctor_or_student'])->group(function(){
     Route::post('book/search', [BookController::class, 'search'])
         ->name('search');
 
-
-    Route::post('blog/add', [BlogController::class, 'store']);
-    Route::post('blog/update/{id}', [BlogController::class, 'update']);
-    Route::delete('blog/delete/{id}', [BlogController::class, 'destroy']);
-
-    Route::post('blog/comment/{id}', [BlogController::class, 'addComment']);
 
 
     Route::post('submitquiz', [ QuizQuestionManageApi::class, 'submitquiz']);
@@ -188,9 +218,17 @@ Route::middleware('auth:sanctum', 'auth.patient')->group(function(){
 
 
 // common api
-Route::get('notification', [NotificationController::class, 'index']);
-Route::get('privacypolicy', function(){
+Route::get('emergency/guide', [EmergencyHelpGuideController::class, 'index']);
+
+Route::get('privacy/policy', function(){
     return PrivacyPolicy::first();
+});
+
+Route::get('privacypolicy', function(){
+    return response()->json([
+        'message' => "privacy policy",
+        'url' =>  route('privacy-policy')
+    ]);
 });
 Route::get('trumsandcondition', function(){
     return response()->json([

@@ -17,6 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('body');
+            $table->boolean('read')->default(false);
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->string('user_type')->nullable();
             $table->timestamps();
         });
     }

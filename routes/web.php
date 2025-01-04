@@ -1,12 +1,31 @@
 <?php
 
 use App\Http\Controllers\Admin\BookController;
+use App\Http\Controllers\Admin\ContactController;
+use App\Http\Controllers\Admin\FeedbackController;
+use App\Http\Controllers\Admin\GuideLine\ChronicsCareController;
 // use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\Admin\JobController;
+use App\Http\Controllers\Admin\NationalGuideLineController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\AppSettingManageController;
 use Illuminate\Support\Facades\Route;
 
+
+use App\Http\Controllers\Admin\GuideLine\KidneyGuideController;
+use App\Http\Controllers\Admin\GuideLine\FemaleHealthController;
+use App\Http\Controllers\Admin\GuideLine\FemaleMotherController;
+use App\Http\Controllers\Admin\GuideLine\TeenagerHelpsController;
+use App\Http\Controllers\Admin\GuideLine\DiabeticGuidesController;
+use App\Http\Controllers\Admin\GuideLine\HeartGuidesController;
+use App\Http\Controllers\Admin\Guideline\HepaticGuidesController;
+use App\Http\Controllers\Admin\Guideline\MentelHelthGuidesController;
+use App\Http\Controllers\Admin\Guideline\SkineGuidesController;
+use App\Http\Controllers\Admin\manage\DoctorsController;
+use App\Http\Controllers\Admin\manage\PatientsController;
+use App\Http\Controllers\Admin\manage\StudentsController;
+use App\Http\Controllers\Admin\manage\DiognosticManageController;
+use App\Http\Controllers\Admin\SettingsController;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\SettingsControler;
 use App\Http\Controllers\DashboardController;
@@ -16,6 +35,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingManageController;
 use App\Models\AppSettingManage;
+use App\Models\NationalGuideLine;
+use App\Models\PrivacyPolicy;
 use App\Models\User;
 use Carbon\Carbon;
 
@@ -46,10 +67,10 @@ Route::get('/terms-and-conditions', function () {
     return view('terms-and-conditions', ['settings' => $settings]);
 });
 Route::get('/privacy-policy', function () {
-    $settings = AppSettingManage::first();
-    return view('privacy-policy', ['settings' => $settings]);
-});
+    $policy = PrivacyPolicy::first();
 
+    return view('privacy-policy', ['policy' => $policy]);
+})->name('privacy-policy');
 
 Route::post('user-register', [UserController::class, 'store'])->name('userRegister.store');
 Route::post('verify-login', [UserController::class, 'verifyLogin'])->name('verifyLogin');
@@ -61,6 +82,7 @@ Route::get('/', function () {
 
 Route::middleware(['jwt'])->group(function () {
     Route::controller(DashboardController::class)->group(function () {
+
         Route::get('/dashboard', 'dashboard')->name('dashboard');
     });
 
@@ -94,6 +116,47 @@ Route::middleware(['jwt'])->group(function () {
     Route::resource('slider', SliderController::class);
     Route::resource('book', BookController::class);
     Route::resource('job', JobController::class);
+    // NationalGuideLine
+    Route::resource('guideline', NationalGuideLineController::class);
+    Route::resource('guide/kidney', KidneyGuideController::class);
+    Route::resource('guide/femalehelth', FemaleHealthController::class);
+    Route::resource('guide/mother', FemaleMotherController::class);
+    Route::resource('guide/chronic', ChronicsCareController::class);
+    Route::resource('guide/teenager', TeenagerHelpsController::class);
+    Route::resource('guide/diabetic', DiabeticGuidesController::class);
+    Route::resource('guide/heart', HeartGuidesController::class);
+    Route::resource('guide/mentelhelth', MentelHelthGuidesController::class);
+    Route::resource('guide/skine', SkineGuidesController::class);
+    Route::resource('guide/hepatic', HepaticGuidesController::class);
+
+
+    // manage all users
+    Route::resource('manage/doctor', DoctorsController::class);
+    Route::resource('manage/student', StudentsController::class);
+    Route::resource('manage/patient', PatientsController::class);
+    Route::resource('manage/diagnostic_case', DiognosticManageController::class);
+
+
+
+    // feedback
+    Route::resource('feedback', FeedbackController::class);
+    // contact
+    Route::resource('contacts', ContactController::class);
+    // privaey_plicy
+    //Route::resource('privacy',  );
+    // videos add,
+
+
+    Route::resource('setting/general', SettingsController::class)
+        ->only('index', 'edit', 'update')
+        ->names([
+            'index' => 'web.settings.index',
+            'edit' => 'web.settings.edit',
+            'update' => 'web.settings.update',
+    ]);
+
+    // Route::get('site/settings/edit', [SettingsController::class, 'edit']);
+    // Route::post('site/settings/{id}', [SettingsController::class, 'update']);
     // h
 
 

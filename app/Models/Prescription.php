@@ -11,7 +11,8 @@ class Prescription extends Model
 
     protected $fillable = [
         'diognostic_id',
-        'note'
+        'note',
+        'report_file'
     ];
 
 
@@ -19,6 +20,4 @@ class Prescription extends Model
     {
         return $this->hasMany(Medicine::class, 'prescription_id', 'id');
     }
-
-
 }

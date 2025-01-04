@@ -34,13 +34,35 @@ class DoctorController extends Controller
         return request()->all();
     }
 
-    public function doctor_list()
+    public function doctor_list(Request $request)
     {
+
+        $filter = null;
+        $filter = $request->filter;
+
+        if($filter == 'blog'){
+            $doctors = Doctor::withCount('blogs')->having('blogs_count', '>', 0)->orderby('blogs_count', 'desc')->get();
+        }else{
+            $doctors = Doctor::all();
+        }
 
         return response()->json([
             'message' => "All Doctor Lists",
             'success' => true,
-            'data' => UserResource::collection(Doctor::all())
+            'data' => UserResource::collection($doctors)
         ]);
     }
+
+    // public function blogDoctorList()
+    // {
+    //     $doctors = Doctor::withCount('blogs')->having('blogs_count', '>', 0)->orderby('blogs_count', 'desc')->get();
+
+    //     return $doctors;
+
+    //     return response()->json([
+    //         'message' => "All Doctor blog writing doctor list",
+    //         'success' => true,
+    //         'data' => 'good'
+    //     ]);
+    // }
 }

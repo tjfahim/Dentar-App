@@ -37,6 +37,7 @@ return new class extends Migration
             $table->string('organization')->nullable();
             $table->string('occupation')->nullable();
             $table->boolean('status')->default(true);
+			$table->integer('total_points')->default(0);
             $table->timestamps();
             $table->softDeletes(); // Soft delete functionality
         });
