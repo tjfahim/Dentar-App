@@ -71,6 +71,9 @@
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('doctor.index') ? 'active' : '' }}" href="{{ route('doctor.index') }}">Doctor Manage</a></li>
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('patient.index') ? 'active' : '' }}" href="{{ route('patient.index') }}">Patient Manage</a></li>
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('student.index') ? 'active' : '' }}" href="{{ route('student.index') }}">Student Manage</a></li>
+                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('diagnostic_case.index') ? 'active' : '' }}" href="{{ route('diagnostic_case.index') }}">Diagnostic case Manage</a></li>
+                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('prescription_assists.index') ? 'active' : '' }}" href="{{ route('prescription_assists.index') }}">Prescription assists Manage</a></li>
+                            <li class="nav-item"><a class="nav-link {{ request()->routeIs('prescription_reads.index') ? 'active' : '' }}" href="{{ route('prescription_reads.index') }}">Prescription reads Manage</a></li>
                         </ul>
                     </div>
                 </li>

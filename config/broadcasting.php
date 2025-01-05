@@ -32,12 +32,15 @@ return [
 
       'pusher' => [
         'driver' => 'pusher',
-        'key' => '2536c67c9ebef6fb6ba8', // Pusher App Key
-        'secret' => '2d65a403367ce351d31a', // Pusher App Secret
-        'app_id' => '1909472',              // Pusher App ID
+        'key' => env('PUSHER_APP_KEY'), // Pusher App Key
+        'secret' => env('PUSHER_APP_SECRET'), // Pusher App Secret
+        'app_id' => env('PUSHER_APP_ID'),              // Pusher App ID
         'options' => [
-            'cluster' => 'ap1',              // Pusher App Cluster
-            'useTLS' => true,
+            'cluster' => env('PUSHER_APP_CLUSTER', 'mt1'),         // Pusher App Cluster
+            'host' => '127.0.0.1',
+            'port' => '6001',
+            'scheme' => 'http',
+            'encrypted' => false,
         ],
 ],
 

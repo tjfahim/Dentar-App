@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\NotificationEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Book;
 use Illuminate\Http\Request;
@@ -50,7 +51,7 @@ class BookController extends Controller
         $book = new Book();
         $book->title = $request->title;
         $book->description = $request->description;
-        $book->status = $request->status == 'active' ? 1 : 0;
+        $book->status = $request->status == 'active' ? 'active' : 'inactive';
 
         // Handle PDF upload
         if ($request->hasFile('pdf')) {
@@ -79,7 +80,11 @@ class BookController extends Controller
         // Save the book data into the database
         $book->save();
 
-        // Redirect to the index route (list of books) with a success message
+
+
+        broadcast(new NotificationEvent("hi good afternone"));
+
+
         return redirect()->route('book.index')->with('success', 'Book created successfully');
     }
 
