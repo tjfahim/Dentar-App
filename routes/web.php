@@ -191,3 +191,8 @@ Route::get('/clear', function () {
 Route::get('pdf', function(){
     return view('pdfview.prescription');
 });
+
+
+Route::get('testp', function(){
+    return view('pusherTest');
+});

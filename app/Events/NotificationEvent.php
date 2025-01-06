@@ -35,13 +35,13 @@ class NotificationEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('channel-name');
+        return new Channel('hadi-house');
     }
 
-    public function broadcastWith()
-    {
-        return [
-            'message' => $this->message,
-        ];
-    }
+    // public function broadcastWith()
+    // {
+    //     return [
+    //         'message' => $this->message,
+    //     ];
+    // }
 }

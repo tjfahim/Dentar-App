@@ -75,6 +75,7 @@ return [
     ],
 
     'statistics' => [
+        'enabled' => env('WEBSOCKETS_STATISTICS_ENABLED', true),
         /*
          * This model will be used to store the statistics of the WebSocketsServer.
          * The only requirement is that the model should extend
