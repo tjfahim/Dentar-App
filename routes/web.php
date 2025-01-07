@@ -31,6 +31,7 @@ use App\Http\Controllers\Admin\SettingsController;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\SettingsControler;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\QuizManageController;
 use App\Http\Controllers\QuizQuestionManageController;
 use App\Http\Controllers\UserController;
@@ -191,3 +192,5 @@ Route::get('/clear', function () {
 Route::get('pdf', function(){
     return view('pdfview.prescription');
 });
+
+Route::get('send-notifications', [NotificationController::class, 'index']);

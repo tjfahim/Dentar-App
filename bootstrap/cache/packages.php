@@ -33,6 +33,17 @@
       'Agent' => 'Jenssegers\\Agent\\Facades\\Agent',
     ),
   ),
+  'kreait/laravel-firebase' => 
+  array (
+    'aliases' => 
+    array (
+      'Firebase' => 'Kreait\\Laravel\\Firebase\\Facades\\Firebase',
+    ),
+    'providers' => 
+    array (
+      0 => 'Kreait\\Laravel\\Firebase\\ServiceProvider',
+    ),
+  ),
   'laravel/fortify' => 
   array (
     'providers' => 

@@ -5,10 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Events\NotificationEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Book;
+use App\Services\NotificationService;
+use App\Traits\Notification;
 use Illuminate\Http\Request;
+use Mockery\Matcher\Not;
 
 class BookController extends Controller
 {
+    use Notification;
     /**
      * Display a listing of the resource.
      *
@@ -81,8 +85,21 @@ class BookController extends Controller
         $book->save();
 
 
+        $deviceTokens = [
+            'token1',
+            'token2',
+            // Add Firebase device tokens here
+        ];
 
-        broadcast(new NotificationEvent("hi good afternone"));
+        $notificationService = new NotificationService();
+        $response = $notificationService->notifyUsers($deviceTokens);
+
+        return  $response;
+
+
+        // $this->sendNotification();
+
+        // broadcast(new NotificationEvent("hi good afternone"));
 
 
         return redirect()->route('book.index')->with('success', 'Book created successfully');
