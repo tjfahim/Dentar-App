@@ -96,6 +96,7 @@ Route::post('hash-password', function(Request $request){
 
 
 // h
+
 // auth --user
 Route::post('login', [ LoginController::class, 'login']);
 Route::post('logout', [ LoginController::class, 'logout'])->middleware('auth:sanctum');
@@ -118,8 +119,10 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('notification/read/{id}', [NotificationController::class, 'read']);
 
     Route::get('profile', [ProfileController::class, 'profile']);
-
+    // device tokens
+    Route::post('devicetoken', [ProfileController::class, 'deviceToken']);
     Route::post('profile/update', [ProfileController::class, 'updateProfile']);
+
     Route::post('password/change', [AuthApi::class, 'passwordUpdate']);
 
 

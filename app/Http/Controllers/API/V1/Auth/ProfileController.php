@@ -49,6 +49,7 @@ class ProfileController extends Controller
                 'dob' => 'nullable|date',
                 'gender' => 'nullable|string',
                 'medical_history' => 'nullable|string',
+                'token' => 'nullable|string',
             ]);
 
             if ($validator->fails()) {
@@ -212,5 +213,27 @@ class ProfileController extends Controller
     public function forgetPassword()
     {
 
+    }
+
+
+    public function deviceToken(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'device_token' => ['required', 'string']
+        ]);
+
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
+
+        $user = Auth::user();
+
+        $user->update([
+            'token' => $request->device_token,
+        ]);
+
+
+        return response()->json(['message' => 'Device token updated successfully'], 200);
     }
 }

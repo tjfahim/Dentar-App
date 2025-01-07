@@ -10,7 +10,7 @@ class NotificationController extends Controller
     use PushNotification;
     public function index() {
 
-        $token = "dYp-x2tAT0SexWX59Y-gYj:APA91bET8xyUUprBtD2gpeX8kmqS5iu8dOUWLM9Iz3UhChpoFn8u0d15Rcc41f6Pcm2luMd8ZkkrLaipCPFMXyTXyr-ChbQ0qpdZ7YqAjtD6V_OFEiEg8BA";
+        $token = "f0TTZAJORRexooN4dG41Yv:APA91bEEeEEhfMx5hpKdIBgTjwMkOB_HCj76-yXf7wKo8CbzzxQSYJ4I5erDT7wwpE_smzo07fQFij_LR5fRFtP6InRGttJ-asuS55rwyaCib9bNIJ24DjY";
         $title = "Notification title";
         $body =  "This is body of notification";
 

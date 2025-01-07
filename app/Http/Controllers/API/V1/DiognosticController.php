@@ -6,7 +6,9 @@ use App\Models\Doctor;
 use App\Models\Diognostic;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DiognosticResource;
+use App\Models\Notification;
 use App\Models\Prescription;
+use App\Traits\PushNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,6 +17,7 @@ use Illuminate\Support\Facades\Validator;
 
 class DiognosticController extends Controller
 {
+    use PushNotification;
     public function index()
     {
         $user = Auth::user();
@@ -96,12 +99,15 @@ class DiognosticController extends Controller
             $files = explode(',', $request->file);
             $files = json_encode($files);
         }else{
-            $files = '';
+            $files = null;
         }
 
         $attributes = $request->all();
 
+
         $attributes = [...$attributes, 'file' => $files];
+
+
 
 
 
@@ -126,12 +132,11 @@ class DiognosticController extends Controller
         $doctors = Doctor::where('role', 'admin')->get();
         $length = count($doctors);
 
-
         foreach ($doctors as $index => $doctor) {
            // return gettype($doctor->nextPatient);
             if ($doctor->nextPatient) {
                 // Assign doctor_id and handle nextPatient logic
-                $doctor_id = $doctor->id;
+                $doctor_id = $doctor;
                 $doctor->nextPatient = false; // Set current doctor to false
                 $doctor->save();
 
@@ -145,14 +150,26 @@ class DiognosticController extends Controller
         }
 
 
-        $attributes = [...$attributes, 'patient_id' => $user->id, 'patient_type' => $user->userType, 'doctor_id' => $doctor_id];
-
+        $attributes = [...$attributes, 'patient_id' => $user->id, 'patient_type' => $user->userType, 'doctor_id' => $doctor_id->id];
 
 
         // Add the patient problem record to the database
         $patientProblem = Diognostic::create($attributes);
 
-        // Return a JSON response
+        $title = 'New case assigned to you';
+        $body = 'You have a new case assigned to you. Please review and complete it.';
+
+        $notification = Notification::create([
+            'title' => $title,
+            'body' => $body,
+            'user_id' => $doctor_id->id,
+            'user_type' => $doctor_id->userType
+        ]);
+
+        $this->sendNotification($doctor_id->token, $title, $body);
+
+
+
         return response()->json([
             'message' => 'Patient Case added successfully!',
             'data' => new DiognosticResource($patientProblem),
@@ -163,6 +180,20 @@ class DiognosticController extends Controller
     public function report(Request $request, $id)
     {
         $case = Diognostic::find($id);
+
+
+
+        switch ($case->patient_type) {
+            case 'patient':
+                $user = $case->patient;
+
+                break;
+            case'student':
+                $user = $case->student;
+                break;
+        }
+
+
 
         if(!$case){
             return response()->json([
@@ -237,6 +268,18 @@ class DiognosticController extends Controller
 
         $prescription->report_file = $filePath;
         $prescription->save();
+
+
+        $title = 'Report';
+        $body = $case->t;
+
+        $notification = Notification::create([
+            'title' => $title,
+            'body' => $body,
+            'user_id' => $user->id,
+            'user_type' => $user->userType
+        ]);
+        $this->sendNotification($user->token, $title, $body);
 
 
         return response()->json([

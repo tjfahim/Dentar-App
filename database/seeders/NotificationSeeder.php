@@ -20,17 +20,26 @@ class NotificationSeeder extends Seeder
     {
         $patient = Patient::all();
         $patient->each(function ($patient) {
-            $patient->notifications()->saveMany(Notification::factory(rand(1, 5))->make());
+            $notifications = Notification::factory(rand(1, 5))->make()->each(function ($notification) use ($patient) {
+                $notification->user_type = $patient->userType;
+            });
+            $patient->notifications()->saveMany($notifications);
         });
 
         $student = Student::all();
         $student->each(function ($student) {
-            $student->notifications()->saveMany(Notification::factory(rand(1, 20))->make());
+            $notifications = Notification::factory(rand(1, 10))->make()->each(function ($notification)  use ($student) {
+                $notification->user_type = $student->userType;
+            });
+            $student->notifications()->saveMany($notifications);
         });
 
         $doctor = Doctor::all();
         $doctor->each(function ($doctor) {
-            $doctor->notifications()->saveMany(Notification::factory(rand(1, 10))->make());
+            $notifications = Notification::factory(rand(1, 20))->make()->each(function ($notification)  use ($doctor) {
+                $notification->user_type = $doctor->userType;
+            });
+            $doctor->notifications()->saveMany($notifications);
         });
 
     }

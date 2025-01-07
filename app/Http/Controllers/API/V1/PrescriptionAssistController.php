@@ -4,14 +4,18 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PrescriptionAssistResource;
+use App\Models\Doctor;
+use App\Models\Notification;
 use App\Models\PrescriptionAssist;
 use App\Models\PrescriptionAssistReplay;
+use App\Traits\PushNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class PrescriptionAssistController extends Controller
 {
+    use PushNotification;
     public function index()
     {
 
@@ -65,7 +69,6 @@ class PrescriptionAssistController extends Controller
     {
 
 
-
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -100,6 +103,25 @@ class PrescriptionAssistController extends Controller
         ]);
 
 
+        // notification system
+        $title = 'Prescriptions Assists';
+        $body = $request->title;
+
+        $doctors = Doctor::all();
+
+        foreach ($doctors as $doctor) {
+            $notification = Notification::create([
+                'title' => $title,
+                'body' => $body,
+                'user_id' => $doctor->id,
+                'user_type' => $doctor->userType
+            ]);
+            $this->sendNotification($doctor->token, $title, $body);
+        }
+
+
+
+
         return response()->json([
             'message' => 'Prescription Assist create successfully!',
             'prescriptionAssist' => new PrescriptionAssistResource($prescription)
@@ -112,6 +134,20 @@ class PrescriptionAssistController extends Controller
     public function replayAssist(Request $request, $id)
     {
         $prescription = PrescriptionAssist::find($id);
+
+        switch ($prescription->userType) {
+            case 'patient':
+                $user = $prescription->patient;
+
+                break;
+            case'student':
+                $user = $prescription->student;
+                break;
+            case'doctor':
+                $user = $prescription->doctor;
+                break;
+
+        }
 
         if(!$prescription){
             return response()->json([
@@ -148,6 +184,19 @@ class PrescriptionAssistController extends Controller
         $prescription->replay_user_id = Auth::user()->id;
         $prescription->replay_user_type = Auth::user()->userType;
         $prescription->save;
+
+
+        // notification system
+        $title = 'Prescriptions Assist Report';
+        $body = $prescription->title;
+
+        $notification = Notification::create([
+            'title' => $title,
+            'body' => $body,
+            'user_id' => $user->id,
+            'user_type' => $user->userType
+        ]);
+        $this->sendNotification($user->token, $title, $body);
 
 
         if($replay){

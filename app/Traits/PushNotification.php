@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 trait PushNotification
 {
-    public function sendNotification($token, $title, $body, $data)
+    public function sendNotification($token, $title, $body, $data = [])
     {
         $fcmurl = "https://fcm.googleapis.com/v1/projects/denterapplication/messages:send";
 
@@ -20,7 +20,7 @@ trait PushNotification
                     'title' => $title,
                     'body' => $body,
                 ],
-                'data' => $data,
+                'data' => !empty($data) ? $data : null,
             ],
         ];
 
