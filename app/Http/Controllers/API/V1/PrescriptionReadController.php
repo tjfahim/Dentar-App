@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\PrescriptionRead;
 use App\Models\PrescriptionReadReport;
 use App\Http\Resources\UnknownMedicineResource;
+use App\Jobs\SendNotificationQueue;
+use App\Models\Doctor;
 
 class PrescriptionReadController extends Controller
 {
@@ -81,7 +83,7 @@ class PrescriptionReadController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'nullable|string',
+            'title' => 'required|string',
             'description' => 'nullable|string',
             'file' => 'nullable|string',
         ]);
@@ -100,6 +102,16 @@ class PrescriptionReadController extends Controller
             'user_type' => Auth::user()->userType,
         ]);
 
+
+        $title = 'Read Prescriptions';
+        $body = $request->title;
+
+        $doctors = Doctor::all();
+
+        foreach ($doctors as $doctor){
+            SendNotificationQueue::dispatch($title, $body, $doctor)->onConnection('database');
+        }
+
         return response()->json([
             'message' => 'Added successfully',
             'success' => true,
@@ -110,6 +122,20 @@ class PrescriptionReadController extends Controller
     public function addReport(Request $request, $id)
     {
         $prescription = PrescriptionRead::find($id);
+
+        switch ($prescription->userType) {
+            case 'patient':
+                $user = $prescription->patient;
+
+                break;
+            case'student':
+                $user = $prescription->student;
+                break;
+            case'doctor':
+                $user = $prescription->doctor;
+                break;
+
+        }
 
         if (!$prescription) {
             return response()->json([
@@ -136,6 +162,11 @@ class PrescriptionReadController extends Controller
             'doctor_id' => Auth::id(),
             'prescription_read_id' => $prescription->id,
         ]);
+
+        $title = 'Prescriptions Read Report';
+        $body = $prescription->title;
+
+        SendNotificationQueue::dispatch($title, $body, $user)->onConnection('database');
 
         return response()->json([
             'message' => 'Report added successfully',

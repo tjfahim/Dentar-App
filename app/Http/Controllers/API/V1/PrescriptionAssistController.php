@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PrescriptionAssistResource;
+use App\Jobs\SendNotificationQueue;
 use App\Models\Doctor;
 use App\Models\Notification;
 use App\Models\PrescriptionAssist;
@@ -109,15 +110,19 @@ class PrescriptionAssistController extends Controller
 
         $doctors = Doctor::all();
 
-        foreach ($doctors as $doctor) {
-            $notification = Notification::create([
-                'title' => $title,
-                'body' => $body,
-                'user_id' => $doctor->id,
-                'user_type' => $doctor->userType
-            ]);
-            $this->sendNotification($doctor->token, $title, $body);
+        foreach ($doctors as $doctor){
+            SendNotificationQueue::dispatch($title, $body, $doctor)->onConnection('database');
         }
+
+        // foreach ($doctors as $doctor) {
+        //     $notification = Notification::create([
+        //         'title' => $title,
+        //         'body' => $body,
+        //         'user_id' => $doctor->id,
+        //         'user_type' => $doctor->userType
+        //     ]);
+        //     $this->sendNotification($doctor->token, $title, $body);
+        // }
 
 
 
@@ -190,13 +195,15 @@ class PrescriptionAssistController extends Controller
         $title = 'Prescriptions Assist Report';
         $body = $prescription->title;
 
-        $notification = Notification::create([
-            'title' => $title,
-            'body' => $body,
-            'user_id' => $user->id,
-            'user_type' => $user->userType
-        ]);
-        $this->sendNotification($user->token, $title, $body);
+        SendNotificationQueue::dispatch($title, $body, $user)->onConnection('database');
+
+        // $notification = Notification::create([
+        //     'title' => $title,
+        //     'body' => $body,
+        //     'user_id' => $user->id,
+        //     'user_type' => $user->userType
+        // ]);
+        // $this->sendNotification($user->token, $title, $body);
 
 
         if($replay){

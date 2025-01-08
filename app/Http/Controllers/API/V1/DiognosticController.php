@@ -6,6 +6,7 @@ use App\Models\Doctor;
 use App\Models\Diognostic;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DiognosticResource;
+use App\Jobs\SendNotificationQueue;
 use App\Models\Notification;
 use App\Models\Prescription;
 use App\Traits\PushNotification;
@@ -159,14 +160,16 @@ class DiognosticController extends Controller
         $title = 'New case assigned to you';
         $body = 'You have a new case assigned to you. Please review and complete it.';
 
-        $notification = Notification::create([
-            'title' => $title,
-            'body' => $body,
-            'user_id' => $doctor_id->id,
-            'user_type' => $doctor_id->userType
-        ]);
+        SendNotificationQueue::dispatch($title, $body, $doctor_id)->onConnection('database');
 
-        $this->sendNotification($doctor_id->token, $title, $body);
+        // $notification = Notification::create([
+        //     'title' => $title,
+        //     'body' => $body,
+        //     'user_id' => $doctor_id->id,
+        //     'user_type' => $doctor_id->userType
+        // ]);
+
+        // $this->sendNotification($doctor_id->token, $title, $body);
 
 
 
@@ -180,7 +183,6 @@ class DiognosticController extends Controller
     public function report(Request $request, $id)
     {
         $case = Diognostic::find($id);
-
 
 
         switch ($case->patient_type) {
@@ -271,15 +273,17 @@ class DiognosticController extends Controller
 
 
         $title = 'Report';
-        $body = $case->t;
+        $body = $case->problem_title;
 
-        $notification = Notification::create([
-            'title' => $title,
-            'body' => $body,
-            'user_id' => $user->id,
-            'user_type' => $user->userType
-        ]);
-        $this->sendNotification($user->token, $title, $body);
+        SendNotificationQueue::dispatch($title, $body, $user)->onConnection('database');
+
+        // $notification = Notification::create([
+        //     'title' => $title,
+        //     'body' => $body,
+        //     'user_id' => $user->id,
+        //     'user_type' => $user->userType
+        // ]);
+        // $this->sendNotification($user->token, $title, $body);
 
 
         return response()->json([
