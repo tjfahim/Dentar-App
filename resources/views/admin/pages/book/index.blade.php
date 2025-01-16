@@ -63,9 +63,9 @@ Book Manage |
                                     @endif
                                 </td>
                                 <td>
-                                    @if ($book->status == 1)
+                                    @if ($book->status == 'active')
                                         <span style="color: green">Active</span>
-                                    @elseif ($book->status == 0)
+                                    @elseif ($book->status == 'inactive')
                                         <span style="color: red">Inactive</span>
                                     @endif
                                 </td>
