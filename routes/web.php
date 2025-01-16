@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\BookController;
 use App\Http\Controllers\Admin\ContactController;
+use App\Http\Controllers\Admin\CustomNotificationController;
 use App\Http\Controllers\Admin\FeedbackController;
 use App\Http\Controllers\Admin\GuideLine\ChronicsCareController;
 // use App\Http\Controllers\Admin\JobController;
@@ -42,6 +43,8 @@ use App\Models\NationalGuideLine;
 use App\Models\PrivacyPolicy;
 use App\Models\User;
 use Carbon\Carbon;
+
+use Illuminate\Support\Number;
 
 /*
 |--------------------------------------------------------------------------
@@ -142,6 +145,10 @@ Route::middleware(['jwt'])->group(function () {
     Route::resource('manage/prescription_reads', PrescriptionReadController::class);
 
 
+    // custome notifications
+    Route::resource('manage/notifications_system', CustomNotificationController::class);
+
+
 
     // feedback
     Route::resource('feedback', FeedbackController::class);
@@ -172,7 +179,7 @@ Route::middleware(['jwt'])->group(function () {
 });
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
-    
+
 });
 
 
@@ -194,3 +201,5 @@ Route::get('pdf', function(){
 });
 
 Route::get('send-notifications', [NotificationController::class, 'index']);
+
+

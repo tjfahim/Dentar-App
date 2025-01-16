@@ -25,10 +25,10 @@ class PrescriptionAssistController extends Controller
 
         switch($user->userType){
             case 'student':
-                $prescriptions = $user->prescriptions;
+                $prescriptions = $user->prescriptions()->latest()->get();
                 break;
             case 'patient':
-                $prescriptions = $user->prescriptions;
+                $prescriptions = $user->prescriptions()->latest()->get();
                 break;
             case 'doctor' :
                 $prescriptions = PrescriptionAssist::latest()->get();

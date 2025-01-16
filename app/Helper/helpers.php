@@ -14,3 +14,9 @@ function settings(){
     return Setting::first();
 }
 
+
+function hadi()
+{
+    return 'My name is Hadiuzzaman';
+}
+

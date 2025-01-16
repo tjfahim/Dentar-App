@@ -18,6 +18,7 @@ Dashboard |
 
     <div class="row row-cols-6" id="dashboard_items">
         @foreach([
+            ['url' => route('notifications_system.index'), 'count' => 'Notifications', 'title' => 'Send Notification'],
             ['url' => route('doctor.index'), 'count' => $doctorsCount, 'title' => 'Doctors'],
             ['url' => '', 'count' => $diagnostic_doctorCount, 'title' => 'Diagnostic Doctors'],
             ['url' => route('student.index'), 'count' => $studentsCount, 'title' => 'Students'],

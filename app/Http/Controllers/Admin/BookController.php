@@ -51,6 +51,8 @@ class BookController extends Controller
             'status' => 'required|in:active,inactive', // Ensure valid status
         ]);
 
+
+
         // Create a new Book model instance
         $book = new Book();
         $book->title = $request->title;
@@ -80,6 +82,8 @@ class BookController extends Controller
             // Save the image path in the database
             $book->image = 'images/books/' . $imageName;
         }
+
+
 
         // Save the book data into the database
         $book->save();
@@ -159,7 +163,7 @@ class BookController extends Controller
         // Update the book's fields
         $book->title = $request->title;
         $book->description = $request->description;
-        $book->status = $request->status == 'active' ? 1 : 0;
+        $book->status = $request->status == 'active' ? 'active' : 'inactive';
 
         // Handle PDF upload if a new PDF is provided
         if ($request->hasFile('pdf')) {
