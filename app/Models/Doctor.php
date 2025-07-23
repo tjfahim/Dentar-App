@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
@@ -34,8 +36,36 @@ class Doctor extends Authenticatable
         'organization',
         'occupation',
         'status',
-        'total_points'
+        'total_points',
+        'notification_play'
     ];
+    
+    public function getAddressAttribute($value)
+    {
+        if (preg_match('/^\d+$/', $value)) {
+            return District::find($value)?->name;
+        }
+    
+        return $value;
+    }
+    
+    public function getSpecializationAttribute($value)
+    {
+        if (preg_match('/^\d+$/', $value)) {
+            return DoctorSpecialty::find($value)?->name;
+        }
+    
+        return $value;
+    }
+    
+    public function getHospitalAttribute($value)
+    {
+        if (preg_match('/^\d+$/', $value)) {
+            return Hospital::find($value)?->name;
+        }
+    
+        return $value;
+    }
 
 
     public function cases()

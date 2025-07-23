@@ -30,8 +30,37 @@ class Student extends Authenticatable
         'additional_info',
         'bio',
         'organization',
-        'occupation'
+        'occupation',
+        'notification_play'
+
     ];
+    
+    public function getAddressAttribute($value)
+    {
+        if(preg_match("/^\d+$/", $value)){
+            return District::find($value)?->name;
+        }
+        
+        return $value;
+    }
+    
+     public function getSpecializationAttribute($value)
+    {
+        if (preg_match('/^\d+$/', $value)) {
+            return DoctorSpecialty::find($value)?->name;
+        }
+    
+        return $value;
+    }
+    
+    public function getHospitalAttribute($value)
+    {
+        if (preg_match('/^\d+$/', $value)) {
+            return Hospital::find($value)?->name;
+        }
+    
+        return $value;
+    }
 
 
     public function cases()

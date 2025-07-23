@@ -44,6 +44,12 @@ class QuizQuestionManageController extends Controller
         // Store new quiz question with a default value for points if not provided
         $data = $request->all();
         $data['points'] = $data['points'] ?? 1; // Set default value for points
+        
+        if($data['question_type'] == 'answer_type'){
+            $data['answer'] = strtolower(trim($data['answer']));
+        }
+        
+        
 
         QuizQuestionManage::create($data);
 
@@ -81,6 +87,10 @@ class QuizQuestionManageController extends Controller
         }
         $data = $request->all();
         $data['points'] = $data['points'] ?? 1; // Set default value for points
+        
+        if($data['question_type'] == 'answer_type'){
+            $data['answer'] = strtolower(trim($data['answer']));
+        }
 
         $record->update($data);
 

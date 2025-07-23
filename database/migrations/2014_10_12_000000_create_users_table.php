@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('role');
             $table->enum('status', ['active', 'pending', 'block', 'suspend'])->default('active');
             $table->boolean('is_active')->default(1);
+                        $table->boolean('notification_play')->default(1);
+
             $table->softDeletes();
             $table->timestamps();
         });

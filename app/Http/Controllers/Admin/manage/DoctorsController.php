@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Admin\Manage;
 
 use App\Http\Controllers\Controller;
+use App\Models\District;
 use App\Models\Doctor;
+use App\Models\DoctorSpecialty;
+use App\Models\Hospital;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -13,14 +16,28 @@ class DoctorsController extends Controller
     // Display the list of doctors
     public function index()
     {
-        $doctors = Doctor::orderBy('id', 'DESC')->get();
+        $doctors = Doctor::latest()->get();
+        
+        
         return view('admin.pages.summery.doctor.index', compact('doctors'));
+    }
+    
+    public function diagnosticDoctor()
+    {
+        $doctors = Doctor::where('role', 'admin')->latest()->get();
+        
+        
+        return view('admin.pages.summery.doctor.diagnosticDoctorList', compact('doctors'));
     }
 
     // Show the form to create a new doctor
     public function create()
     {
-        return view('admin.pages.summery.doctor.create');
+        return view('admin.pages.summery.doctor.create', [
+            'specializations' => DoctorSpecialty::all(),
+            'addresses' => District::all(),
+            'hospital' => Hospital::all(),
+        ]);
     }
 
     // Store a new doctor in the database
@@ -32,9 +49,9 @@ class DoctorsController extends Controller
             'email' => 'required|email|unique:doctors,email',
             'phone' => 'required|string|unique:doctors,phone',
             'specialization' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'signature' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'hospital' => 'required|string|max:255',
+            'image' => 'nullable|image',
+            'signature' => 'nullable|image',
+            'hospital' => 'required|string',
             'gender' => 'required|string',
             'biography' => 'nullable|string',
             'dob' => 'required|date',
@@ -86,7 +103,12 @@ class DoctorsController extends Controller
     public function edit($id)
     {
         $doctor = Doctor::findOrFail($id);
-        return view('admin.pages.summery.doctor.edit', compact('doctor'));
+        return view('admin.pages.summery.doctor.edit', [
+            'doctor' => $doctor,
+            'specializations' => DoctorSpecialty::all(),
+            'addresses' => District::all(),
+            'hospital' => Hospital::all(),
+        ]);
     }
 
     public function update(Request $request, Doctor $doctor)
@@ -95,10 +117,10 @@ class DoctorsController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:doctors,email,' . $doctor->id,
             'phone' => 'required|string|unique:doctors,phone,' . $doctor->id,
-            'password' => 'required|string',
-            'specialization' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'signature' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            // 'password' => 'required|string',
+            'specialization' => 'required|string',
+            'image' => 'nullable|image',
+            'signature' => 'nullable|image',
             'hospital' => 'nullable|string|max:255',
             'gender' => 'nullable|string',
             'biography' => 'nullable|string',
@@ -114,8 +136,11 @@ class DoctorsController extends Controller
         ]);
 
         $data = $validated;
+        
+        
+        
 
-        $data['password'] = Hash::make($request->password);
+        $data['password'] = $request->password == null ?  $doctor->password :   Hash::make($request->password);
 
 
         if ($request->hasFile('image')) {

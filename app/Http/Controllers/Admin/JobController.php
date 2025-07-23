@@ -28,7 +28,7 @@ class JobController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'image' => 'nullable|string',
+            'image' => 'nullable|image',
             'company_name' => 'required|string|max:255',
             'job_deadline' => 'required|date',
             'source_url' => 'nullable|url',

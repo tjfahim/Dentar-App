@@ -26,7 +26,7 @@ class TeenagerHelpsController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'file' => 'required|file|mimes:pdf|max:10240',
+            'file' => 'required|file|mimes:pdf',
             'status' => 'required|in:active,inactive',
         ]);
 
@@ -57,7 +57,7 @@ class TeenagerHelpsController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'file' => 'nullable|file|mimes:pdf|max:10240',
+            'file' => 'nullable|file|mimes:pdf',
             'status' => 'required|in:active,inactive',
         ]);
 

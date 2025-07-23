@@ -37,112 +37,194 @@
     $('[data-toggle="tooltip"]').tooltip()
   });
   $(function () {
-    // $('#usersTable').DataTable();
+
+    if ($('#addressTable tbody tr').length > 1) {
+        $('#addressTable').DataTable({
+            // "order": [[ 0, "desc" ]]
+        });
+    }
+
+    if ($('#hospitalTable tbody tr').length > 1) {
+        $('#hospitalTable').DataTable({
+            // "order": [[ 0, "desc" ]]
+        });
+    }
+
+     if ($('#specialtyTable tbody tr').length > 1) {
+        $('#specialtyTable').DataTable({
+            // "order": [[ 0, "desc" ]]
+        });
+    }
+    
     if ($('#usersTable tbody tr').length > 1) {
-        $('#usersTable').DataTable();
+        $('#usersTable').DataTable({
+            // "order": [[ 0, "desc" ]]
+        });
     }
-    // $('#whyAreYouLearningTable').DataTable();
+
+    if ($('#doctorTable tbody tr').length > 1) {
+        $('#doctorTable').DataTable({
+            // "order": [[ 0, "desc" ]]
+        });
+    }
+
+    if ($('#doctorTableQuiz tbody tr').length > 1) {
+        $('#doctorTableQuiz').DataTable({
+            "order": [[ 0, "desc" ]]
+        });
+    }
+    
     if ($('#whyAreYouLearningTable tbody tr').length > 1) {
-        $('#whyAreYouLearningTable').DataTable();
+        $('#whyAreYouLearningTable').DataTable({
+            "order": [[ 0, "desc" ]]
+        });
     }
-    // $('#whereDidYouHearTable').DataTable();
+    
     if ($('#whereDidYouHearTable tbody tr').length > 1) {
-        $('#whereDidYouHearTable').DataTable();
+        $('#whereDidYouHearTable').DataTable({
+            "order": [[ 0, "desc" ]]
+        });
     }
-    // $('#dailyLearningGoalsTable').DataTable();
+    
     if ($('#dailyLearningGoalsTable tbody tr').length > 1) {
-        $('#dailyLearningGoalsTable').DataTable();
+        $('#dailyLearningGoalsTable').DataTable({
+            "order": [[ 0, "desc" ]]
+        });
     }
-    // $('#languageListTable').DataTable();
+    
     if ($('#languageListTable tbody tr').length > 1) {
-        $('#languageListTable').DataTable();
+        $('#languageListTable').DataTable({
+            "order": [[ 0, "desc" ]]
+        });
     }
     $('#totalLevelTable').DataTable();
     if ($('#totalLevelTable tbody tr').length > 1) {
-        $('#totalLevelTable').DataTable();
+        $('#totalLevelTable').DataTable({
+            "order": [[ 0, "desc" ]]
+        });
     }
-    // $('#studyDailyTimeTable').DataTable();
+    
     if ($('#studyDailyTimeTable tbody tr').length > 1) {
-        $('#studyDailyTimeTable').DataTable();
+        $('#studyDailyTimeTable').DataTable({
+            "order": [[ 0, "desc" ]]
+        });
     }
-    // $('#coursesTable').DataTable();
+    
     if ($('#coursesTable tbody tr').length > 1) {
-        $('#coursesTable').DataTable();
+        $('#coursesTable').DataTable({
+            "order": [[ 0, "desc" ]]
+        });
     }
-    // $('#mentorListTable').DataTable();
+    
     if ($('#mentorListTable tbody tr').length > 1) {
-        $('#mentorListTable').DataTable();
+        $('#mentorListTable').DataTable({
+            "order": [[ 0, "desc" ]]
+        });
     }
-    // $('#moduleManageTable').DataTable();
+    
     if ($('#moduleManageTable tbody tr').length > 1) {
-        $('#moduleManageTable').DataTable();
+        $('#moduleManageTable').DataTable({
+            "order": [[ 0, "desc" ]]
+        });
     }
-    // $('#chapterManageTable').DataTable();
+    
     if ($('#chapterManageTable tbody tr').length > 1) {
-        $('#chapterManageTable').DataTable();
+        $('#chapterManageTable').DataTable({
+            "order": [[ 0, "desc" ]]
+        });
     }
-    // $('#videoManageTable').DataTable();
+    
     if ($('#videoManageTable tbody tr').length > 1) {
-        $('#videoManageTable').DataTable();
+        $('#videoManageTable').DataTable({
+            "order": [[ 0, "desc" ]]
+        });
     }
-    // $('#courseGoalTable').DataTable();
+    
     if ($('#courseGoalTable tbody tr').length > 1) {
-        $('#courseGoalTable').DataTable();
+        $('#courseGoalTable').DataTable({
+            "order": [[ 0, "desc" ]]
+        });
     }
-    // $('#pdfManageTable').DataTable();
+    
     if ($('#pdfManageTable tbody tr').length > 1) {
-        $('#pdfManageTable').DataTable();
+        $('#pdfManageTable').DataTable({
+            "order": [[ 0, "desc" ]]
+        });
     }
-    // $('#booksManageTable').DataTable();
+    
     if ($('#booksManageTable tbody tr').length > 1) {
-        $('#booksManageTable').DataTable();
+        $('#booksManageTable').DataTable({
+            "order": [[ 0, "desc" ]]
+        });
     }
-    // $('#quizManageTable').DataTable();
+    
     if ($('#quizManageTable tbody tr').length > 1) {
-        $('#quizManageTable').DataTable();
+        $('#quizManageTable').DataTable({
+            "order": [[ 0, "desc" ]]
+        });
     }
-    // $('#quizQuestionTable').DataTable();
+    
     if ($('#quizQuestionTable tbody tr').length > 1) {
-        $('#quizQuestionTable').DataTable();
+        $('#quizQuestionTable').DataTable({
+            "order": [[ 0, "desc" ]]
+        });
     }
-    // $('#getStartTable').DataTable();
+    
     if ($('#getStartTable tbody tr').length > 1) {
-        $('#getStartTable').DataTable();
+        $('#getStartTable').DataTable({
+            "order": [[ 0, "desc" ]]
+        });
     }
-    // $('#packagesTable').DataTable();
+    
     if ($('#packagesTable tbody tr').length > 1) {
-        $('#packagesTable').DataTable();
+        $('#packagesTable').DataTable({
+            "order": [[ 0, "desc" ]]
+        });
     }
-    // $('#paymentsTable').DataTable();
+    
     if ($('#paymentsTable tbody tr').length > 1) {
-        $('#paymentsTable').DataTable();
+        $('#paymentsTable').DataTable({
+            "order": [[ 0, "desc" ]]
+        });
     }
-    // $('#levelManageTable').DataTable();
+    
     if ($('#levelManageTable tbody tr').length > 1) {
-        $('#levelManageTable').DataTable();
+        $('#levelManageTable').DataTable({
+            "order": [[ 0, "desc" ]]
+        });
     }
-    // $('#levelContentManageTable').DataTable();
+    
     if ($('#levelContentManageTable tbody tr').length > 1) {
-        $('#levelContentManageTable').DataTable();
+        $('#levelContentManageTable').DataTable({
+            "order": [[ 0, "desc" ]]
+        });
     }
 
     if ($('#courseReportManageTable tbody tr').length > 1) {
-        $('#courseReportManageTable').DataTable();
+        $('#courseReportManageTable').DataTable({
+            "order": [[ 0, "desc" ]]
+        });
     }
 
     if ($('#levelReportManageTable tbody tr').length > 1) {
-        $('#levelReportManageTable').DataTable();
+        $('#levelReportManageTable').DataTable({
+            "order": [[ 0, "desc" ]]
+        });
     }
 
     if ($('#userReportManageTable tbody tr').length > 1) {
-        $('#userReportManageTable').DataTable();
+        $('#userReportManageTable').DataTable({
+            "order": [[ 0, "desc" ]]
+        });
     }
 
     if ($('#courseGoalManageReportTable tbody tr').length > 1) {
-        $('#courseGoalManageReportTable').DataTable();
+        $('#courseGoalManageReportTable').DataTable({
+            "order": [[ 0, "desc" ]]
+        });
     }
 
-    // $('#allReportsTable').DataTable();
+    
     // if ($('#allReportsTable tbody tr').length > 1) {
     //     $('#allReportsTable').DataTable();
     // }

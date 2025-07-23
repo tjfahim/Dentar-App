@@ -8,7 +8,7 @@ Patient Manage |
         <div class="card">
             <div class="card-body">
                 <div class="d-flex justify-content-between">
-                    <h4 class="card-title">Diagnostic Case Lists</h4>
+                    <h4 class="card-title">Diagnostic  Case Lists</h4>
                     <div class="d-flex">
                         <button type="button" class="btn btn-outline-info btn-sm btn-icon-text mx-1" onclick="printTable()">
                             <i class="mdi mdi-printer"></i>
@@ -50,7 +50,7 @@ Patient Manage |
                     <table id="usersTable" class="table table-bordered">
                         <thead>
                             <tr class="text-center bg-info text-dark">
-                                <th># Id</th>
+                                <th>#</th>
                                 <th>Name</th>
                                 <th>Age</th>
                                 <th>Gender</th>
@@ -66,9 +66,9 @@ Patient Manage |
                         </div>
                         @endif
                         <tbody id="usersTableBody">
-                            @forelse ($diagnostic_cases as $case)
+                            @forelse ($diagnostic_cases as $index =>  $case)
                             <tr class="text-center">
-                                <td>{{ $case->id }}</td>
+                                <td>{{ $index + 1 }}</td>
                                 <td>{{ $case->name }}</td>
                                 <td>{{ $case->age }}</td>
                                 <td>{{ $case->gender }}</td>
@@ -135,6 +135,8 @@ Patient Manage |
                         <p><strong>Patient Type:</strong> <span id="caseType"></span></p>
                         <p><strong>Patient ID:</strong> <span id="casePatientId"></span></p>
                         <p><strong>Doctor ID:</strong> <span id="caseDoctorId"></span></p>
+                    </div>
+                    <div class="col-12">
                         <p><strong>File:</strong> <span id="caseFile"></span></p>
                     </div>
                 </div>
@@ -146,18 +148,46 @@ Patient Manage |
 @endsection
 
 <script>
-    function showCaseDetails(caseData) {
-        document.getElementById('caseName').innerText = caseData.name;
-        document.getElementById('caseAge').innerText = caseData.age;
-        document.getElementById('caseGender').innerText = caseData.gender;
-        document.getElementById('caseNumber').innerText = caseData.number;
-        document.getElementById('caseProblemTitle').innerText = caseData.problem_title;
-        document.getElementById('caseProblem').innerText = caseData.problem;
-        document.getElementById('caseType').innerText = caseData.patient_type;
-        document.getElementById('casePatientId').innerText = caseData.patient_id;
-        document.getElementById('caseDoctorId').innerText = caseData.doctor_id;
-        document.getElementById('caseFile').innerText = caseData.file || 'No file uploaded';
+   function showCaseDetails(caseData) {
+    document.getElementById('caseName').innerText = caseData.name;
+    document.getElementById('caseAge').innerText = caseData.age;
+    document.getElementById('caseGender').innerText = caseData.gender;
+    document.getElementById('caseNumber').innerText = caseData.number;
+    document.getElementById('caseProblemTitle').innerText = caseData.problem_title;
+    document.getElementById('caseProblem').innerText = caseData.problem;
+    document.getElementById('caseType').innerText = caseData.patient_type;
+    document.getElementById('casePatientId').innerText = caseData.patient_id;
+    document.getElementById('caseDoctorId').innerText = caseData.doctor_id;
+    
+    
+
+    // Handle multiple images
+    let fileContainer = document.getElementById('caseFile');
+    fileContainer.innerHTML = ""; // Clear previous content
+
+    let files = JSON.parse(caseData.file);
+    
+
+    if (!Array.isArray(files)) {
+        files = [files]; // Convert to array if it's a single file
+        console.log(files);
     }
+
+    // Filter out empty values and check for image formats
+    files = files.filter(file => file && file.trim() !== "" && file.match(/\.(jpeg|jpg|png|gif)$/));
+    const baseUrl = "{{ asset('') }}";
+
+    if (files.length > 0) {
+        files.forEach(file => {
+            let imgElement = `<img src="${baseUrl}/${file}" alt="Case Image" class="img-thumbnail m-1" width="100">`;
+            fileContainer.innerHTML += imgElement;
+        });
+    } else {
+        fileContainer.innerHTML = "No image uploaded";
+    }
+}
+
+
 
     // Event listener for changing filter option
     document.getElementById('filter_option').addEventListener('change', function () {

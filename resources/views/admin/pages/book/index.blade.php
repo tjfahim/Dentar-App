@@ -30,7 +30,7 @@ Book Manage |
                     <table id="bookTable" class="table table-bordered">
                         <thead>
                             <tr class="text-center bg-info text-dark">
-                                <th> # Id</th>
+                                <th> #</th>
                                 <th> Title</th>
                                 <th> Description</th>
                                 <th> Image</th>
@@ -47,13 +47,13 @@ Book Manage |
                         @endif
 
                         <tbody id="bookTableBody">
-                            @forelse ($books as $book)
+                            @forelse ($books as $index => $book)
                             <tr class="text-center">
-                                <td>{{ $book->id }}</td>
+                                <td>{{ $index + 1 }}</td>
                                 <td>{{ $book->title }}</td>
                                 <td>{{ Str::limit($book->description, 50) }}</td>
                                 <td width="200" height='200'>
-                                    <img src="{{ asset($book->image) }}" style="width: 100%; height: auto;" alt="Book Image">
+                                    <img src="{{ asset($book->image) }}" style="width: 100%; height: 100%; border-radius: 0%;" alt="Book Image">
                                 </td>
                                 <td>
                                     @if ($book->pdf)

@@ -142,6 +142,45 @@ class AuthApi extends Controller
         }
     }
 
+
+ public function updateNotification(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            
+            $validator = Validator::make($request->all(), [
+       
+                'notification_play' => 'required',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'error' => $validator->errors()->toArray()
+                ], 422);
+            }
+
+            $data = $request->only([
+                'notification_play'
+            ]);
+            
+
+            // Set default values if fields are not provided
+            $data['notification_play'] = $data['notification_play'] ?? $user->notification_play;
+      
+
+            // Update the user
+            $user->update($data);
+
+            return response()->json([
+                'message' => 'User notification play successfully.',
+                'user' => $user,
+            ]);
+        } catch (\Exception $e) {
+            // Log the error for debugging purposes
+            Log::error('Error updating user:', ['error' => $e->getMessage()]);
+            return response()->json(['error' => 'An error occurred. Please try again later.'], 500);
+        }
+    }
     public function passwordUpdate(Request $request)
     {
         $user = Auth::user();
@@ -303,8 +342,7 @@ class AuthApi extends Controller
             return response()->json(['message' => 'Email not found'], 404);
         }
 
-        $otp = 12345;
-
+        $otp = rand(10000, 99999);
         DB::table('password_resets')->updateOrInsert(
             ['email' => $user->email],
             [

@@ -19,6 +19,11 @@ Teenager Help Guide Management |
                 </div>
 
                 <div class="table-responsive pt-3">
+                     @if(session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @endif
                     <table id="teenagerTable" class="table table-bordered">
                         <thead>
                             <tr class="text-center bg-info text-dark">

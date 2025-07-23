@@ -5,6 +5,9 @@ namespace App\Http\Controllers\API\V1\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\Patient;
+use App\Models\Doctor;
+use App\Models\Student;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -21,16 +24,167 @@ class ProfileController extends Controller
 
     public function profileDelete($id){
 
-        $user = Patient::find($id);
+          try {
+             $user = Patient::findOrFail($id);
+
+            $user->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Profile deleted successfully.',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Profile deletion failed. Please try again later.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+        
+        
 
         if(!$user){
-            return response()->json(['error' => 'User not found'], 404);
+            return 'User not found';
         }
 
         $user->delete();
 
-        return response()->json(['message' => 'User deleted successfully'], 200);
+        return 'User deleted successfully';
     }
+    
+    public function accountdelete(){
+
+        return view('accountdelete');
+
+    }
+public function accountDeleteSubmit(Request $request)
+{
+   
+
+    try {
+        // Check if email exists in the Patient table
+        $user = Patient::where('email', $request->email)->first();
+
+        // If not found in Patient, check the Doctor table
+        if (!$user) {
+            $user = Doctor::where('email', $request->email)->first();
+        }
+
+        // If not found in Doctor, check the Student table
+        if (!$user) {
+            $user = Student::where('email', $request->email)->first();
+        }
+
+        // If still no user is found
+        if (!$user) {
+            return 'No account found with the provided email.';
+        }
+
+        // If a user is found, proceed to delete based on their userType
+        $userType = $user->userType;
+        $userToDelete = null;
+
+        if ($userType == 'patient') {
+            // Ensure the user exists in the Patient table
+            $userToDelete = Patient::findOrFail($user->id);
+        } elseif ($userType == 'student') {
+            // Ensure the user exists in the Student table
+            $userToDelete = Student::findOrFail($user->id);
+        } elseif ($userType == 'doctor') {
+            // Ensure the user exists in the Doctor table
+            $userToDelete = Doctor::findOrFail($user->id);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid user type.',
+            ], 400);
+        }
+
+        // Delete the user profile
+        $userToDelete->delete();
+return 'Your account has been deleted successfully.';
+        // Return success response
+        return response()->json([
+            'success' => true,
+            'message' => 'Your account has been deleted successfully.',
+        ], 200);
+
+    } catch (\Exception $e) {
+        // Handle errors and log the exception message for debugging
+        \Log::error("An error occurred during account deletion: " . $e->getMessage());
+
+
+return 'Account deletion failed. Please try again later.';
+        return response()->json([
+            'success' => false,
+            'message' => 'Account deletion failed. Please try again later.',
+            'error' => $e->getMessage(),
+        ], 500);
+    }
+}
+
+
+
+public function profileDeleteforall(Request $request)
+{
+    // Get the authenticated user
+    $user = $request->user();
+    if (!$user) {
+        // If no user is authenticated, return a 401 Unauthorized response
+        return response()->json([
+            'success' => false,
+            'message' => 'Unauthorized. Please log in.',
+        ], 401);
+    }
+
+    // Ensure user has a valid userType and user ID
+    if (is_null($user->userType) || is_null($user->id)) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Invalid user data.',
+        ], 400);
+    }
+
+    try {
+        // Check user type and delete accordingly
+        $userType = $user->userType;
+
+        if ($userType == 'patient') {
+            // Ensure the user exists in the Patient table
+            $userToDelete = Patient::findOrFail($user->id);
+        } elseif ($userType == 'student') {
+            // Ensure the user exists in the Student table
+            $userToDelete = Student::findOrFail($user->id);
+        } elseif ($userType == 'doctor') {
+            // Ensure the user exists in the Doctor table
+            $userToDelete = Doctor::findOrFail($user->id);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid user type.',
+            ], 400);
+        }
+
+        // Delete the user profile
+        $userToDelete->delete();
+
+        // Return success response
+        return response()->json([
+            'success' => true,
+            'message' => 'Profile deleted successfully.',
+        ], 200);
+    } catch (\Exception $e) {
+        // Handle errors and log the exception message for debugging
+        \Log::error("An error occurred during profile deletion: " . $e->getMessage());
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Profile deletion failed. Please try again later.',
+            'error' => $e->getMessage(),
+        ], 500);
+    }
+}
+
 
     public function updateProfile(Request $request)
     {
@@ -82,6 +236,7 @@ class ProfileController extends Controller
                 'dob' => date_format($date, "Y-m-d") ??  $user->dob,
                 'gender' => $request->gender ?? $user->gender,
                 'medical_history' => $request->medical_history ?? $user->medical_history,
+                'email' => $request->email ?? $user->email,
             ]);
 
         } elseif ($userType == 'student') {
@@ -99,6 +254,7 @@ class ProfileController extends Controller
                 'medical_history' => 'nullable|string',
                 'additional_info' => 'nullable|string',
                 'bio' => 'nullable|string',
+                'organization' => 'nullable|string',
             ]);
 
             if ($validator->fails()) {
@@ -134,6 +290,8 @@ class ProfileController extends Controller
                 'specialization' => $request->specialization ?? $user->specialization,
                 'medical_history' => $request->medical_history ?? $user->medical_history,
                 'additional_info' => $request->additional_info ?? $user->additional_info,
+                'organization' => $request->organization ?? $user->organization,
+
             ]);
 
         } elseif ($userType == 'doctor') {
@@ -213,6 +371,41 @@ class ProfileController extends Controller
     public function forgetPassword()
     {
 
+    }
+    
+       public function updateProfilenotification(Request $request)
+    {
+
+        $user = $request->user();
+
+        $userType = $user->userType;
+
+        if ($userType == 'patient') {
+      
+            $user->update([
+                'notification_play' => $request->notification_play ?? $user->notification_play
+            ]);
+
+        } elseif ($userType == 'student') {
+          
+            $user->update([
+                'notification_play' => $request->notification_play ?? $user->notification_play,
+              
+            ]);
+
+        } elseif ($userType == 'doctor') {
+          
+            $user->update([
+                'notification_play' => $request->notification_play ?? $user->notification_play,
+            
+            ]);
+        }
+
+        // Return updated user data
+        return response()->json([
+            'message' => 'Profile updated successfully',
+            'user' => new UserResource($user)
+        ]);
     }
 
 

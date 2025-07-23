@@ -22,7 +22,7 @@ class PrescriptionReadController extends Controller
         $without_report = [];
 
         if ($user->userType == 'doctor') {
-            $prescriptions = PrescriptionRead::with(['report.doctor'])->latest()->get();
+            $prescriptions = PrescriptionRead::with(['report.doctor'])->get();
 
 
             foreach($prescriptions as $case){
@@ -32,6 +32,8 @@ class PrescriptionReadController extends Controller
                 }
                 $without_report[] = $case;
             }
+            
+            $with_report = array_reverse($with_report);
 
             return response()->json([
                 'message' => "All Prescription Read List",
@@ -55,6 +57,8 @@ class PrescriptionReadController extends Controller
                 return $item->load('student');
             }
         });
+        
+       
 
 
 
@@ -65,6 +69,10 @@ class PrescriptionReadController extends Controller
             }
             $without_report[] = $case;
         }
+        
+        
+         $with_report = array_reverse($with_report);
+        
 
         return response()->json([
             'message' => "All Prescription Read List",
@@ -122,8 +130,10 @@ class PrescriptionReadController extends Controller
     public function addReport(Request $request, $id)
     {
         $prescription = PrescriptionRead::find($id);
+        
+        
 
-        switch ($prescription->userType) {
+        switch ($prescription->user_type) {
             case 'patient':
                 $user = $prescription->patient;
 
@@ -136,6 +146,9 @@ class PrescriptionReadController extends Controller
                 break;
 
         }
+        
+     
+        
 
         if (!$prescription) {
             return response()->json([

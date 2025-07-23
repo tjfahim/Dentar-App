@@ -35,6 +35,25 @@ class PrescriptionAssistsController extends Controller
             'prescription_assists' => $cases,
         ]);
     }
+    
+    
+    public function pending_assists()
+    {
+        $cases = PrescriptionAssist::with('reports')->doesntHave('reports')->latest()->get();
+
+        return view('admin.pages.summery.prescription_assists.pending', [
+            'prescription_assists' => $cases,
+        ]);
+    }
+    
+    public function complete_assists()
+    {
+        $cases = PrescriptionAssist::with('reports')->whereHas('reports')->latest()->get();
+
+        return view('admin.pages.summery.prescription_assists.complete', [
+            'prescription_assists' => $cases,
+        ]);
+    }
 
     public function edit($id)
     {
@@ -51,7 +70,7 @@ class PrescriptionAssistsController extends Controller
 
         $request->validate([
             'title' => 'required|string|max:255',
-            'image' => 'nullable|file|mimes:jpg,png|max:2048',
+            'image' => 'nullable|file',
             'description' => 'nullable|string',
             'replay_user_type' => 'nullable|string|max:255',
             'replay_user_id' => 'nullable|exists:users,id',

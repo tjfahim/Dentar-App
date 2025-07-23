@@ -11,11 +11,12 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\StudentResource;
 use App\Http\Resources\DoctorResource;
-
+use App\Mail\OtpEmail;
 use App\Models\Patient;
 use App\Models\Student;
 use App\Models\Doctor;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class RegisterController extends Controller
 {
@@ -41,7 +42,7 @@ class RegisterController extends Controller
              // Validate the incoming request data
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
-                'email' => 'email|unique:patients,email|unique:students,email|unique:doctors,email',
+                // 'email' => 'email|unique:patients,email|unique:students,email|unique:doctors,email',
                 'phone' => 'required|string|max:15|unique:patients,phone|unique:students,phone|unique:doctors,phone',
                 'password' => 'required|string', // confirm password
                 'image' => 'nullable|image',
@@ -102,6 +103,8 @@ class RegisterController extends Controller
                 'medical_history' => 'nullable|string',
                 'additional_info' => 'nullable|string',
                 'bio' => 'nullable|string',
+                'organization' => 'string|nullable',
+
             ]);
 
             if ($validator->fails()) {
@@ -130,6 +133,8 @@ class RegisterController extends Controller
                 'medical_history' => $request->medical_history,
                 'additional_info' => $request->additional_info,
                 'bio' => $request->bio,
+                'organization' => $request->organization,
+
             ]);
 
             // Generate a token for the student after successful registration
@@ -202,7 +207,7 @@ class RegisterController extends Controller
             'occupation' => $request->occupation,
             'organization' => $request->organization,
             'role' => $request->role ?? 'normal', // Default to normal role
-            'status' => 0,
+            'status' => 1,
 
         ]);
 
@@ -275,7 +280,6 @@ class RegisterController extends Controller
         }
 
         $otp = rand(10000, 99999);
-        $otp = 12345;
 
         DB::table('password_resets')->updateOrInsert(
             ['email' => $user->email],
@@ -285,7 +289,7 @@ class RegisterController extends Controller
             ]
         );
 
-        // Mail::to($user->email)->send(new OtpEmail($user, $otp));
+        Mail::to($user->email)->send(new OtpEmail($user, $otp));
 
         return response()->json(['message' => 'OTP sent to your email'], 201);
     }

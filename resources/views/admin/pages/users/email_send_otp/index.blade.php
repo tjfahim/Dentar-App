@@ -59,7 +59,7 @@
         <p>If you did not request this, please ignore this email.</p>
 
         <div class="footer">
-            <p>Thank you for your time!<br>Your Company Team</p>
+            <p>Thank you for your time!<br>DERTER PRO</p>
         </div>
     </div>
 </body>

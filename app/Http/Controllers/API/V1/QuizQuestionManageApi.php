@@ -4,19 +4,47 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\QuizManage;
+use App\Models\QuizResult;
 use App\Models\QuizQuestionAnsManage;
 use App\Models\QuizQuestionManage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class QuizQuestionManageApi extends Controller
 {
 public function getQuiz(Request $request)
 {
-    $quizzes = QuizManage::where('status', 1)->get();
+    $time = Carbon::now();
+    $bdtime =  Carbon::now('Asia/Dhaka')->format('Y-m-d\TH:i');
+    // return $bdtime;
+    // return $time . " --- ". $bdtime;
+    $quizzes = QuizManage::where('end_time', '>=', $bdtime)->where('status', 1)->get();
+    
+    $auth_id = Auth::user()->id;
 
+    $quizzes = $quizzes->filter(function($quiz) use($auth_id) {
+        if($quiz->user){
+            $users = json_decode($quiz->user);
+            foreach($users as $id){
+                if($id == $auth_id){
+                    return $quiz;
+                }
+            }
+        }
+        return false;
+    });
+    
+
+    
+    
     $quizQuestionManage = QuizQuestionManage::where('status', 1)->get();
+    
+    
+    
+
+   
 
     // Transform each question to include options
     $quizQuestionManage->each(function ($question) {
@@ -35,6 +63,11 @@ public function getQuiz(Request $request)
             ->where('quiz_manage_id', $quiz->id)
             ->values(); // Reindex the questions collection
     });
+    
+    foreach($quizzes as $index => $value){
+        $value->id = $index + 1;
+    }
+
 
     return response()->json([
         'success' => true,
@@ -47,6 +80,18 @@ public function getQuiz(Request $request)
 
 
     public function submitquiz(Request $request){
+        
+        // $q = QuizQuestionManage::all();
+        
+        // return $q;
+        
+        
+        //  $validator = Validator::make($request->all(), [
+        //     'quiz_answer_manages' => 'required|array',
+        //     'quiz_answer_manages.*.quiz_question_manages_id' => 'required',
+        //     'quiz_answer_manages.*.user_answer' => 'required',
+        // ]);
+        
         $validator = Validator::make($request->all(), [
             'quiz_answer_manages' => 'required|array',
             'quiz_answer_manages.*.quiz_question_manages_id' => 'required|exists:quiz_question_manages,id',
@@ -61,12 +106,17 @@ public function getQuiz(Request $request)
         $correctAnswers = 0;
         $wrongAnswers = 0;
         $totalPoints = 0;
+        $quiz_id = null;
         $now = now();
 
         if ($user) {
             $quizAnsweredIds = [];
             foreach ($request->quiz_answer_manages as $quizData) {
                 $quizQuestionManage = QuizQuestionManage::findOrFail($quizData['quiz_question_manages_id']);
+                
+                
+                $quiz_id =  $quizQuestionManage->quiz_manage_id;
+                
 
                 $quizQuestionAnswerManage = QuizQuestionAnsManage::where('user_id', $user->id)
                     ->where('quiz_question_manages_id', $quizQuestionManage->id)
@@ -80,17 +130,29 @@ public function getQuiz(Request $request)
                 $quizQuestionAnswerManage->user_id = $user->id;
                 $quizQuestionAnswerManage->quiz_question_manages_id = $quizQuestionManage->id;
                 $quizQuestionAnswerManage->user_answer = $quizData['user_answer'];
-
-                if (strcasecmp($quizQuestionManage->answer, $quizData['user_answer']) == 0) {
+                
+                // return $quizQuestionManage;
+                // check the answer start
+               if ($quizQuestionManage->question_type == 'answer_type') {
+                    // Case-insensitive comparison for text input answers
+                    $isCorrect = strcasecmp($quizQuestionManage->answer, $quizData['user_answer']) === 0;
+                } else {
+                    // Case-sensitive comparison for options/multiple choice
+                    $isCorrect = $quizQuestionManage->answer === $quizData['user_answer'];
+                }
+                
+                if ($isCorrect) {
                     $quizQuestionAnswerManage->answer_is_correct = 1;
-                    $correctAnswers += 1;
+                    $correctAnswers++;
                     $quizQuestionAnswerManage->points = $quizQuestionManage->points;
                     $totalPoints += $quizQuestionManage->points;
                 } else {
                     $quizQuestionAnswerManage->answer_is_correct = 0;
-                    $wrongAnswers += 1;
+                    $wrongAnswers++;
                     $quizQuestionAnswerManage->points = 0;
                 }
+                // check the answer end
+
 
                 $quizQuestionAnswerManage->status = 1;
                 $quizQuestionAnswerManage->updated_at = $now;
@@ -105,6 +167,25 @@ public function getQuiz(Request $request)
 
             $user->total_points = $user->total_points + $totalPoints;
             $user->save();
+            
+         
+            $find = QuizResult::where('user_id', $user->id)->where('quiz_manage_id', $quiz_id)->first();
+            
+           
+            
+            if(!$find){
+                $result = QuizResult::create([
+                    'score' => $totalPoints,
+                    'wrong_answer' => $wrongAnswers,
+                    'correct_answer' => $correctAnswers,
+                    'user_id' => $user->id,
+                    'user_type' => $user->userType,
+                    'quiz_manage_id' => $quiz_id
+                ]);
+            }
+            
+            
+            
             return response()->json([
                 'success' => 'Answers submitted successfully',
                 'answered_results' => $answeredResults,
@@ -118,4 +199,6 @@ public function getQuiz(Request $request)
 
 
     }
+    
+    
 }

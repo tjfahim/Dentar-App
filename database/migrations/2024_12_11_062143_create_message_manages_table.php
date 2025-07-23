@@ -18,6 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('sender_id');
             $table->unsignedBigInteger('receiver_id');
             $table->text('message');
+            $table->string('sender_type');
+            $table->string('receiver_type');
             $table->json('file_url')->nullable();
             $table->timestamps();
         });

@@ -40,6 +40,16 @@
                             @enderror
                         </div>
                         <div class="mt-2">
+                            <label for="question_type">Question Type</label>
+                            <select id="question_type" name="question_type" class="form-control border-info" required>
+                                <option value="multiple_choice" {{ old('question_type') == 'multiple_choice' ? 'selected' : '' }}>Multiple Choice</option>
+                                <option value="answer_type" {{ old('question_type') == 'answer_type' ? 'selected' : '' }}>Answer Type</option>
+                            </select>
+                            @error('question_type')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="mt-2">
                             <label for="question">Question</label>
                             <input type="text" id="question" name="question" class="form-control border-info" value="{{ old('question') }}" placeholder="Enter Question" required oninput="handleInputChange(this)">
                             @error('question')
@@ -54,16 +64,7 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="mt-2">
-                            <label for="question_type">Question Type</label>
-                            <select id="question_type" name="question_type" class="form-control border-info" required>
-                                <option value="multiple_choice" {{ old('question_type') == 'multiple_choice' ? 'selected' : '' }}>Multiple Choice</option>
-                                <option value="answer_type" {{ old('question_type') == 'answer_type' ? 'selected' : '' }}>Answer Type</option>
-                            </select>
-                            @error('question_type')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+                  
 
                         <div id="options-container">
     <div class="mt-2" id="div_option_1">
@@ -130,32 +131,31 @@
     </div>
 </div>
 
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const questionType = document.getElementById("question_type");
-        const option1 = document.getElementById("option_1");
-        const option2 = document.getElementById("option_2");
-        const option3 = document.getElementById("option_3");
-        const option4 = document.getElementById("option_4");
+        const optionsContainer = document.getElementById("options-container");
 
-        function toggleOptionRequirements() {
+        function toggleOptionsVisibility() {
             if (questionType.value === "multiple_choice") {
-                option1.required = true;
-                option2.required = true;
-                option3.required = false;
-                option4.required = false;
+                optionsContainer.style.display = "block"; // Show the options
+                document.getElementById("option_1").required = true;
+                document.getElementById("option_2").required = true;
+                document.getElementById("option_3").required = false;
+                document.getElementById("option_4").required = false;
             } else {
-                option1.required = false;
-                option2.required = false;
-                option3.required = false;
-                option4.required = false;
+                optionsContainer.style.display = "none"; // Hide the options
+                document.getElementById("option_1").required = false;
+                document.getElementById("option_2").required = false;
+                document.getElementById("option_3").required = false;
+                document.getElementById("option_4").required = false;
             }
         }
 
-        toggleOptionRequirements();
-        questionType.addEventListener("change", toggleOptionRequirements);
+        toggleOptionsVisibility();
+        questionType.addEventListener("change", toggleOptionsVisibility);
     });
 </script>
 
 @endsection
-

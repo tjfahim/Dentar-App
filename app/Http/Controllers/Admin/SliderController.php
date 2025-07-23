@@ -15,7 +15,7 @@ class SliderController extends Controller
      */
     public function index()
     {
-        $sliders = Slider::all();
+        $sliders = Slider::latest()->get();
         return view('admin.pages.slider.index', compact('sliders'));
     }
 
@@ -41,7 +41,7 @@ class SliderController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validate image
+            'image' => 'required|image', // Validate image
             'status' => 'required|in:active,inactive', // Ensure valid status
         ]);
 
@@ -111,7 +111,7 @@ class SliderController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Image is optional during update
+            'image' => 'nullable|image', // Image is optional during update
             'status' => 'required|in:active,inactive', // Ensure valid status
         ]);
 

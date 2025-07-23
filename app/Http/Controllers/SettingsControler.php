@@ -88,6 +88,8 @@ class SettingsControler extends Controller
             'website_name' => 'required|string',
             'website_email' => 'required|email|string',
         ]);
+        
+      
         $setting->update([
             'website_name'      => $request->website_name ?? $setting->website_name,
             'website_email'     => $request->website_email ?? $setting->website_email,

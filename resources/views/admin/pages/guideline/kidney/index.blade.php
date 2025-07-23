@@ -32,7 +32,7 @@ Kidney Guide Manage |
                     <table id="kidneyGuideTable" class="table table-bordered">
                         <thead>
                             <tr class="text-center bg-info text-dark">
-                                <th> # Id</th>
+                                <th> #</th>
                                 <th> Title</th>
                                 <th> Description</th>
                                 <th> File</th>
@@ -48,9 +48,9 @@ Kidney Guide Manage |
                         @endif
 
                         <tbody id="kidneyGuideTableBody">
-                            @forelse ($guidelines as $guideline)
+                            @forelse ($guidelines as $index =>  $guideline)
                             <tr class="text-center">
-                                <td>{{ $guideline->id }}</td>
+                                <td>{{ $index + 1 }}</td>
                                 <td>{{ $guideline->title }}</td>
                                 <td>{{ Str::limit($guideline->description, 50) }}</td>
                                 <td>

@@ -46,8 +46,8 @@ class BookController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'pdf' => 'nullable|file|mimes:pdf|max:10240', // Validate PDF
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validate image
+            'pdf' => 'required|file|mimes:pdf', // Validate PDF
+            'image' => 'required|image', // Validate image
             'status' => 'required|in:active,inactive', // Ensure valid status
         ]);
 
@@ -89,16 +89,16 @@ class BookController extends Controller
         $book->save();
 
 
-        $deviceTokens = [
-            'token1',
-            'token2',
-            // Add Firebase device tokens here
-        ];
+        // $deviceTokens = [
+        //     'token1',
+        //     'token2',
+        //     // Add Firebase device tokens here
+        // ];
 
-        $notificationService = new NotificationService();
-        $response = $notificationService->notifyUsers($deviceTokens);
+        // $notificationService = new NotificationService();
+        // $response = $notificationService->notifyUsers($deviceTokens);
 
-        return  $response;
+        // return  $response;
 
 
         // $this->sendNotification();
@@ -152,8 +152,8 @@ class BookController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'pdf' => 'nullable|file|mimes:pdf|max:10240', // Validate PDF
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Image is optional during update
+            'pdf' => 'nullable|file|mimes:pdf', // Validate PDF
+            'image' => 'nullable|image', // Image is optional during update
             'status' => 'required|in:active,inactive', // Ensure valid status
         ]);
 
@@ -221,9 +221,9 @@ class BookController extends Controller
         if (file_exists(public_path($book->image))) {
             unlink(public_path($book->image));
         }
-        if (file_exists(public_path($book->pdf))) {
-            unlink(public_path($book->pdf));
-        }
+        // if (file_exists(public_path($book->pdf))) {
+        //     unlink(public_path($book->pdf));
+        // }
 
         // Delete the book from the database
         $book->delete();

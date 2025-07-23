@@ -3,12 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali&display=swap" rel="stylesheet">
     <title>Prescription Design</title>
     <style>
+    
+     @font-face {
+            font-family: "kalpurush";
+            font-style: normal;
+            font-weight: normal;
+            src: url('fonts/kalpurush.ttf') format('truetype');
+        } 
+        
+        *{
+    font-family: "kalpurush";
+}
         body {
             background-color: #f7fafc;
             padding: 2.5rem 0;
-            font-family: Arial, sans-serif;
+            /*font-family: Arial, sans-serif;*/
+            /*font-family: 'Noto Sans Bengali', Arial, sans-serif;*/
+             font-family: 'Noto Sans Bengali', 'Arial Unicode MS', 'SolaimanLipi', 'Vrinda', 'Kalpurush', Arial, sans-serif;
         }
         .container {
             max-width: 40rem;
@@ -226,9 +243,12 @@
 
         <!-- Note -->
         <div class="note">
-            <span>Note:</span>
+            <span>Note: {!! $prescription->note !!}</span>
         </div>
-
+        
+        <p style="font-family: 'Noto Sans Bengali', sans-serif;">বাংলা লেখা এখানে</p>
+        <p>পরীক্ষা - এটি বাংলা টেক্সট</p>
+        <p style="font-family: 'Kalpurush', sans-serif;">এটি কল্পরুষ ফন্ট দিয়ে লেখা</p>
         <!-- Footer -->
         <div class="footer">
             <p>Name: {{ $doctor->name }}</p>

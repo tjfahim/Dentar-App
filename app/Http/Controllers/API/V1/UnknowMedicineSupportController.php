@@ -9,9 +9,12 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\UnknownMedicine;
 use App\Models\UnknownMedicineReport;
 use App\Http\Resources\UnknownMedicineResource;
+use App\Models\Doctor;
+use App\Jobs\SendNotificationQueue;
 
 class UnknowMedicineSupportController extends Controller
 {
+    
     public function index()
     {
 
@@ -22,7 +25,7 @@ class UnknowMedicineSupportController extends Controller
         $without_report = [];
 
         if($user->userType == 'doctor'){
-            $unknownM = UnknownMedicine::with(['report.doctor'])->latest()->get();
+            $unknownM = UnknownMedicine::with(['report.doctor'])->get();
 
 
             foreach($unknownM as $case){
@@ -32,6 +35,8 @@ class UnknowMedicineSupportController extends Controller
                 }
                 $without_report[] = $case;
             }
+            
+            $with_report = array_reverse($with_report);
 
             return response()->json([
                 'message' => "All Prescription Read List",
@@ -64,6 +69,8 @@ class UnknowMedicineSupportController extends Controller
             }
             $without_report[] = $case;
         }
+        
+        $with_report = array_reverse($with_report);
 
         return response()->json([
             'message' => "All Unknown medicine  List",
@@ -108,6 +115,16 @@ class UnknowMedicineSupportController extends Controller
             'user_id' => Auth::id(),
             'user_type' => Auth::user()->userType,
         ]);
+        
+        
+        $title = 'UnknownMedicine Check';
+        $body = $request->title;
+
+        $doctors = Doctor::all();
+
+        foreach ($doctors as $doctor){
+            SendNotificationQueue::dispatch($title, $body, $doctor)->onConnection('database');
+        }
 
         return response()->json([
             'message' => 'add successfully',
@@ -119,13 +136,32 @@ class UnknowMedicineSupportController extends Controller
     public function addReport(Request $request, $id)
     {
 
-        $med = UnknownMedicine::find($id)->first();
+        $med = UnknownMedicine::where('id', $id)->first();
+        
 
         if(!$med){
             return response()->json([
                 'errors' => 'Case not found'
             ], 404);
         }
+        
+       
+        
+         switch ($med->user_type) {
+            case 'patient':
+                $user = $med->patient;
+
+                break;
+            case'student':
+                $user = $med->student;
+                break;
+            case'doctor':
+                $user = $med->doctor;
+                break;
+
+        }
+
+        
 
         $validator = Validator::make($request->all(), [
             'title' => 'nullable|string',
@@ -151,6 +187,12 @@ class UnknowMedicineSupportController extends Controller
             'doctor_id' => Auth::id(),
             'unkown_medicine_id' => $med->id,
          ]);
+         
+         
+        $title = 'UnknownMedicine Report';
+        $body = $med->title;
+
+        SendNotificationQueue::dispatch($title, $body, $user)->onConnection('database');
 
         return response()->json([
             'message' => 'add successfully',

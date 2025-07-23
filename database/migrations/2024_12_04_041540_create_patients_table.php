@@ -28,6 +28,8 @@ return new class extends Migration
             $table->text('medical_history')->nullable();
             $table->string('organization')->nullable();
             $table->string('occupation')->nullable();
+                                    $table->boolean('notification_play')->default(1);
+
             $table->softDeletes();
             $table->timestamps();
         });

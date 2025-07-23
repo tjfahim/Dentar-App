@@ -31,6 +31,8 @@ return new class extends Migration
             $table->text('medical_history')->nullable(); // Medical history (if applicable)
             $table->text('additional_info')->nullable(); // Additional info
             $table->string('organization')->nullable();
+                                    $table->boolean('notification_play')->default(1);
+
             $table->string('occupation')->nullable();
             $table->text('bio')->nullable(); // Additional info
             $table->timestamps();

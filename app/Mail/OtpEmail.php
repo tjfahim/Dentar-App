@@ -33,7 +33,7 @@ class OtpEmail extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'OTP to change password',
+            subject: 'OTP Verification',
         );
     }
 

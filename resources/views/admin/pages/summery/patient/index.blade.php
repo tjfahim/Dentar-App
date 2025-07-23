@@ -29,11 +29,11 @@ Patient Manage |
                     <table id="usersTable" class="table table-bordered">
                         <thead>
                             <tr class="text-center bg-info text-dark">
-                                <th># Id</th>
+                                <th>#</th>
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Phone</th>
-                                <th>address</th>
+                                <th>Address</th>
 
                                 <th class="action">Action</th>
                             </tr>
@@ -44,9 +44,9 @@ Patient Manage |
                         </div>
                         @endif
                         <tbody id="usersTableBody">
-                            @forelse ($patients as $patient)
+                            @forelse ($patients as $index => $patient)
                             <tr class="text-center">
-                                <td>{{ $patient->id }}</td>
+                                <td>{{ $index + 1 }}</td>
                                 <td>{{ $patient->name }}</td>
                                 <td>{{ $patient->email }}</td>
                                 <td>{{ $patient->phone }}</td>

@@ -82,40 +82,50 @@ class UserController extends Controller
     }
 
 
-    public function update(Request $request, $id)
-    {
-        // Validate basic fields
-        $validator = Validator::make($request->all(), [
-            'name'              => 'required|string',
-            'current_password'  => 'nullable|required_with:new_password|password', // Optional, only required if new password is provided
-            'new_password'      => 'nullable|min:8|confirmed', // At least 8 characters and must match the confirmation
-        ]);
-    
-        if ($validator->fails()) {
-            return Redirect::back()->withInput()->withErrors($validator);
-        }
-    
-        $user = User::findOrFail($id);
-    
-        if ($request->filled('current_password') && $request->filled('new_password')) {
-            if (Hash::check($request->input('current_password'), $user->password)) {
-                $user->password = Hash::make($request->input('new_password'));
-            } else {
-                return Redirect::back()->withInput()->withErrors(['current_password' => 'Current password is incorrect']);
-            }
-        }
-    
-        $input = $request->all();
-        if ($request->hasFile('profile_picture')) {
-            $this->services->imageDestroy($request->profile_picture, 'profile_picture/');
-            $profileImage = $this->services->imageUpload($request->file('profile_picture'), 'profile_picture/');
-            $input['profile_picture'] = 'profile_picture/' . $profileImage;
-        }
-    
-        $user->update($input);
-    
-        return redirect()->route('usersIndex')->with('success', 'User updated successfully.');
+  public function update(Request $request, $id)
+{
+    // Validate basic fields
+    $validator = Validator::make($request->all(), [
+        'name'             => 'required|string',
+        'current_password' => 'nullable|required_with:new_password', // Only required if new_password is provided
+        'new_password'     => 'nullable|min:8|confirmed', // At least 8 characters and must match the confirmation
+    ]);
+
+    if ($validator->fails()) {
+        return Redirect::back()->withInput()->withErrors($validator);
     }
+
+    $user = User::findOrFail($id);
+
+    // Handle password update
+    if ($request->filled('current_password') && $request->filled('new_password')) {
+        // Check if the current password matches the user's stored password
+        if (Hash::check($request->input('current_password'), $user->password)) {
+            // Update the password if current password is correct
+            $user->password = Hash::make($request->input('new_password'));
+        } else {
+            // Return error if the current password is incorrect
+            return Redirect::back()->withInput()->withErrors(['current_password' => 'Current password is incorrect']);
+        }
+    }
+
+    // Handle profile picture update
+    $input = $request->except(['current_password', 'new_password', 'new_password_confirmation']); // Exclude password-related fields
+    if ($request->hasFile('profile_picture')) {
+        // Delete old profile picture
+        $this->services->imageDestroy($user->profile_picture, 'profile_picture/');
+
+        // Upload new profile picture
+        $profileImage = $this->services->imageUpload($request->file('profile_picture'), 'profile_picture/');
+        $input['profile_picture'] = 'profile_picture/' . $profileImage;
+    }
+
+    // Update the user's details
+    $user->update($input);
+
+    return redirect()->route('usersIndex')->with('success', 'User updated successfully.');
+}
+
 
 
 
@@ -130,6 +140,7 @@ class UserController extends Controller
 
     public function verifyLogin(Request $request)
     {
+       
         // Validate the input fields
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',

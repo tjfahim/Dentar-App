@@ -36,6 +36,32 @@ class PrescriptionReadController extends Controller
             'prescription_reads' => $reads,
         ]);
     }
+    
+    public function pending_reads()
+    {
+        $reads = PrescriptionRead::with('report')->doesntHave('report')->latest()->get();
+
+        return view('admin.pages.summery.prescription_reads.pending', [
+            'prescription_reads' => $reads,
+        ]);
+    }
+    
+    public function complete_reads()
+    {
+        $reads = PrescriptionRead::with('report')->whereHas('report')->latest()->get();
+
+        return view('admin.pages.summery.prescription_reads.complete', [
+            'prescription_reads' => $reads,
+        ]);
+    }
+     public function show($id)
+    {
+        $read = PrescriptionRead::findOrFail($id);
+
+        return view('admin.pages.summery.prescription_reads.show', [
+            'prescriptionRead' => $read,
+        ]);
+    }
 
     public function edit($id)
     {
@@ -45,6 +71,7 @@ class PrescriptionReadController extends Controller
             'prescriptionRead' => $read,
         ]);
     }
+    
 
     public function update(Request $request, $id)
     {
@@ -53,7 +80,7 @@ class PrescriptionReadController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'files' => 'nullable|file|mimes:jpg,png,pdf,doc,docx|max:2048',
+            'files' => 'nullable|file',
             'status' => 'required|in:pending,approved,rejected',
             'user_type' => 'required|string|max:255',
             'user_id' => 'required|exists:users,id',

@@ -1,4 +1,44 @@
+# Laravel & PHP
 /vendor
+/.env
+.env.*
+/storage/*.key
+/storage/oauth-private.key
+/storage/oauth-public.key
+/bootstrap/cache/*.php
+
+# Laravel logs and compiled files
+/storage/logs
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+
+# Node.js
+/node_modules
+/public/files
+/public/hot
+/public/storage
+/public/mix-manifest.json
 /public/denterapplication-firebase-adminsdk-h01cb-826b7d4cc6.json
-govt_project.zip
-.env
+
+# System files
+.DS_Store
+Thumbs.db
+.idea
+.vscode
+
+# Composer & NPM
+composer.lock
+package-lock.json
+npm-debug.log
+yarn-error.log
+
+# OS generated
+*.log
+
+# ZIP or archives
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz

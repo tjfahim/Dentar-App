@@ -15,6 +15,8 @@ class QuizManage extends Model
         'start_time',
         'end_time',
         'status',
+        'leaderboard',
+        'user'
     ];
 
     public function quizQuestionManage()

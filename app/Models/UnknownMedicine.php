@@ -35,4 +35,9 @@ class UnknownMedicine extends Model
     {
         return $this->belongsTo(Student::class, 'user_id', 'id');
     }
+    
+    public function doctor()
+    {
+        return $this->belongsTo(Doctor::class, 'user_id', 'id');
+    }
 }

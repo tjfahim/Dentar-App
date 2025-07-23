@@ -8,6 +8,8 @@ use App\Http\Resources\JobResource;
 use App\Models\Job;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class JobController extends Controller
 {
@@ -18,7 +20,7 @@ class JobController extends Controller
      */
     public function index()
     {
-        $jobs = Job::all();
+        $jobs = Job::whereDate('job_deadline', '>=', Carbon::today())->latest()->get();
         return  new JobCollection($jobs);
     }
 
@@ -34,46 +36,85 @@ class JobController extends Controller
 
         return $jobs;
 
-
-
     }
 
-    public function store(Request $request)
+//     public function store(Request $request)
+// {
+//     // Perform the validation using Validator::make
+//     $validator = Validator::make($request->all(), [
+//         'title' => 'required|string|max:255',
+//         'description' => 'required|string',
+//         'image' => 'nullable|string',
+//         'company_name' => 'nullable|string|max:255',
+//         'job_deadline' => 'nullable|string',
+//         'source_url' => 'nullable|string',
+//     ]);
+
+//     // If validation fails, return a 422 response with validation errors
+//     if ($validator->fails()) {
+//         return response()->json(['error' => $validator->errors()], 422);
+//     }
+
+
+
+//     $date = date_create($request->job_deadline);
+
+//     $job = Job::create([
+//         'title' => $request->title,
+//         'description' => $request->description,
+//         'image' => $request->image,
+//         'company_name' => $request->company_name ?? null,
+//         'job_deadline' => date_format($date, 'Y-m-d')  ?? null,
+//         'source_url' => $request->source_url ?? null,
+//     ]);
+
+//     // Return a success response with the created job data
+//     return response()->json([
+//         'message' => 'Job created successfully!',
+//         'data' => new JobResource($job)
+//     ], 201);
+// }
+
+
+
+public function store(Request $request)
 {
-    // Perform the validation using Validator::make
     $validator = Validator::make($request->all(), [
         'title' => 'required|string|max:255',
         'description' => 'required|string',
         'image' => 'nullable|string',
         'company_name' => 'nullable|string|max:255',
-        'job_deadline' => 'nullable|string',
+        'job_deadline' => 'nullable', // Accepts 30/06/2025
         'source_url' => 'nullable|string',
     ]);
 
-    // If validation fails, return a 422 response with validation errors
     if ($validator->fails()) {
         return response()->json(['error' => $validator->errors()], 422);
     }
+    Log::info("job store data: ". json_encode($request->all()));
 
-
-
-    $date = date_create($request->job_deadlineb);
+    // Convert from d/m/Y (30/06/2025) to Y-m-d (2025-06-30)
+    $formattedDeadline = $request->job_deadline
+        ? Carbon::createFromFormat('d/m/Y', $request->job_deadline)->format('Y-m-d')
+        : null;
 
     $job = Job::create([
         'title' => $request->title,
         'description' => $request->description,
         'image' => $request->image,
-        'company_name' => $request->company_name ?? null,
-        'job_deadline' => date_format($date, 'Y-m-d')  ?? null,
-        'source_url' => $request->source_url ?? null,
+        'company_name' => $request->company_name,
+        'job_deadline' => $formattedDeadline,
+        'source_url' => $request->source_url,
     ]);
 
-    // Return a success response with the created job data
     return response()->json([
         'message' => 'Job created successfully!',
         'data' => new JobResource($job)
     ], 201);
 }
+
+
+
 
     // Show the specified job
     public function show($id)

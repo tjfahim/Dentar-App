@@ -10,6 +10,7 @@ Doctor Manage |
                 <div class="d-flex justify-content-between">
                     <h4 class="card-title">Doctor Lists</h4>
                     <div class="d-flex">
+                        {{-- <button id="getMessage"  class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="right" title="Add Doctor"><i class="mdi mdi-bell"></i>Notfication Send </button> --}}
                         <button type="button" class="btn btn-outline-info btn-sm btn-icon-text mx-1" onclick="printTable()">
                             <i class="mdi mdi-printer"></i>
                             Print
@@ -24,14 +25,16 @@ Doctor Manage |
                         <p class="mt-1">{{ settings()->address }}</p>
                         <p class="mt-1">{{ settings()->website_email }}</p>
                     </div>
-                    <table id="usersTable" class="table table-bordered">
+                    <table id="doctorTable" class="table table-bordered">
                         <thead>
                             <tr class="text-center bg-info text-dark">
-                                <th># Id</th>
+                                <th>#</th>
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Phone</th>
                                 <th>Specialization</th>
+                                <th>Hospital</th>
+                                <th>Address</th>
                                 <th>Status</th>
                                 <th class="action">Action</th>
                             </tr>
@@ -41,14 +44,18 @@ Doctor Manage |
                             {{ session('success') }}
                         </div>
                         @endif
-                        <tbody id="usersTableBody">
-                            @forelse ($doctors as $doctor)
+                        <div id="messageContainer"></div>
+                        <tbody id="doctorsTableBody">
+                            @forelse ($doctors as $index =>  $doctor)
                             <tr class="text-center">
+                                {{-- <td style="display: hidden;">{{ $doctor->id }}</td> --}}
                                 <td>{{ $doctor->id }}</td>
                                 <td>{{ $doctor->name }}</td>
                                 <td>{{ $doctor->email }}</td>
                                 <td>{{ $doctor->phone }}</td>
                                 <td>{{ $doctor->specialization }}</td>
+                                <td>{{ $doctor->hospital }}</td>
+                                <td>{{ $doctor->address }}</td>
                                 <td>
                                     @if ($doctor->status == '1')
                                         <span style="color: green">Active</span>
@@ -89,10 +96,43 @@ Doctor Manage |
                             @endforelse
                         </tbody>
                     </table>
+
+
+                    
+                    
                 </div>
             </div>
         </div>
+      
+
     </div>
+
+
+    <div class="col-lg-12 grid-margin stretch-card">
+
+        <div class="card p-5">
+                <h5>Send Notification to Listed Doctors</h5>
+                <form id="notificationForm">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <input type="text" class="form-control" id="notificationTitle" placeholder="Notification Title" required>
+                        </div>
+                        <div class="col-md-5">
+                            <input type="text" class="form-control" id="notificationBody" placeholder="Notification Body" required>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="mdi mdi-bell-ring"></i> Send
+                            </button>
+                        </div>
+                    </div>
+                </form>
+        </div>
+    </div>
+
+
+
+
 </div>
 
 <!-- Modal -->
@@ -132,10 +172,81 @@ Doctor Manage |
     </div>
 </div>
 
+
+
 @endsection
-
-
 <script>
+   document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('notificationForm');
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        // Step 1: Collect all Doctor IDs from the table
+        const tbody = document.getElementById('doctorsTableBody');
+        const rows = tbody.querySelectorAll('tr');
+        let data = "";
+
+        rows.forEach(function(row) {
+            const firstCell = row.querySelector('td'); // First <td>
+            if (firstCell) {
+                data += firstCell.textContent.trim() + ",";
+            }
+        });
+
+        data = data.replace(/,$/, ''); // Remove trailing comma
+
+        // Step 2: Collect title and body from form inputs
+        const title = document.getElementById('notificationTitle').value.trim();
+        const body = document.getElementById('notificationBody').value.trim();
+
+        // Step 3: Send POST request
+        fetch("{{ url('manage/notification/send/doctor') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({
+                ids: data,
+                title: title,
+                body: body
+            })
+        })
+        .then(response => response.json())
+        .then(result => {
+            console.log(result);
+            if (result.status === 'success') {
+                showAlertMessage(result.message);
+                form.reset();
+            } else {
+                showAlertMessage('Failed to send notification.', 'danger');
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            showAlertMessage("Something went wrong!", 'danger');
+        });
+    });
+
+    function showAlertMessage(message, type = 'success') {
+        const alertDiv = document.createElement('div');
+        alertDiv.classList.add('alert', `alert-${type}`);
+        alertDiv.textContent = message;
+
+        const container = document.querySelector('#messageContainer');
+        if (container) {
+            container.innerHTML = ''; // Clear previous messages
+            container.appendChild(alertDiv);
+
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+    }
+});
+ 
+
     function showDoctorDetails(doctor) {
         document.getElementById('doctorName').innerText = doctor.name;
         document.getElementById('doctorEmail').innerText = doctor.email;
@@ -148,8 +259,11 @@ Doctor Manage |
         document.getElementById('doctorAddress').innerText = doctor.address;
         document.getElementById('doctorBmdcNumber').innerText = doctor.bmdc_number;
         document.getElementById('doctorBiography').innerText = doctor.biography;
-        document.getElementById('doctorImage').src = doctor.image || '/path-to-default-image.jpg';
-        document.getElementById('doctorSignature').src = doctor.signature || '/path-to-default-signature.jpg';
+        document.getElementById('doctorImage').src = doctor.image ? "{{ asset('') }}" + doctor.image : '/path-to-default-image.jpg';
+        document.getElementById('doctorSignature').src = doctor.signature ? "{{ asset('') }}" +  doctor.signature : '/path-to-default-signature.jpg';
     }
+
+
+   
 
 </script>

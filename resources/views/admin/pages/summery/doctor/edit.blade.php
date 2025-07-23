@@ -47,11 +47,27 @@
                         </div>
                         <div class="mt-2">
                             <label for="specialization">Specialization</label>
-                            <input type="text" name="specialization" class="form-control border-info" placeholder="Enter Specialization" value="{{ old('specialization', $doctor->specialization) }}">
+                            <select name="specialization" class="form-control border-info">
+                                 {{-- <option value="0" >Select Specialization</option> --}}
+                                @foreach ($specializations as $item)
+                                    <option value="{{ $item->id }}" {{ $doctor->specialization == $item->name ? 'selected="selected"' : '' }}>{{ $item->name }}</option>
+                                @endforeach
+                             
+                            </select>
                         </div>
-                        <div class="mt-2">
+                        {{-- <div class="mt-2">
                             <label for="hospital">Hospital/Clinic</label>
                             <input type="text" name="hospital" class="form-control border-info" placeholder="Enter Hospital/Clinic" value="{{ old('hospital', $doctor->hospital) }}">
+                        </div> --}}
+                         <div class="mt-2">
+                            <label for="hospital">Hospital/Clinic</label>
+                            <select name="hospital" class="form-control border-info">
+                                 {{-- <option value="0" >Select Specialization</option> --}}
+                                @foreach ($hospital as $item)
+                                    <option value="{{ $item->id }}" {{ $doctor->hospital == $item->name ? 'selected="selected"' : '' }}>{{ $item->name }}</option>
+                                @endforeach
+                             
+                            </select>
                         </div>
                         <div class="mt-2">
                             <label for="gender">Gender</label>
@@ -69,9 +85,19 @@
                             <label for="degree">Degree/Qualifications</label>
                             <input type="text" name="degree" class="form-control border-info" placeholder="Enter Degree/Qualifications" value="{{ old('degree', $doctor->degree) }}">
                         </div>
-                        <div class="mt-2">
+                        {{-- <div class="mt-2">
                             <label for="address">Address</label>
                             <input type="text" name="address" class="form-control border-info" placeholder="Enter Address" value="{{ old('address', $doctor->address) }}">
+                        </div> --}}
+                         <div class="mt-2">
+                            <label for="address">Address</label>
+                            <select name="address" class="form-control border-info">
+                                 {{-- <option value="0" >Select Specialization</option> --}}
+                                @foreach ($addresses as $item)
+                                    <option value="{{ $item->id }}" {{ $doctor->address == $item->name ? 'selected="selected"' : '' }}>{{ $item->name }}</option>
+                                @endforeach
+                             
+                            </select>
                         </div>
                         <div class="mt-2">
                             <label for="bmdc_number">BMDC Number</label>

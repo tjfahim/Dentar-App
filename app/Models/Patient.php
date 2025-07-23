@@ -26,9 +26,20 @@ class Patient extends Authenticatable
         'gender' ,
         'medical_history' ,
         'organization',
-        'occupation'
+        'occupation',
+        'notification_play'
 
     ];
+    
+    
+    public function getAddressAttribute($value)
+    {
+        if(preg_match("/^\d+$/", $value)){
+            return District::find($value)?->name;
+        }
+        
+        return $value;
+    }
 
 
     public function cases()

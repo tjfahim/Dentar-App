@@ -30,7 +30,7 @@ Slider Manage |
                     <table id="sliderTable" class="table table-bordered">
                         <thead>
                             <tr class="text-center bg-info text-dark">
-                                <th> # Id</th>
+                                <th> #</th>
                                 <th> Title</th>
                                 <th> Description</th>
                                 <th> Image</th>
@@ -48,11 +48,11 @@ Slider Manage |
                         <tbody id="sliderTableBody">
                             @forelse ($sliders as $slider)
                             <tr class="text-center">
-                                <td>{{ $slider->id }}</td>
+                                <td>{{ $loop->iteration }}</td> 
                                 <td>{{ $slider->title }}</td>
                                 <td>{{ Str::limit($slider->description, 50) }}</td>
                                 <td width="200" height='200' >
-                                    <img src="{{ asset($slider->image) }}" style="{width: full, height: full}" alt="Slider Image" >
+                                    <img src="{{ asset($slider->image) }}" style="width: 100%; height: 100%; border-radius: 0px;" alt="Slider Image" >
                                 </td>
                                 <td>
                                     @if ($slider->status == 1)

@@ -31,7 +31,7 @@ class PatientsController extends Controller
             'email' => 'required|email|unique:patients,email', // Update table name to patients
             'phone' => 'required|string|unique:patients,phone', // Update table name to patients
             'password' => 'required|string|min:8',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image',
             'address' => 'nullable|string|max:255',
             'dob' => 'required|date',
             'gender' => 'required|string',
@@ -76,7 +76,7 @@ class PatientsController extends Controller
             'email' => 'required|email|unique:patients,email,' . $patient->id, // Update table name to patients
             'phone' => 'required|string|unique:patients,phone,' . $patient->id, // Update table name to patients
             'password' => 'nullable|string|min:8',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image',
             'address' => 'nullable|string|max:255',
             'dob' => 'nullable|date',
             'gender' => 'nullable|string',

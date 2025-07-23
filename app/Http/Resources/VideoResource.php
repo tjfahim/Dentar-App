@@ -18,7 +18,7 @@ class VideoResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
-            'image_poster' => $this->image_poster,
+            'image_poster' => asset( 'storage/'. $this->image_poster),
             'url' => $this->url,
             'status' => $this->status ? 'active' : 'inactive', // Convert boolean status to readable string
             'created_at' => $this->created_at->toDateTimeString(), // Optional: Format created_at

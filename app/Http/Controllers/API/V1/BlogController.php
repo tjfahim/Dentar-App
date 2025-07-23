@@ -136,6 +136,7 @@ public function store(Request $request)
         $blog = $blog->load('comments.replay');
 
 
+       
 
         foreach($blog->comments as  $comment){
             switch($comment->user_type){
@@ -152,6 +153,7 @@ public function store(Request $request)
         }
 
 
+        
 
         switch($blog->user_type){
             case 'patient':
@@ -163,6 +165,7 @@ public function store(Request $request)
         }
 
 
+        // return $blog;
 
 
         return response()->json([

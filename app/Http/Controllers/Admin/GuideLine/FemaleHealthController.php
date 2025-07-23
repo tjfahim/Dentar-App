@@ -37,7 +37,7 @@ class FemaleHealthController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'file' => 'required|file|mimes:pdf|max:10240', // Validate file
+            'file' => 'required|file|mimes:pdf', // Validate file
             'status' => 'required|in:active,inactive', // Ensure valid status
         ]);
 
@@ -109,7 +109,7 @@ class FemaleHealthController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'file' => 'nullable|file|mimes:pdf|max:10240', // Validate file
+            'file' => 'nullable|file|mimes:pdf', // Validate file
             'status' => 'required|in:active,inactive', // Ensure valid status
         ]);
 

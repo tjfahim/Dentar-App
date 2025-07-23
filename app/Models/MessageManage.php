@@ -15,6 +15,8 @@ class MessageManage extends Model
         'message',
         'file_url',
         'status',
+        'sender_type',
+        'receiver_type'
     ];
 
     protected $casts = [

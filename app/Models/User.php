@@ -62,6 +62,8 @@ class User extends Authenticatable implements JWTSubject
         'role',
         'is_active',
         'status',
+                'notification_play'
+
     ];
 
 

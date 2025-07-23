@@ -49,7 +49,7 @@ Prescription Assist Manage |
                     <table id="usersTable" class="table table-bordered">
                         <thead>
                             <tr class="text-center bg-info text-dark">
-                                <th># Id</th>
+                                <th>#</th>
                                 <th>Title</th>
                                 <th>Description</th>
                                 <th>User ID</th>
@@ -65,9 +65,9 @@ Prescription Assist Manage |
                         </div>
                         @endif
                         <tbody id="usersTableBody">
-                            @forelse ($prescription_assists as $assist)
+                            @forelse ($prescription_assists as $index => $assist)
                             <tr class="text-center">
-                                <td>{{ $assist->id }}</td>
+                                <td>{{ $index + 1 }}</td>
                                 <td>{{ $assist->title }}</td>
                                 <td>{{ $assist->description }}</td>
                                 <td>{{ $assist->user_id }}</td>
@@ -131,6 +131,8 @@ Prescription Assist Manage |
                     <div class="col-md-6">
                         <p><strong>Replay User Type:</strong> <span id="assistReplayUserType"></span></p>
                         <p><strong>Replay User ID:</strong> <span id="assistReplayUserId"></span></p>
+                    </div>
+                    <div class="col-md-12">
                         <p><strong>Image:</strong> <span id="assistImage"></span></p>
                     </div>
                 </div>
@@ -143,14 +145,42 @@ Prescription Assist Manage |
 
 <script>
     function showAssistDetails(assistData) {
-        document.getElementById('assistTitle').innerText = assistData.title;
-        document.getElementById('assistDescription').innerText = assistData.description;
-        document.getElementById('assistUserId').innerText = assistData.user_id;
-        document.getElementById('assistUserType').innerText = assistData.userType;
-        document.getElementById('assistReplayUserType').innerText = assistData.replay_user_type;
-        document.getElementById('assistReplayUserId').innerText = assistData.replay_user_id;
-        document.getElementById('assistImage').innerText = assistData.image || 'No image uploaded';
+    document.getElementById('assistTitle').innerText = assistData.title;
+    document.getElementById('assistDescription').innerText = assistData.description;
+    document.getElementById('assistUserId').innerText = assistData.user_id;
+    document.getElementById('assistUserType').innerText = assistData.userType;
+    document.getElementById('assistReplayUserType').innerText = assistData.replay_user_type;
+    document.getElementById('assistReplayUserId').innerText = assistData.replay_user_id;
+
+    // Handle multiple images
+    let fileContainer = document.getElementById('assistImage');
+    fileContainer.innerHTML = ""; // Clear previous content
+
+    let files = [];
+    try {
+        files = JSON.parse(assistData.image); // Corrected variable
+    } catch (error) {
+        console.error("Error parsing images:", error);
     }
+
+    if (!Array.isArray(files)) {
+        files = [files]; // Convert to array if it's a single file
+    }
+
+    // Filter out empty values and ensure it's an image file
+    files = files.filter(file => file && file.trim() !== "" && file.match(/\.(jpeg|jpg|png|gif|webp)$/));
+    const baseUrl = "{{ asset('') }}";
+
+    if (files.length > 0) {
+        files.forEach(file => {
+            let imgElement = `<img src="${baseUrl}/${file}" alt="Case Image" class="img-thumbnail m-1" width="100">`;
+            fileContainer.innerHTML += imgElement;
+        });
+    } else {
+        fileContainer.innerHTML = "No image uploaded";
+    }
+}
+
 
     // Event listener for changing filter option
     document.getElementById('filter_option').addEventListener('change', function () {

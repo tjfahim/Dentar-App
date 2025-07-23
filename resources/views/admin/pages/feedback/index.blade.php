@@ -27,7 +27,7 @@ Feedback Manage |
                     <table id="feedbackTable" class="table table-bordered">
                         <thead>
                             <tr class="text-center bg-info text-dark">
-                                <th># ID</th>
+                                <th> #</th>
                                 <th> Name</th>
                                 <th> Email</th>
                                 <th> Description</th>
@@ -44,9 +44,9 @@ Feedback Manage |
                         @endif
 
                         <tbody id="feedbackTableBody">
-                            @forelse ($feedbacks as $feedback)
+                            @forelse ($feedbacks as $index => $feedback)
                             <tr class="text-center">
-                                <td>{{ $feedback->id }}</td>
+                                <td>{{ $index + 1 }}</td>
                                 <td>{{ $feedback->name }}</td>
                                 <td>{{ $feedback->email }}</td>
                                 <td>{{ $feedback->description }}</td>
@@ -55,6 +55,11 @@ Feedback Manage |
                                     <!-- View Feedback Button -->
                                     <button type="button" class="btn btn-sm btn-info me-2" data-toggle="modal" data-target="#viewFeedbackModal-{{ $feedback->id }}" title="View Feedback">
                                         <i class="mdi mdi-eye"></i>
+                                    </button>
+
+                                     <!-- Notification Modal Trigger -->
+                                    <button type="button" class="btn btn-sm btn-warning me-2" data-toggle="modal" data-target="#notificationModal-{{ $feedback->id }}" title="Send Notification">
+                                        <i class="mdi mdi-bell-ring"></i>
                                     </button>
 
                                     <!-- Delete Feedback Form -->
@@ -110,6 +115,46 @@ Feedback Manage |
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Notification Modal -->
+                            <div class="modal fade" id="notificationModal-{{ $feedback->id }}" tabindex="-1" role="dialog" aria-labelledby="notificationModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <form action="{{ route('feedback.notification') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="id" value="{{ $feedback->id }}">
+                                        <input type="hidden" name="user_id" value="{{ $feedback->user_id }}">
+                                        <input type="hidden" name="user_type" value="{{ $feedback->user_type }}">
+
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Send Notification</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="title">Notification Title</label>
+                                                    <input type="text" name="title" class="form-control" required placeholder="Enter title">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="body">Notification Body</label>
+                                                    <textarea name="body" class="form-control" rows="4" required placeholder="Enter message..."></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-primary">Send</button>
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+
                             @empty
                             <tr class="text-center">
                                 <td colspan="6">No feedback found</td>

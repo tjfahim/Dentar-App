@@ -59,4 +59,26 @@ class NotificationController extends Controller
             'data' => new NotificationResource($notifi),
         ]);
     }
+    
+     public function updatenotification(Request $request)
+    {
+        // Get the authenticated user
+        $user = $request->user();
+
+        // Update all notifications for the authenticated user
+        $updatedNotifications = Notification::where('user_id', $user->id)
+                                            ->update(['read' => 1]);
+
+        // Check if any notifications were updated
+        if ($updatedNotifications) {
+            return response()->json([
+                'message' => 'All notifications marked as read successfully',
+            ]);
+        }
+
+        // If no notifications were updated, return a message
+        return response()->json([
+            'message' => 'No notifications found for this user',
+        ]);
+    }
 }

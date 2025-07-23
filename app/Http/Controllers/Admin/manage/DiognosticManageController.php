@@ -103,6 +103,26 @@ class DiognosticManageController extends Controller
 
 
 
+    public function pending_case()
+    {
+        
+        $cases  = Diognostic::with('prescription')->doesntHave('prescription')->latest()->get();
+
+        return view('admin.pages.summery.diognostic.pendingCase', [
+            'diagnostic_cases' => $cases
+        ]);
+    }
+    
+    public function compelete_case()
+    {
+        $cases  = Diognostic::with('prescription')->whereHas('prescription')->latest()->get();
+
+        return view('admin.pages.summery.diognostic.compeleteCase', [
+            'diagnostic_cases' => $cases
+        ]);
+    }
+
+
 
 
     public function destroy($id)

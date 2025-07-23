@@ -30,7 +30,7 @@ Job Manage |
                     <table id="jobTable" class="table table-bordered">
                         <thead>
                             <tr class="text-center bg-info text-dark">
-                                <th> # Id</th>
+                                <th> #</th>
                                 <th> Title</th>
                                 <th> Description</th>
                                 <th> Company</th>
@@ -47,9 +47,9 @@ Job Manage |
                         @endif
 
                         <tbody id="jobTableBody">
-                            @forelse ($jobs as $job)
+                            @forelse ($jobs as $index => $job)
                             <tr class="text-center">
-                                <td>{{ $job->id }}</td>
+                                <td>{{ $index + 1 }}</td>
                                 <td>{{ $job->title }}</td>
                                 <td>{{ Str::limit($job->description, 50) }}</td>
                                 <td>{{ $job->company_name }}</td>

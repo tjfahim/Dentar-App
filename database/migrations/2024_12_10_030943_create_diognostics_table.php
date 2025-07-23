@@ -17,7 +17,8 @@ return new class extends Migration
         Schema::create('diognostics', function (Blueprint $table) {
             $table->id(); // Auto-incrementing primary key
             $table->string('name'); // Patient's name
-            $table->integer('age'); // Patient's age
+            $table->string('age'); // Patient's age
+            $table->string('weight'); // Patient's age
             $table->string('gender')->nullable(); // Contact number
             $table->string('number')->nullable(); // Contact number
             $table->json('file')->nullable(); // Path to image, nullable
@@ -25,7 +26,7 @@ return new class extends Migration
             $table->text('problem'); // Description of the problem
             $table->string('patient_type');
             $table->integer('patient_id');
-            $table->foreignIdFor(Doctor::class);
+            $table->foreignIdFor(Doctor::class)->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
         });
     }

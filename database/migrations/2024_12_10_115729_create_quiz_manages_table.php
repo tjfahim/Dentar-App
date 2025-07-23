@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('start_time'); 
             $table->string('end_time'); 
             $table->boolean('status')->default(1);
+            $table->enum('leaderboard', ['active', 'inactive'])->default('inactive');
+            $table->text('user');
             $table->timestamps();
         });
     }

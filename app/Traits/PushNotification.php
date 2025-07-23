@@ -20,11 +20,19 @@ trait PushNotification
                     'title' => $title,
                     'body' => $body,
                 ],
-                'data' => !empty($data) ? $data : null,
+                // 'data' => !empty($data) ? $data : null,
+                'data' => !empty($data) ? array_map('strval', $data) : null,
+                // 'data' => !empty($data) ? $data : (object)[]
             ],
         ];
 
         try {
+            // Log the payload before sending
+            Log::info('Sending FCM notification:', [
+                'url' => $fcmurl,
+                'payload' => $notification
+            ]);
+            
             $accessToken = $this->getAccessToken();
 
             $response = Http::withHeaders([

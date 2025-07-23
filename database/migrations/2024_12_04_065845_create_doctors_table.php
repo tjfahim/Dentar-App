@@ -37,6 +37,8 @@ return new class extends Migration
             $table->string('organization')->nullable();
             $table->string('occupation')->nullable();
             $table->boolean('status')->default(true);
+                                    $table->boolean('notification_play')->default(1);
+
 			$table->integer('total_points')->default(0);
             $table->timestamps();
             $table->softDeletes(); // Soft delete functionality

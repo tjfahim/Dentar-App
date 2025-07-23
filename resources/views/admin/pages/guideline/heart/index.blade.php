@@ -26,7 +26,7 @@ Heart Guideline Manage |
                     <table id="guidelineTable" class="table table-bordered">
                         <thead>
                             <tr class="text-center bg-info text-dark">
-                                <th> # Id</th>
+                                <th> #</th>
                                 <th> Title</th>
                                 <th> Description</th>
                                 <th> File</th>
@@ -42,9 +42,9 @@ Heart Guideline Manage |
                         @endif
 
                         <tbody>
-                            @forelse ($guidelines as $guide)
+                            @forelse ($guidelines as $index =>  $guide)
                             <tr class="text-center">
-                                <td>{{ $guide->id }}</td>
+                                <td>{{ $index + 1 }}</td>
                                 <td>{{ $guide->title }}</td>
                                 <td>{{ Str::limit($guide->description, 50) }}</td>
                                 <td>

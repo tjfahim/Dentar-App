@@ -49,13 +49,13 @@ Prescription Read Manage |
                     <table id="readsTable" class="table table-bordered">
                         <thead>
                             <tr class="text-center bg-info text-dark">
-                                <th># Id</th>
+                                <th>#</th>
                                 <th>Title</th>
                                 <th>Description</th>
                                 <th>Status</th>
-                                <th>User Type</th>
-                                <th>User ID</th>
-                                <th>Files</th>
+                                <!--<th>User Type</th>-->
+                                <!--<th>User ID</th>-->
+                                <!--<th>Files</th>-->
                                 <th class="action">Action</th>
                             </tr>
                         </thead>
@@ -65,25 +65,25 @@ Prescription Read Manage |
                         </div>
                         @endif
                         <tbody id="readsTableBody">
-                            @forelse ($prescription_reads as $read)
+                            @forelse ($prescription_reads as $index => $read)
                             <tr class="text-center">
-                                <td>{{ $read->id }}</td>
+                                <td>{{ $index + 1 }}</td>
                                 <td>{{ $read->title }}</td>
                                 <td>{{ $read->description }}</td>
                                 <td>{{ ucfirst($read->status) }}</td>
-                                <td>{{ $read->user_type }}</td>
-                                <td>{{ $read->user_id }}</td>
-                                <td>
-                                    @if($read->files)
-                                    <a href="{{ asset('storage/' . $read->files) }}" target="_blank" class="btn btn-sm btn-primary">View File</a>
-                                    @else
-                                    No file uploaded
-                                    @endif
-                                </td>
+                                <!--<td>{{ $read->user_type }}</td>-->
+                                <!--<td>{{ $read->user_id }}</td>-->
+                                <!--<td>-->
+                                <!--    @if($read->files)-->
+                                <!--    <a href="{{ asset('storage/' . $read->files) }}" target="_blank" class="btn btn-sm btn-primary">View File</a>-->
+                                <!--    @else-->
+                                <!--    No file uploaded-->
+                                <!--    @endif-->
+                                <!--</td>-->
                                 <td class="action d-flex justify-content-center align-items-center">
                                     <!-- Edit Button -->
-                                    <a href="{{ route('prescription_reads.edit', $read->id) }}" class="btn btn-sm btn-info me-2" title="Edit Read">
-                                        <i class="mdi mdi-grease-pencil"></i>
+                                    <a href="{{ route('prescription_reads.show', $read->id) }}" class="btn btn-sm btn-info me-2" title="Edit Read">
+                                        <i class="mdi mdi-eye"></i>
                                     </a>
                                     <!-- Delete Form -->
                                     <form action="{{ route('prescription_reads.destroy', $read->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete?')" class="mb-0">

@@ -14,6 +14,7 @@ class Diognostic extends Model
     protected $fillable = [
         'name',
         'age',
+        'weight',
         'gender',
         'number',
         'file',

@@ -29,10 +29,11 @@ Student Manage |
                     <table id="usersTable" class="table table-bordered">
                         <thead>
                             <tr class="text-center bg-info text-dark">
-                                <th># Id</th>
+                                <th>#</th>
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Phone</th>
+                                <th>Address</th>
                                 <th>University</th>
                                 <th>Specialization</th>
                                 <th class="action">Action</th>
@@ -44,12 +45,13 @@ Student Manage |
                         </div>
                         @endif
                         <tbody id="usersTableBody">
-                            @forelse ($students as $student)
+                            @forelse ($students as $index => $student)
                             <tr class="text-center">
-                                <td>{{ $student->id }}</td>
+                                <td>{{ $index + 1 }}</td>
                                 <td>{{ $student->name }}</td>
                                 <td>{{ $student->email }}</td>
                                 <td>{{ $student->phone }}</td>
+                                <td>{{ $student->address }}</td>
                                 <td>{{ $student->university }}</td>
                                 <td>{{ $student->specialization }}</td>
 

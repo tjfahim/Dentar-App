@@ -58,10 +58,10 @@
         <div class="row justify-content-center">
             <div class="col-md-10 col-lg-8 terms-container text-center">
                 <!-- Title -->
-                <h1>{{ $settings->policy1title }}</h1>
+                 <h1>{{ $policy->title }}</h1>
 
                 <!-- Description -->
-                <p>{{ $settings->policy1description }}</p>
+                <p>{!! nl2br(e($policy->description)) !!}</p>
             </div>
         </div>
     </div>

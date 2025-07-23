@@ -26,7 +26,7 @@ Hepatic Care Guideline Manage |
                     <table id="guidelineTable" class="table table-bordered">
                         <thead>
                             <tr class="text-center bg-info text-dark">
-                                <th> # Id</th>
+                                <th> #</th>
                                 <th> Title</th>
                                 <th> Description</th>
                                 <th> File</th>
@@ -42,9 +42,9 @@ Hepatic Care Guideline Manage |
                         @endif
 
                         <tbody>
-                            @forelse ($guides as $guide)
+                            @forelse ($guides as $index =>  $guide)
                             <tr class="text-center">
-                                <td>{{ $guide->id }}</td>
+                                <td>{{ $index + 1 }}</td>
                                 <td>{{ $guide->title }}</td>
                                 <td>{{ Str::limit($guide->description, 50) }}</td>
                                 <td>
