@@ -13,13 +13,11 @@ use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 
 class QuizQuestionManageApi extends Controller
-{
-public function getQuiz(Request $request)
+{public function getQuiz(Request $request)
 {
     $time = Carbon::now();
-    $bdtime =  Carbon::now('Asia/Dhaka')->format('Y-m-d\TH:i');
-    // return $bdtime;
-    // return $time . " --- ". $bdtime;
+    $bdtime = Carbon::now('Asia/Dhaka')->format('Y-m-d\TH:i');
+    
     $quizzes = QuizManage::where('end_time', '>=', $bdtime)->where('status', 1)->get();
     
     $auth_id = Auth::user()->id;
@@ -34,18 +32,10 @@ public function getQuiz(Request $request)
             }
         }
         return false;
-    });
-    
-
-    
+    })->values(); // Add values() here to reindex the collection
     
     $quizQuestionManage = QuizQuestionManage::where('status', 1)->get();
     
-    
-    
-
-   
-
     // Transform each question to include options
     $quizQuestionManage->each(function ($question) {
         $question->options = array_filter([
@@ -61,13 +51,14 @@ public function getQuiz(Request $request)
     $quizzes->each(function ($quiz) use ($quizQuestionManage) {
         $quiz->questions = $quizQuestionManage
             ->where('quiz_manage_id', $quiz->id)
-            ->values(); // Reindex the questions collection
+            ->values();
     });
     
-    foreach($quizzes as $index => $value){
-        $value->id = $index + 1;
-    }
-
+    // Reset the IDs to sequential numbers
+    $quizzes = $quizzes->map(function ($quiz, $index) {
+        $quiz->id = $index + 1;
+        return $quiz;
+    });
 
     return response()->json([
         'success' => true,
@@ -75,7 +66,6 @@ public function getQuiz(Request $request)
         'data' => $quizzes->toArray(), 
     ], 200);
 }
-
 
 
 
